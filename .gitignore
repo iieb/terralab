@@ -70,13 +70,3 @@ local_settings.py
 .vagrant/
 Vagrantfile
 /.env
-.env.sample
-.override_dev_env
-.override_dev_env.sample
-Vagrantfile.stack
-create-envfile.py
-dev_config.yml
-docker-build.sh
-generated-project-vagrant-compose.sh
-generated-project-vagrant-swarm.sh
-geonode-stack.yml
