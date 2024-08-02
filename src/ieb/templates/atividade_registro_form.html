@@ -73,6 +73,9 @@
             color: #ff0000;
             margin-bottom: 20px;
         }
+        textarea {
+            height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -143,11 +146,11 @@
             {{ form.fotos.errors }}
             <label for="id_fotos">Fotos:</label>
             {{ form.fotos }}
-
+<!--
             {{ form.equipe_adicional.errors }}
             <label for="id_equipe_adicional">Equipe Adicional:</label>
             <div id="id_equipe_adicional" class="checkbox-group">
-                <!-- Opções carregadas dinamicamente -->
+                Opções carregadas dinamicamente -->
             </div>
 
             <button type="submit">Salvar</button>
