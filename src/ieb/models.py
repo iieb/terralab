@@ -15,7 +15,7 @@ class OIsRegional(models.Model):
     cargo = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.ois_reg
+        return self.ois_reg_sigla
 
 
 class OIsLocal(models.Model):
