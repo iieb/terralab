@@ -35,6 +35,7 @@ try:
 except ImportError:
     from geonode.settings import *
 
+from django.utils.translation import gettext_lazy as _
 #
 # General Django development settings
 #
@@ -52,9 +53,15 @@ LOCAL_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 WSGI_APPLICATION = "{}.wsgi.application".format(PROJECT_NAME)
 
+LANGUAGES = [
+    ('en', _('English')),
+    ('pt-BR', _('Português')),  # Adicione esta linha para o português
+    # ... outros idiomas se necessário ...
+]
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "en")
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "pt-BR")
 
 if PROJECT_NAME not in INSTALLED_APPS:
     INSTALLED_APPS += (PROJECT_NAME, 'ieb')
