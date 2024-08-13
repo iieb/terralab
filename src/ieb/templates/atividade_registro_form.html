@@ -92,7 +92,7 @@
             {% csrf_token %}
             
             {{ form.non_field_errors }}
-            <label for="id_projeto">Projeto:</label>
+            <label for="id_projeto">Projeto: <span style="color: red;">*</span></label>
             <select id="id_projeto" name="projeto">
                 <option value="">Selecione um projeto</option>
                 {% for projeto in form.fields.projeto.queryset %}
@@ -101,31 +101,43 @@
             </select>
             {{ form.projeto.errors }}
 
-            <label for="id_componente">Componente:</label>
+            <label for="id_componente">Componente: <span style="color: red;">*</span></label>
             <select id="id_componente" name="componente">
                 <option value="">Selecione um componente</option>
             </select>
             {{ form.componente.errors }}
 
-            <label for="id_atividade">Atividade:</label>
+            <label for="id_atividade">Atividade: <span style="color: red;">*</span></label>
             <select id="id_atividade" name="atividade">
                 <option value="">Selecione uma atividade</option>
             </select>
             {{ form.atividade.errors }}
 
-            <label for="id_equipe_projeto">Responsável pelo preenchimento:</label>
+            <label for="id_equipe_projeto">Responsável pelo preenchimento: <span style="color: red;">*</span></label>
             <select id="id_equipe_projeto" name="equipe_projeto">
                 <option value="">Selecione uma equipe</option>
             </select>
             {{ form.equipe_projeto.errors }}
 
             {{ form.data_inicio.errors }}
-            <label for="id_data_inicio">Data Início:</label>
+            <label for="id_data_inicio">Data Início: <span style="color: red;">*</span></label>
             {{ form.data_inicio }}
 
             {{ form.data_final.errors }}
-            <label for="id_data_final">Data Final:</label>
+            <label for="id_data_final">Data Final: <span style="color: red;">*</span></label>
             {{ form.data_final }}
+
+            {{ form.descricao.errors }}
+            <label for="id_descricao">Descrição: <span style="color: red;">*</span></label>
+            {{ form.descricao }}
+
+            {{ form.local.errors }}
+            <label for="id_local">Local: <span style="color: red;">*</span></label>
+            {{ form.local }}
+
+            {{ form.comentarios.errors }}
+            <label for="id_comentarios">Comentários:</label>
+            {{ form.comentarios }}
 
             {{ form.desafios.errors }}
             <label for="id_desafios">Desafios:</label>
@@ -144,8 +156,12 @@
             {{ form.melhores_praticas }}
 
             {{ form.fotos.errors }}
-            <label for="id_fotos">Fotos:</label>
+            <label for="id_fotos">Fotos: <span style="color: red;">*</span></label>
             {{ form.fotos }}
+
+            {{ form.lista_presenca.errors }}
+            <label for="id_lista_presenca">Lista de Presença:</label>
+            {{ form.lista_presenca }}
 <!--
             {{ form.equipe_adicional.errors }}
             <label for="id_equipe_adicional">Equipe Adicional:</label>

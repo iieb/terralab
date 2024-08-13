@@ -20,6 +20,8 @@ def atividade_registro_view(request):
         else:
             messages.error(request, 'Erro ao salvar o registro de atividade. Verifique os campos e tente novamente.')
             print(form.errors)  # Adicione esta linha para imprimir os erros no console do servidor
+            print(request.POST)
+            print(request.FILES)
     else:
         form = AtividadeRegistroForm()
 
