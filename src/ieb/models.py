@@ -208,11 +208,16 @@ class AtividadeRegistro(models.Model):
     equipe_adicional = models.ManyToManyField(EquipeProjeto, related_name='atividades_registradas')
     data_inicio = models.DateField()
     data_final = models.DateField()
-    desafios = models.CharField(max_length=255)
-    propostas = models.CharField(max_length=255)
-    sucesso = models.CharField(max_length=255)
-    melhores_praticas = models.CharField(max_length=255)
+    desafios = models.CharField(max_length=255, blank=True)
+    propostas = models.CharField(max_length=255, blank=True)
+    sucesso = models.CharField(max_length=255, blank=True)
+    melhores_praticas = models.CharField(max_length=255, blank=True)
     fotos = models.ImageField(upload_to='fotos/')  # Usar ImageField para suportar upload de mídia
+    descricao = models.TextField()
+    local = models.CharField(max_length=255)
+    comentarios = models.TextField()
+    lista_presenca = models.ImageField(upload_to='listas_presenca/', blank=True)  # Novo campo para lista de presença
+
 
     def __str__(self):
         return f"{self.projeto.nome} - {self.atividade.nome}"
