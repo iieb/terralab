@@ -1368,158 +1368,159 @@
         "widgets": {
             "types": {
                 "map": {
-                    "title": "Map",
-                    "caption": "add a map"
+                    "title": "Mapa",
+                    "caption": "Adicionar Mapa"
                 },
                 "legend": {
-                    "title": "Legend",
-                    "caption": "add a legend"
+                    "title": "Legenda",
+                    "caption": "adicionar uma legenda"
                 },
                 "chart": {
-                    "title": "Chart",
-                    "caption": "add a chart"
+                    "title": "Gráfico",
+                    "caption": "adicionar um gráfico"
                 },
                 "text": {
-                    "title": "Text",
-                    "caption": "add a text area"
+                    "title": "Texto",
+                    "caption": "adicionar uma área de texto"
                 },
                 "table": {
-                    "title": "Table",
-                    "caption": "add a table"
+                    "title": "Tabela",
+                    "caption": "adicionar uma tabela"
                 },
                 "counter": {
-                    "title": "Counter",
-                    "caption": "add a counter"
+                    "title": "Contador",
+                    "caption": "adicionar um contador"
                 }
             },
-            "selectWidgetType": "Select the widget type",
+            "selectWidgetType": "Selecione o tipo de elemento",
             "selectChartType": {
-                "title": "Select the Chart type"
+                "title": "Selecione o tipo de gráfico"
             },
             "selectMap": {
                 "TOC": {
-                    "noLayerTitle": "No Layers",
-                    "noLayerDescription": "There are no layers in the map. If you want to add a layer from the catalog click on the '+' button in the toolbar on top"
+                    "noLayerTitle": "Sem Camadas",
+                    "noLayerDescription": "Não há camadas no mapa. Se você deseja adicionar uma camada do catálogo, clique no botão '+' na barra de ferramentas no topo"
                 },
                 "emptyMap": {
-                    "title": "Empty Map",
-                    "description": "Start from an empty map"
+                    "title": "Mapa Vazio",
+                    "description": "Comece com um mapa vazio"
                 }
             },
-            "title": "Title",
-            "description": "Description",
+            "title": "Título",
+            "description": "Descrição",
             "errors": {
-                "notext": "No text available",
-                "nodata": "No data available for the selected layer/filter",
-                "noLegend": "No legend items to show",
-                "noLegendDescription": "The connected map has no layers to show in legend",
-                "nodatainviewport": "No data in the current viewport",
-                "timeoutExpired": "The service took too much time to respond. Maybe the query is too complex or the server is busy",
-                "genericError": "There was an error during data retrival"
+                "notext": "Sem texto disponível",
+                "nodata": "Sem dados disponíveis para a camada/seleção escolhida",
+                "noLegend": "Sem itens de legenda para mostrar",
+                "noLegendDescription": "O mapa conectado não tem camadas para mostrar na legenda",
+                "nodatainviewport": "Sem dados na viewport atual",
+                "timeoutExpired": "O serviço levou muito tempo para responder. Talvez a consulta seja muito complexa ou o servidor esteja ocupado",
+                "genericError": "Houve um erro durante a obtenção de dados"
             },
             "builder": {
                 "header": {
-                    "title": "Widget"
+                    "title": "Elementos"
                 },
                 "wizard": {
-                    "backToTypeSelection": "Back to chart type selection",
-                    "backToWidgetTypeSelection": "Back to widget type selection",
-                    "backToFeatureGrid": "Back to the feature grid",
-                    "backToLayerSelection": "Back to layer selection",
-                    "backToMapSelection": "Back to map selection",
-                    "backToPreview": "Back to Preview",
-                    "backToChartOptions": "Back to chart options",
-                    "selectALayer": "Select a layer",
-                    "selectAMap": "Select a map",
-                    "configureChartOptions": "Configure chart options",
-                    "configureWidgetOptions": "Configure widget options",
-                    "backToTableOptions": "Back to table options",
-                    "configureTableOptions": "Configure table options",
-                    "resetColumnsSizes": "Reset all changes to the column sizes",
-                    "updateWidget": "Update the widget",
-                    "addTheWidget": "Add the widget",
-                    "titlePlaceholder": "Insert title...",
-                    "textPlaceholder": "Insert text...",
-                    "useThisMap": "Use this map",
-                    "configureMapOptions": "Configure map options",
-                    "preview": "Preview",
-                    "addLayer": "Add a layer to the map",
-                    "useTheSelectedLayer": "Use the selected layer",
-                    "connectToAMap": "Connect to another widget",
-                    "connectToTheMap": "Connect to the other widget",
-                    "selectMapToConnect": "Select the widget to connect",
-                    "clearConnection": "Clear connection"
+                    "backToTypeSelection": "Voltar à seleção do tipo de gráfico",
+                    "backToWidgetTypeSelection": "Voltar à seleção do tipo de elementos",
+                    "backToFeatureGrid": "Voltar à grade de recursos",
+                    "backToLayerSelection": "Voltar à seleção de camada",
+                    "backToMapSelection": "Voltar à seleção do mapa",
+                    "backToPreview": "Voltar à prévia",
+                    "backToChartOptions": "Voltar às opções do gráfico",
+                    "selectALayer": "Selecione uma camada",
+                    "selectAMap": "Selecione um mapa",
+                    "configureChartOptions": "Configure as opções do gráfico",
+                    "configureWidgetOptions": "Configure as opções do elementos",
+                    "backToTableOptions": "Voltar às opções da tabela",
+                    "configureTableOptions": "Configure as opções da tabela",
+                    "resetColumnsSizes": "Redimensione todas as alterações nos tamanhos das colunas",
+                    "updateWidget": "Atualize o elemento",
+                    "addTheWidget": "Adicione o elemento",
+                    "titlePlaceholder": "Insira o título...",
+                    "textPlaceholder": "Insira o texto...",
+                    "useThisMap": "Use este mapa",
+                    "configureMapOptions": "Configure as opções do mapa",
+                    "preview": "Prévia",
+                    "addLayer": "Adicione uma camada ao mapa",
+                    "useTheSelectedLayer": "Use a camada selecionada",
+                    "connectToAMap": "Conecte a outro elemento",
+                    "connectToTheMap": "Conecte ao outro elemento",
+                    "selectMapToConnect": "Selecione o elemento para conectar",
+                    "clearConnection": "Limpe a conexão",
+                    "selectLayers": "Camadas selecionadas"
                 },
                 "errors": {
-                    "noAttributesTitle": "No attributes to show",
-                    "noAttributesDescription": "The selected layer has no attributes to show. Please select another widget type or layer",
-                    "noWidgetsAvailableTitle": "Can not create the widget for the selected layer",
-                    "noWidgetsAvailableDescription": "<p><strong>Please try to select another layer or widget type</strong></p><p>The server doesn't provide the needed services for the layer and the widget type selected</p><p>Possible causes are: <ul><li>The selected layer is a raster layer</li><li>WFS service is not available</li><li>The WPS process <code>gs:aggregate</code> is not available</li></ul></p>",
-                    "checkAtLeastOneAttribute": "You must select at least one column",
-                    "noMapAvailableForLegend": "No map available",
-                    "noMapAvailableForLegendDescription": "You need at least one map widget to create the legend"
+                    "noAttributesTitle": "Sem atributos para mostrar",
+                    "noAttributesDescription": "A camada selecionada não tem atributos para mostrar. Por favor, selecione outro tipo de widget ou camada",
+                    "noWidgetsAvailableTitle": "Não é possível criar o elemnto para a camada selecionada",
+                    "noWidgetsAvailableDescription": "<p><strong>Tente selecionar outra camada ou tipo de elemento</strong></p><p>O servidor não fornece os serviços necessários para a camada e o tipo de widget selecionados</p><p>Causas possíveis são: <ul><li>A camada selecionada é uma camada raster</li><li>O serviço WFS não está disponível</li><li>O processo WPS <code>gs:aggregate</code> não está disponível</li></ul></p>",
+                    "checkAtLeastOneAttribute": "Você deve selecionar pelo menos uma coluna",
+                    "noMapAvailableForLegend": "Sem mapa disponível",
+                    "noMapAvailableForLegendDescription": "Você precisa de pelo menos um elemento de mapa para criar a legenda"
                 },
-                "setupFilter": "Configure a filter for the widget data"
+                "setupFilter": "Configure um filtro para os dados do elemento"
             },
             "widget": {
                 "menu": {
-                    "showChartData": "Show chart data",
-                    "edit": "Edit",
-                    "delete": "Delete",
-                    "collapse": "Collapse",
-                    "confirmDelete": "Are you sure?",
-                    "downloadData": "Download Data",
-                    "exportImage": "Export Image",
-                    "pin": "Pin",
-                    "unpin": "Unpin",
-                    "hide": "Hide",
-                    "hideDescription": "Hide this widget to other users",
-                    "unhide": "Unhide",
-                    "unhideDescription": "Unhide the widget to other users"
+                    "showChartData": "Mostrar dados do gráfico",
+                    "edit": "Editar",
+                    "delete": "Deletar",
+                    "collapse": "Colapsar",
+                    "confirmDelete": "Tem a certeza?",
+                    "downloadData": "Baixar Dados",
+                    "exportImage": "Exportar Imagem",
+                    "pin": "Fixar",
+                    "unpin": "Desfixar",
+                    "hide": "Esconder",
+                    "hideDescription": "Esconder este elemento para outros usuários",
+                    "unhide": "Mostrar",
+                    "unhideDescription": "Mostrar o elemento para outros usuários"
                 }
             },
             "chartType": {
                 "bar": {
-                    "title": "Bar Chart",
-                    "description": "Create a bar chart to add to the map",
+                    "title": "Gráfico de Barras",
+                    "description": "Crie um gráfico de barras para adicionar ao mapa",
                     "caption": "bar"
                 },
                 "pie": {
-                    "title": "Pie Chart",
-                    "description": "Create a pie chart to add to the map",
-                    "caption": "pie"
+                    "title": "Gráfico de Pizza",
+                    "description": "Crie um gráfico de pizza para adicionar ao mapa",
+                    "caption": "pizza"
                 },
                 "line": {
-                    "title": "Line Chart",
-                    "description": "Create a line chart to add to the map",
-                    "caption": "line"
+                    "title": "Gráfico de Linha",
+                    "description": "Crie um gráfico de linha para adicionar ao mapa",
+                    "caption": "linha"
                 },
                 "gauge": {
-                    "title": "Gauge Chart",
-                    "description": "Create a gauge chart to add to the map",
-                    "caption": "gauge"
+                    "title": "Gráfico de Medidor",
+                    "description": "Crie um gráfico de medidor para adicionar ao mapa",
+                    "caption": "medidor"
                 }
             },
-            "chartOptionsTitle": "Configure data",
-            "widgetOptionsTitle": "Configure Widget Info",
+            "chartOptionsTitle": "Configure dados",
+            "widgetOptionsTitle": "Configure Informações do elemento",
             "placeHolder":{
-                "default":"Select attribute"
+                "default":"Selecione um atributo"
             },
             "groupByAttributes": {
-                "line": "X Attribute",
-                "pie": "Group By",
-                "bar": "X Attribute",
-                "gauge": "Group By",
-                "counter": "Group By",
-                "default": "Group By"
+                "line": "Atributo X",
+                "pie": "Agrupar Por",
+                "bar": "Atributo X",
+                "gauge": "Agrupar Por",
+                "counter": "Agrupar Por",
+                "default": "Agrupar Por"
             },
             "aggregationAttribute": {
-                "line": "Y Attribute",
-                "pie": "Use",
-                "bar": "Y Attribute",
-                "gauge": "Use",
-                "counter": "Use",
-                "default": "Use"
+                "line": "Atributo Y",
+                "pie": "Usar",
+                "bar": "Atributo Y",
+                "gauge": "Usar",
+                "counter": "Usar",
+                "default": "Usar"
             },
             "aggregateFunction": {
                 "line": "Operation",

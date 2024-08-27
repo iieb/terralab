@@ -13,7 +13,11 @@
             },
             "mapList": {
                 "emptyList": "Nenhum resultado para esta solicitação. Tente alterar o filtro ou selecionar um serviço diferente na entrada no canto superior direito."
-            }
+            },
+            "images": "imagens",
+            "videos": "videos",
+            "maps": "mapas",
+            "apply": "aplicar"
         },
         "plugins": {
             "VisualStyleEditor": {
@@ -208,7 +212,10 @@
             "approved": "Aprovado",
             "refused": "Recusado",
             "pending": "Pendente",
-            "appliedToGroup": "Aplicado ao grupo"
+            "appliedToGroup": "Aplicado ao grupo",
+            "allResources": "Todos Recursos",
+            "resource": "Opção",
+            "addWidget": "Adicionar Elementos"
         }
     }
 }
