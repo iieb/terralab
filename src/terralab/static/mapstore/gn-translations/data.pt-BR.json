@@ -215,7 +215,42 @@
             "appliedToGroup": "Aplicado ao grupo",
             "allResources": "Todos Recursos",
             "resource": "Opção",
-            "addWidget": "Adicionar Elementos"
+            "addWidget": "Adicionar Elementos",
+            "supportedFiles": "Tipos de arquivos suportados",
+            "selectFiles": "Selecione arquivos",
+            "upload": "Enviar",
+            "uploadDataset": "Enviar conjuntos de dados",
+            "dragAndDropDataset": "Arraste e solte o arquivo",
+            "cancelUpload": "Cancelar o envio",
+            "filterPendingUploadDataset": "Filtrar conjuntos de dados enviados",
+            "title": "Título",
+            "owner": "Proprietário",
+            "publication": "Publicação",
+            "created": "Criado em",
+            "lastModified": "Última modificação",
+            "resourceType": "Tipo de recurso",
+            "sourceType": "Tipo de origem",
+            "pointOfContact": "Contato de referência",
+            "language": "Idioma",
+            "supplementalInformation": "Informações adicionais",
+            "viewFullMetadata": "Ver todo Metadados",
+            "locations": "Localidade",
+            "legend": "Legenda",
+            "createMap": "Criar Mapa",
+            "styleUpload": "Enviar Estilo",
+            "metadataUpload": "Enviar Metadados",
+            "iso": "ISO Geospatial Metadada",
+            "dublinCore": "Metadados Dublin Core (DC)",
+            "boundingBox": "Bounding Box",
+            "minLat": "Latitude Mínima",
+            "minLon": "Longitude Mínima",
+            "maxLat": "Latitude Máxima",
+            "maxLon": "Longitude Máxima",
+            "resourceOrigin": {
+                "a": "Um",
+                "from": "de"
+            }
+
         }
     }
 }
