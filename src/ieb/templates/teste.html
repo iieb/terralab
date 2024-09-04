@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Botão Simples</title>
+</head>
+<body>
+    <button id="test_button">Clique Aqui</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            alert("JS carregado!");
+
+            const btn = document.getElementById('test_button');
+            console.log('Botão:', btn);  // Log para verificar se o botão é encontrado
+
+            if (btn) {
+                alert('Botão encontrado!');
+                btn.addEventListener('click', function() {
+                    alert('Botão clicado!');
+                    console.log('Botão foi clicado!');
+                });
+            } else {
+                alert('Botão não encontrado!');
+                console.log('Botão não encontrado no DOM');
+            }
+        });
+    </script>
+</body>
+</html>

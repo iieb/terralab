@@ -9,15 +9,15 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #636363;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 40px;
+            box-shadow: 0 0 10px rgba(132, 90, 40, 0.9);
         }
         h1 {
             text-align: center;
@@ -45,10 +45,17 @@
         }
         select, input[type="file"], input[type="date"], textarea {
             width: 100%;
-            padding: 8px;
+            padding: 2px;
             margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 10%;
+            padding: 2px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
         }
         .checkbox-group {
             display: flex;
@@ -65,14 +72,62 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #3e8e41;
+            transform: scale(1.25);
         }
         .errorlist {
             color: #ff0000;
             margin-bottom: 20px;
         }
+        textarea {
+            height: 60px;
+        }
+        .radio-group {
+            margin-bottom: 20px; /* Espaçamento semelhante ao usado nos outros campos */
+            display: flex;
+            flex-direction: column; /* Coloca as opções de rádio em uma coluna */
+        }
+        .radio-group label {
+            margin-bottom: 10px; /* Espaçamento entre as opções de rádio */
+            display: flex;
+            align-items: center; /* Alinha o texto com o botão de rádio */
+            cursor: pointer;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 10px; /* Espaçamento entre o botão de rádio e o texto */
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            margin-bottom: 10px;
+            color: #d26b16;
+            border-bottom: 2px solid #d26b16;
+            padding-bottom: 5px;
+        }
+        .valid, input[type="text"].valid, input[type="number"].valid {
+            border-color: #4CAF50; /* Verde para válido */
+        }
+        .invalid, input[type="text"].invalid, input[type="number"].invalid {
+            border-color: #d26b16; /* Laranja para inválido */
+        }
+        .indicator-section {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+        
+        .indicator-section h3 {
+            margin-top: 0;
+            color: #894309;
+            font-size: 18px;
+        }
+
     </style>
 </head>
 <body>
@@ -89,118 +144,405 @@
             {% csrf_token %}
             
             {{ form.non_field_errors }}
-            <label for="id_projeto">Projeto:</label>
-            <select id="id_projeto" name="projeto">
-                <option value="">Selecione um projeto</option>
-                {% for projeto in form.fields.projeto.queryset %}
-                    <option value="{{ projeto.id }}">{{ projeto.nome }}</option>
-                {% endfor %}
-            </select>
-            {{ form.projeto.errors }}
 
-            <label for="id_componente">Componente:</label>
-            <select id="id_componente" name="componente">
-                <option value="">Selecione um componente</option>
-            </select>
-            {{ form.componente.errors }}
+            <div class='section'>
+                <h2>Informações Obrigatórias</h2>
 
-            <label for="id_atividade">Atividade:</label>
-            <select id="id_atividade" name="atividade">
-                <option value="">Selecione uma atividade</option>
-            </select>
-            {{ form.atividade.errors }}
+                <label for="id_projeto">Projeto: <span style="color: red;">*</span></label>
+                <select id="id_projeto" name="projeto">
+                    <option value="">Selecione um projeto</option>
+                    {% for projeto in form.fields.projeto.queryset %}
+                        <option value="{{ projeto.id }}">{{ projeto.nome }}</option>
+                    {% endfor %}
+                </select>
+                {{ form.projeto.errors }}
 
-            <label for="id_equipe_projeto">Responsável pelo preenchimento:</label>
-            <select id="id_equipe_projeto" name="equipe_projeto">
-                <option value="">Selecione uma equipe</option>
-            </select>
-            {{ form.equipe_projeto.errors }}
+                <label for="id_componente">Componente: <span style="color: red;">*</span></label>
+                <select id="id_componente" name="componente">
+                    <option value="">Selecione um componente</option>
+                </select>
+                {{ form.componente.errors }}
 
-            {{ form.data_inicio.errors }}
-            <label for="id_data_inicio">Data Início:</label>
-            {{ form.data_inicio }}
+                <label for="id_atividade">Atividade: <span style="color: red;">*</span></label>
+                <select id="id_atividade" name="atividade">
+                    <option value="">Selecione uma atividade</option>
+                </select>
+                {{ form.atividade.errors }}
 
-            {{ form.data_final.errors }}
-            <label for="id_data_final">Data Final:</label>
-            {{ form.data_final }}
+                <label for="id_equipe_projeto">Responsável pelo preenchimento: <span style="color: red;">*</span></label>
+                <select id="id_equipe_projeto" name="equipe_projeto">
+                    <option value="">Selecione uma equipe</option>
+                </select>
+                {{ form.equipe_projeto.errors }}
 
-            {{ form.desafios.errors }}
-            <label for="id_desafios">Desafios:</label>
-            {{ form.desafios }}
+                {{ form.data_inicio.errors }}
+                <label for="id_data_inicio">Data Início: <span style="color: red;">*</span></label>
+                {{ form.data_inicio }}
 
-            {{ form.propostas.errors }}
-            <label for="id_propostas">Propostas:</label>
-            {{ form.propostas }}
+                {{ form.data_final.errors }}
+                <label for="id_data_final">Data Final: <span style="color: red;">*</span></label>
+                {{ form.data_final }}
 
-            {{ form.sucesso.errors }}
-            <label for="id_sucesso">Sucesso:</label>
-            {{ form.sucesso }}
+                {{ form.descricao.errors }}
+                <label for="id_descricao">Descrição: <span style="color: red;">*</span></label>
+                {{ form.descricao }}
 
-            {{ form.melhores_praticas.errors }}
-            <label for="id_melhores_praticas">Melhores Práticas:</label>
-            {{ form.melhores_praticas }}
+                {{ form.local.errors }}
+                <label for="id_local">Local: <span style="color: red;">*</span></label>
+                {{ form.local }}
 
-            {{ form.fotos.errors }}
-            <label for="id_fotos">Fotos:</label>
-            {{ form.fotos }}
+                {{ form.fotos.errors }}
+                <label for="id_fotos">Fotos: <span style="color: red;">*</span></label>
+                {{ form.fotos }}
 
+            </div>
+
+            <div class="section">
+                <h2>Indicadores (Escolha a atividade)</h2>
+                <div id="indicadores"></div>
+            </div>
+
+            <div class="section">
+                <h2>Perguntas Adicionais</h2>
+
+                {{ form.comentarios.errors }}
+                <label for="id_comentarios">Comentários:</label>
+                {{ form.comentarios }}
+
+                {{ form.desafios.errors }}
+                <label for="id_desafios">Desafios:</label>
+                {{ form.desafios }}
+
+                {{ form.propostas.errors }}
+                <label for="id_propostas">Propostas:</label>
+                {{ form.propostas }}
+
+                {{ form.sucesso.errors }}
+                <label for="id_sucesso">Sucesso:</label>
+                {{ form.sucesso }}
+
+                {{ form.melhores_praticas.errors }}
+                <label for="id_melhores_praticas">Melhores Práticas:</label>
+                {{ form.melhores_praticas }}
+
+                {{ form.lista_presenca.errors }}
+                <label for="id_lista_presenca">Lista de Presença:</label>
+                {{ form.lista_presenca }}
+            </div>
+<!--
             {{ form.equipe_adicional.errors }}
             <label for="id_equipe_adicional">Equipe Adicional:</label>
             <div id="id_equipe_adicional" class="checkbox-group">
-                <!-- Opções carregadas dinamicamente -->
-            </div>
+                Opções carregadas dinamicamente
+            </div> -->
 
+
+            <div>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="errorlist">{{ field.errors }}</div>
+            {% endif %}
+            </div>
+            
+     
             <button type="submit">Salvar</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('id_projeto').addEventListener('change', function() {
-            var url = "{% url 'load_componentes' %}?projeto=" + this.value;
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    var select = document.getElementById('id_componente');
-                    select.innerHTML = '<option value="">Selecione um componente</option>';
-                    data.forEach(item => {
-                        select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
-                    });
-                });
+        
+        // DICIONÁRIO DE CONFIGURAÇÃO DOS INDICADORES
+        // Nova forma de obter o dicionário diretamente do backend
+        const indicadoresConfig = {{ indicadores_config|safe }}
 
-            var equipes_url = "{% url 'load_equipes' %}?projeto=" + this.value;
-            fetch(equipes_url)
-                .then(response => response.json())
-                .then(data => {
-                    var select = document.getElementById('id_equipe_projeto');
-                    select.innerHTML = '<option value="">Selecione uma equipe</option>';
-                    data.forEach(item => {
-                        select.innerHTML += '<option value="' + item.id + '">' + item.equipe__nome + '</option>';
+        document.addEventListener('DOMContentLoaded', function () {
+            alert("O JavaScript está funcionando!");
+            document.getElementById('indicadores_14_parcerias_add_btn').addEventListener('click', function() {
+                console.log('Teste simples: botão clicado');
+            });
+            document.getElementById('id_projeto').addEventListener('change', function() {
+                var url = "{% url 'load_componentes' %}?projeto=" + this.value;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var select = document.getElementById('id_componente');
+                        select.innerHTML = '<option value="">Selecione um componente</option>';
+                        data.forEach(item => {
+                            select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
+                        });
                     });
-                });
+        
+                var equipes_url = "{% url 'load_equipes' %}?projeto=" + this.value;
+                fetch(equipes_url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var select = document.getElementById('id_equipe_projeto');
+                        select.innerHTML = '<option value="">Selecione uma equipe</option>';
+                        data.forEach(item => {
+                            select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
+                        });
+                    });
+        
+                var equipes_adicionais_url = "{% url 'load_equipes_adicionais' %}?projeto=" + this.value;
+                fetch(equipes_adicionais_url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var checkboxGroup = document.getElementById('id_equipe_adicional');
+                        checkboxGroup.innerHTML = '';
+                        data.forEach(item => {
+                            checkboxGroup.innerHTML += '<label><input type="checkbox" name="equipe_adicional" value="' + item.id + '"> ' + item.nome + '</label>';
+                        
+                        });
+                    });
+            });
 
-            var equipes_adicionais_url = "{% url 'load_equipes_adicionais' %}?projeto=" + this.value;
-            fetch(equipes_adicionais_url)
-                .then(response => response.json())
-                .then(data => {
-                    var checkboxGroup = document.getElementById('id_equipe_adicional');
-                    checkboxGroup.innerHTML = '';
-                    data.forEach(item => {
-                        checkboxGroup.innerHTML += '<label><input type="checkbox" name="equipe_adicional" value="' + item.id + '"> ' + item.equipe__nome + '</label>';
+            document.getElementById('id_componente').addEventListener('change', function() {
+                var url = "{% url 'load_atividades' %}?componente=" + this.value;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var select = document.getElementById('id_atividade');
+                        select.innerHTML = '<option value="">Selecione uma atividade</option>';
+                        data.forEach(item => {
+                            select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
+                        });
                     });
-                });
-        });
+            });
+            // Função para validar campos obrigatórios
+            function validateField(field) {
+                if (field.value.trim() === "") {
+                    field.classList.remove('valid');
+                    field.classList.add('invalid');
+                } else {
+                    field.classList.remove('invalid');
+                    field.classList.add('valid');
+                }
+            }
 
-        document.getElementById('id_componente').addEventListener('change', function() {
-            var url = "{% url 'load_atividades' %}?componente=" + this.value;
-            fetch(url)
-                .then(response => response.json())
+            function validateDates() {
+                const startDateField = document.getElementById('id_data_inicio');
+                const endDateField = document.getElementById('id_data_final');
+                const startDate = new Date(startDateField.value);
+                const endDate = new Date(endDateField.value);
+    
+                if (startDateField.value && endDateField.value) {
+                    if (endDate < startDate) {
+                        endDateField.classList.remove('valid');
+                        endDateField.classList.add('invalid');
+                        alert("A data final não pode ser anterior à data inicial.");
+                    } else {
+                        endDateField.classList.remove('invalid');
+                        endDateField.classList.add('valid');
+                    }
+                }
+            }
+
+            
+            // Campos de Informações Obrigatórias
+            const requiredFields = [
+                document.getElementById('id_projeto'),
+                document.getElementById('id_componente'),
+                document.getElementById('id_atividade'),
+                document.getElementById('id_equipe_projeto'),
+                document.getElementById('id_data_inicio'),
+                document.getElementById('id_data_final'),
+                document.getElementById('id_descricao'),
+                document.getElementById('id_local'),
+                document.getElementById('id_fotos')
+            ];
+    
+            requiredFields.forEach(field => {
+                field.addEventListener('input', function () {
+                    validateField(field);
+                    if (field === document.getElementById('id_data_inicio') || field === document.getElementById('id_data_final')) {
+                        validateDates();
+                    }
+                });
+    
+                // Validação inicial ao carregar a página
+                validateField(field);
+                if (field === document.getElementById('id_data_inicio') || field === document.getElementById('id_data_final')) {
+                    validateDates();
+                }
+            });
+
+            // Funções CHECKBOXES
+
+
+            function renderCheckboxField(field, fieldName, indicadoresDiv) {
+                let optionsHTML = '';
+                field.options.forEach(option => {
+                    optionsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_${option.value}" name="${fieldName}" value="${option.value}" style="margin-right: 5px;">
+                            <label for="${fieldName}_${option.value}" style="font-size: 14px;">${option.label}</label>
+                        </div>
+                    `;
+                });
+                indicadoresDiv.innerHTML += `
+                    <div>
+                        <label>${field.label}:</label>
+                        ${optionsHTML}
+                    </div>
+                `;
+            }
+        
+            function renderParceriasField(field, fieldName, indicadoresDiv) {
+                let optionsHTML = '';
+                field.options.forEach(option => {
+                    optionsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_${option.value}" name="${fieldName}" value="${option.value}" style="margin-right: 5px;">
+                            <label for="${fieldName}_${option.value}" style="font-size: 14px;">${option.label}</label>
+                        </div>
+                    `;
+                });
+                indicadoresDiv.innerHTML += `
+                    <div>
+                        <label>${field.label}:</label>
+                        ${optionsHTML}
+                        <input type="text" id="${fieldName}_new" name="${fieldName}_new" placeholder="Nova Parceria">
+                        <button type="button" id="${fieldName}_add_btn">Adicionar Nova Parceria</button>
+                    </div>
+                `;
+            
+                // Adicionar evento para o botão de adicionar nova parceria
+                // Adicionar o evento de clique depois de garantir que o botão existe no DOM
+                
+                    const addButton = document.getElementById(`${fieldName}_add_btn`);
+                    if (addButton) {
+                        addButton.addEventListener('click', function() {
+                            console.log('Botão de adicionar parceria clicado');
+                            const newParceriaValue = document.getElementById(`${fieldName}_new`).value;
+                            if (newParceriaValue) {
+                                // Enviar nova parceria ao backend e atualizar os checkboxes
+                                adicionarNovaParceria(newParceriaValue, fieldName);
+                            }
+                        });
+                    }
+            }
+        
+            function adicionarNovaParceria(nome, fieldName) {
+                fetch("{% url 'adicionar_parceria' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ nome: nome })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            console.error('Erro ao adicionar parceria:', errorData);
+                            alert('Erro ao adicionar parceria: ' + (errorData.error || 'Erro desconhecido'));
+                        });
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    var select = document.getElementById('id_atividade');
-                    select.innerHTML = '<option value="">Selecione uma atividade</option>';
-                    data.forEach(item => {
-                        select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
+                    if (data && data.id) {
+                        // Atualizar os checkboxes com a nova parceria
+                        const newCheckboxHTML = `
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <input type="checkbox" id="${fieldName}_${data.id}" name="${fieldName}" value="${data.id}" style="margin-right: 5px;" checked>
+                                <label for="${fieldName}_${data.id}" style="font-size: 14px;">${data.nome}</label>
+                            </div>
+                        `;
+                        document.querySelector(`#${fieldName}_new`).insertAdjacentHTML('beforebegin', newCheckboxHTML);
+                        document.getElementById(`${fieldName}_new`).value = ''; // Limpar o campo de input
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar a requisição:', error);
+                    alert('Erro ao realizar a requisição: ' + error.message);
+                });
+            }
+            
+            document.getElementById('id_atividade').addEventListener('change', function() {
+                const url = "{% url 'load_indicadores' %}?atividade=" + this.value;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const indicadoresDiv = document.getElementById('indicadores');
+                        indicadoresDiv.innerHTML = ''; // Limpar indicadores anteriores
+        
+                        data.forEach(item => {
+                            const indicadorKey = item.nome.toLowerCase().replace(" ", "_");
+        
+                            indicadoresDiv.innerHTML += `<div class="indicator-section"><h3>Preencha os valores para o Indicador: ${item.nome}</h3>`;
+        
+                            if (indicadoresConfig[indicadorKey]) {
+                                indicadoresConfig[indicadorKey].forEach(field => {
+                                    const fieldName = `indicadores_${item.id}_${field.name}`;
+                                    if (field.type === 'number' || field.type === 'text') {
+                                        indicadoresDiv.innerHTML += `
+                                            <div>
+                                                <label>${field.label}:</label>
+                                                <input type="${field.type}" name="${fieldName}" placeholder="${field.label}">
+                                            </div>
+                                        `;
+                                    } else if (field.type === 'select') {
+                                        let optionsHTML = '';
+                                        field.options.forEach(option => {
+                                            optionsHTML += `
+                                                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                                    <input type="radio" id="${fieldName}_${option.value}" name="${fieldName}" value="${option.value}" style="margin-right: 5px;">
+                                                    <label for="${fieldName}_${option.value}" style="font-size: 14px;">${option.label}</label>
+                                                </div>
+                                            `;
+                                        });
+                                        indicadoresDiv.innerHTML += `
+                                            <div>
+                                                <label>${field.label}:</label>
+                                                ${optionsHTML}
+                                            </div>
+                                        `;
+                                    } else if (field.type === 'checkbox' && indicadorKey === 'parcerias') {
+                                        renderParceriasField(field, fieldName, indicadoresDiv);
+                                    } else if (field.type === 'checkbox') {
+                                        renderCheckboxField(field, fieldName, indicadoresDiv);
+                                    }
+                                });
+                            }
+        
+                            indicadoresDiv.innerHTML += `</div>`; // Fechar a seção do indicador
+                        });
+        
+                        // Aplicar validação aos novos campos de indicadores
+                        applyValidationToIndicators();
+                    })
+                    .catch(error => console.error('Erro ao carregar indicadores:', error));
+            });
+                        
+            function applyValidationToIndicators() {
+                const fields = document.querySelectorAll('#indicadores input[type="number"], #indicadores input[type="text"], #indicadores select');
+                fields.forEach(field => {
+                    field.classList.add('invalid'); // Inicialmente inválido
+            
+                    field.addEventListener('input', function() {
+                        const value = field.value.trim();
+                        if (field.type === 'number') {
+                            if (value === "" || isNaN(Number(value))) {
+                                field.classList.remove('valid');
+                                field.classList.add('invalid');
+                            } else {
+                                field.classList.remove('invalid');
+                                field.classList.add('valid');
+                            }
+                        } else if (field.type === 'text' || field.type === 'radio') { // Incluído radio para validação
+                            if (value === "") {
+                                field.classList.remove('valid');
+                                field.classList.add('invalid');
+                            } else {
+                                field.classList.remove('invalid');
+                                field.classList.add('valid');
+                            }
+                        }
                     });
                 });
+            }
         });
     </script>
 </body>
