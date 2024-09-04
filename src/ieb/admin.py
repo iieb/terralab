@@ -50,4 +50,3 @@ admin.site.register(Escola)
 admin.site.register(Professores)
 admin.site.register(Organizacao)
 
-admin.site.register(AtividadeRegistroParcerias)

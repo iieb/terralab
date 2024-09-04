@@ -218,6 +218,7 @@ class AtividadeRegistro(models.Model):
     comentarios = models.TextField(blank=True)
     lista_presenca = models.ImageField(upload_to='listas_presenca/', blank=True)  # Novo campo para lista de presença
 
+
     def __str__(self):
         return f"{self.data_inicio} - {self.projeto.nome}/COMP-{self.componente.codigo}/ATIV-{self.atividade.codigo} - {self.atividade.nome}"
 
@@ -317,26 +318,13 @@ class Modelos(models.Model):
 
 
 class Parcerias(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
     nome = models.CharField(max_length=255)
     tipo = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
 
     def __str__(self):
         return self.nome
-
-class AtividadeRegistroParcerias(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    parcerias = models.ManyToManyField(Parcerias, related_name='atividades')
-    total_parcerias = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        # Salvar a instância para garantir que ela tenha um ID antes de adicionar as parcerias
-        super().save(*args, **kwargs)
-        # Atualizar a contagem de parcerias selecionadas
-        self.total_parcerias = self.parcerias.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_parcerias} parcerias"
 
 
 class Produtos(models.Model):

@@ -1,11 +1,14 @@
-import json
+from django.shortcuts import render
+
+# Create your views here.
+from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
 from .forms import AtividadeRegistroForm
-from .models import Projeto, Componente, Atividade, EquipeProjeto, Indicador, Meta, AtividadeRegistro, Treinados, Leis, Planos, Capacitados, Organizacao, Parcerias, AtividadeRegistroParcerias
+from .models import Projeto, Componente, Atividade, EquipeProjeto, Indicador, Meta, AtividadeRegistro, Treinados, Leis, Planos, Capacitados, Organizacao
 
 def atividade_registro_view(request):
     if request.method == 'POST':
@@ -18,9 +21,8 @@ def atividade_registro_view(request):
             leis_data = {'total_leis': 0, 'desenvolvimento': 0, 'proposto': 0, 'adotado': 0, 'implementado': 0}
             planos_data = {'total_planos': 0, 'desenvolvimento': 0, 'proposto': 0, 'adotado': 0, 'implementado': 0}
             capacitados_data = {'organizacoes': [], 'total_organizacoes': 0}
-            parcerias_data = {'parcerias': [], 'total_parcerias': 0}
 
-            treinados_exist = leis_exist = planos_exist = capacitados_exist = parcerias_exist = False
+            treinados_exist = leis_exist = planos_exist = capacitados_exist = False
 
             # Processamento dos campos enviados pelo formulário
             for key, value in request.POST.items():
@@ -75,17 +77,6 @@ def atividade_registro_view(request):
                             if field_name == 'organizacoes':
                                 capacitados_data['organizacoes'].extend(request.POST.getlist(key))
 
-                        elif indicador.nome.lower() == 'parcerias':
-                            parcerias_exist = True
-                            if field_name == 'parcerias':
-                                parcerias_data['parcerias'].extend(request.POST.getlist(key))
-                            # Verificar se uma nova parceria foi adicionada
-                            if f'{field_name}_new' in request.POST and request.POST[f'{field_name}_new'].strip():
-                                nova_parceria, created = Parcerias.objects.get_or_create(
-                                    nome=request.POST[f'{field_name}_new'].strip()
-                                )
-                                parcerias_data['parcerias'].append(nova_parceria.id)
-
                     except (Indicador.DoesNotExist, ValueError) as e:
                         print(f"Erro ao processar o indicador {key}: {e}")
                         continue
@@ -110,18 +101,6 @@ def atividade_registro_view(request):
                 capacitados_instance.total_organizacoes = len(capacitados_data['organizacoes'])
                 capacitados_instance.save()  # Salva novamente para atualizar o total_organizacoes
 
-            if parcerias_exist and parcerias_data['parcerias']:
-                # Criar a instância de AtividadeRegistroParcerias para armazenar as parcerias
-                parcerias_instance = AtividadeRegistroParcerias(
-                    atividade_registro=atividade_registro
-                )
-                parcerias_instance.save()
-
-                # Adicionar as parcerias selecionadas e salvar a contagem
-                parcerias_instance.parcerias.set(parcerias_data['parcerias'])
-                parcerias_instance.total_parcerias = len(parcerias_data['parcerias'])
-                parcerias_instance.save()
-
             messages.success(request, 'Registro de atividade salvo com sucesso!')
             return redirect('atividade_registro_detalhe', pk=atividade_registro.pk)
         else:
@@ -133,10 +112,6 @@ def atividade_registro_view(request):
     # Gerar o dicionário de configuração dos indicadores dinamicamente
     organizacoes = Organizacao.objects.all()
     organizacoes_options = [{'value': org.id, 'label': org.nome} for org in organizacoes]
-
-    parcerias = Parcerias.objects.all()
-    parcerias_options = [{'value': p.id, 'label': p.nome} for p in parcerias]
-
 
     indicadores_config = {
         "treinados": [
@@ -166,17 +141,14 @@ def atividade_registro_view(request):
         ],
         "capacitados": [
             {"name": "organizacoes", "type": "checkbox", "label": "Organizações", "options": organizacoes_options}
-        ],
-        "parcerias": [
-            {"name": "parcerias", "type": "checkbox", "label": "Parcerias", "options": parcerias_options},
         ]
-
     }
 
     return render(request, 'atividade_registro_form.html', {
         'form': form,
         'indicadores_config': indicadores_config  # Passando o dicionário para o template
     })
+
 def load_componentes(request):
     projeto_id = request.GET.get('projeto')
     componentes = Componente.objects.filter(projeto_id=projeto_id).all()
@@ -215,21 +187,3 @@ def atividade_registro_detalhe_view(request, pk):
     return render(request, 'atividade_registro_detalhe.html', {
         'atividade_registro': atividade_registro
     })
-
-def adicionar_parceria(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
-
-        nome = data.get("nome")
-        if nome:
-            nova_parceria = Parcerias.objects.create(nome=nome)
-            return JsonResponse({"id": nova_parceria.id, "nome": nova_parceria.nome})
-        else:
-            return JsonResponse({"error": "Nome não fornecido"}, status=400)
-    return JsonResponse({"error": "Método não permitido"}, status=405)
-
-def teste_template_view(request):
-    return render(request, 'teste.html')
