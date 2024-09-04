@@ -1,7 +1,13 @@
 from django import forms
-from .models import AtividadeRegistro
+from .models import AtividadeRegistro, Meta, Indicador, Projeto
 
 class AtividadeRegistroForm(forms.ModelForm):
+    indicadores = forms.ModelMultipleChoiceField(
+        queryset=Indicador.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
     class Meta:
         model = AtividadeRegistro
         fields = [
@@ -14,17 +20,20 @@ class AtividadeRegistroForm(forms.ModelForm):
             'data_inicio': forms.DateInput(attrs={'type': 'date'}),
             'data_final': forms.DateInput(attrs={'type': 'date'}),
             'equipe_adicional': forms.CheckboxSelectMultiple,
-            'desafios': forms.TextInput(attrs={'maxlength': 255}),
+            'desafios': forms.Textarea(attrs={'maxlength': 255}),
             'propostas': forms.Textarea(attrs={'maxlength': 255}),
             'sucesso': forms.Textarea(attrs={'maxlength': 255}),
             'melhores_praticas': forms.Textarea(attrs={'maxlength': 255}),
             'descricao': forms.Textarea(attrs={'maxlength': 255}),
             'comentarios': forms.Textarea(attrs={'maxlength': 255}),
+            'local': forms.Textarea(attrs={'maxlength': 255}),
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['projeto'].required = True
+        self.fields['projeto'].queryset = Projeto.objects.all()  # Certifique-se de que há Projetos no banco de dados
+        self.fields['projeto'].widget = forms.Select()
         self.fields['componente'].required = True
         self.fields['atividade'].required = True
         self.fields['equipe_projeto'].required = True
@@ -33,12 +42,40 @@ class AtividadeRegistroForm(forms.ModelForm):
         self.fields['descricao'].required = True
         self.fields['local'].required = True
         self.fields['fotos'].required = True
-        # Não é necessário definir campos não obrigatórios aqui, mas pode ser útil para clareza
-        self.fields['desafios'].required = False
-        self.fields['propostas'].required = False
-        self.fields['sucesso'].required = False
-        self.fields['melhores_praticas'].required = False
-        self.fields['lista_presenca'].required = False
+
+        self.fields['descricao'].widget.attrs.update({
+        'placeholder': 'Descreva a atividade realizada'
+    })
+        self.fields['local'].widget.attrs.update({
+        'placeholder': 'Indique o local em que a atividade foi realizada. Exemplo: Aldeia Nova Vista - TI Tenharim Marmelos'
+    })
+        self.fields['comentarios'].widget.attrs.update({
+        'placeholder': 'Comente algo relevante sobre a realização da atividade'
+    })
+        self.fields['desafios'].widget.attrs.update({
+        'placeholder': 'Algum desafio encontrado? Comente aqui...'
+    })
+        self.fields['propostas'].widget.attrs.update({
+        'placeholder': 'Alguma proposta a sugerir? Comente aqui...'
+    })
+        self.fields['sucesso'].widget.attrs.update({
+        'placeholder': 'História de sucesso a compartilhar? Comente aqui...'
+    })
+        self.fields['melhores_praticas'].widget.attrs.update({
+        'placeholder': 'Alguma boa prática a compartilhar? Comente aqui...'
+    })
+
+  
+  
+        if 'atividade' in self.data:
+            try:
+                atividade_id = int(self.data.get('atividade'))
+                self.fields['indicadores'].queryset = Indicador.objects.filter(meta__atividade_id=atividade_id).distinct()
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['indicadores'].queryset = self.instance.atividade.meta_set.all()
+
     def clean(self):
         cleaned_data = super().clean()
         data_inicio = cleaned_data.get('data_inicio')

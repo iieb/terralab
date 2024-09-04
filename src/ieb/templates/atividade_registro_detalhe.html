@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Botão</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            alert("O JavaScript está funcionando!");
+            const btn = document.getElementById('indicadores_14_parcerias_add_btn');
+            if (btn) {
+                console.log('Botão encontrado');
+                btn.addEventListener('click', function() {
+                    console.log('Teste simples: botão clicado');
+                });
+            } else {
+                console.log('Botão não encontrado');
+            }
+        });
+    </script>
+</head>
+<body>
+    <button id="indicadores_14_parcerias_add_btn">Adicionar Nova Parceria</button>
+</body>
+</html>
