@@ -49,4 +49,6 @@ admin.site.register(AIS)
 admin.site.register(Escola)
 admin.site.register(Professores)
 admin.site.register(Organizacao)
+admin.site.register(Parceria)
+admin.site.register(Plano)
 

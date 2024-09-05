@@ -248,17 +248,58 @@ class Treinados(models.Model):
     def __str__(self):
         return f"{self.atividade_registro} - {self.total_pessoas}"
 
-class Planos(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    total_planos = models.PositiveIntegerField(default=0)
-    desenvolvimento = models.PositiveIntegerField(default=0)
-    proposto = models.PositiveIntegerField(default=0)
-    adotado = models.PositiveIntegerField(default=0)
-    implementado = models.PositiveIntegerField(default=0)
+class Plano(models.Model):
+    TIPO_CHOICES = [
+        ('PGTA', 'PGTA'),
+        ('Plano de Enfrentamento', 'Plano de Enfrentamento'),
+        ('Plano de Diagnóstico', 'Plano de Diagnóstico')
+    ]
+    
+    SITUACAO_CHOICES = [
+        ('em desenvolvimento', 'Em Desenvolvimento'),
+        ('proposto', 'Proposto'),
+        ('adotado', 'Adotado'),
+        ('implementado', 'Implementado')
+    ]
+
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255, choices=TIPO_CHOICES)
+    situacao = models.CharField(max_length=255, choices=SITUACAO_CHOICES)
 
     def __str__(self):
-        return f"{self.atividade_registro} - {self.total_planos}"
+        return f"{self.nome} - {self.tipo} - {self.situacao}"
 
+class Planos(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    planos = models.ManyToManyField(Plano, related_name='planos')
+    total_planos = models.PositiveIntegerField(default=0, editable=False)
+
+    def save(self, *args, **kwargs):
+        # Evitar contar planos antes que a instância tenha um ID
+        if self.pk is None:
+            super().save(*args, **kwargs)
+
+        # Atualiza o campo `total_planos` com a contagem de planos selecionados
+        self.total_planos = self.planos.count()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.atividade_registro} - {self.total_planos} planos"
+
+
+    def __str__(self):
+        return f"{self.nome} - {self.tipo} - {self.situacao}"
+    
+class PlanoHistorico(models.Model):
+    plano = models.ForeignKey(Plano, on_delete=models.CASCADE)
+    situacao_anterior = models.CharField(max_length=255, choices=[('em desenvolvimento', 'Em Desenvolvimento'), ('proposto', 'Proposto'), ('adotado', 'Adotado'), ('implementado', 'Implementado')])
+    situacao_nova = models.CharField(max_length=255, choices=[('em desenvolvimento', 'Em Desenvolvimento'), ('proposto', 'Proposto'), ('adotado', 'Adotado'), ('implementado', 'Implementado')])
+    data_alteracao = models.DateTimeField(auto_now_add=True)
+    usuario = models.CharField(max_length=255)  # Ou usar um ForeignKey para um modelo de usuário, se necessário
+
+    def __str__(self):
+        return f"{self.plano.nome} - Alteração de {self.situacao_anterior} para {self.situacao_nova} em {self.data_alteracao}"
+    
 class Leis(models.Model):
     atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
     total_leis = models.PositiveIntegerField(default=0)
@@ -293,7 +334,27 @@ class Capacitados(models.Model):
     def __str__(self):
         return f"{self.atividade_registro} - {self.total_organizacoes} organizações"
     
+class Parceria(models.Model):
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.nome
+
+class Parcerias(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
+    parcerias = models.ManyToManyField(Parceria, related_name='parcerias')
+    total_parcerias = models.PositiveIntegerField(default=0, editable=False)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            super().save(*args, **kwargs)
+        self.total_parcerias = self.parcerias.count()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.atividade_registro} - {self.total_parcerias} parcerias"
+    
 
 
 class FormacaoIndigena(models.Model):
@@ -316,15 +377,6 @@ class Modelos(models.Model):
     def __str__(self):
         return self.nome
 
-
-class Parcerias(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    nome = models.CharField(max_length=255)
-    tipo = models.CharField(max_length=255)
-    tis = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
 
 
 class Produtos(models.Model):
