@@ -197,7 +197,7 @@ class Meta(models.Model):
     data = models.DateField()
 
     def __str__(self):
-        return f"{self.atividade.nome} - {self.indicador.nome}"
+        return f"{self.atividade.codigo} - {self.indicador.nome} - {self.base} - {self.meta}"
 
 
 class AtividadeRegistro(models.Model):

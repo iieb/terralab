@@ -57,6 +57,13 @@
             border: 2px solid #ddd;
             border-radius: 6px;
         }
+        input[type="text2"] {
+            width: 95%;
+            padding: 2px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
         .checkbox-group {
             display: flex;
             flex-direction: column;
@@ -108,10 +115,10 @@
             border-bottom: 2px solid #d26b16;
             padding-bottom: 5px;
         }
-        .valid, input[type="text"].valid, input[type="number"].valid {
+        .valid, input[type="text"].valid, input[type="text2"].valid, input[type="number"].valid {
             border-color: #4CAF50; /* Verde para válido */
         }
-        .invalid, input[type="text"].invalid, input[type="number"].invalid {
+        .invalid, input[type="text"].invalid, input[type="text2"].valid, input[type="number"].invalid {
             border-color: #d26b16; /* Laranja para inválido */
         }
         .indicator-section {
@@ -142,9 +149,12 @@
         background-color: #e04a2b;
         transform: scale(1.1);
 
-    .small-select {
-        width: 48%; /* Define o dropdown como metade do tamanho normal */
-    }
+    small-select {
+        width: 30%;
+        padding: 2px;
+        margin-bottom: 20px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
 
     </style>
 </head>
@@ -216,7 +226,8 @@
             </div>
 
             <div class="section">
-                <h2>Indicadores (Escolha a atividade)</h2>
+                <h2>Indicadores</h2>
+                <h4>Espaços para preencher valores dos indicadores aparecerão automaticamente, após selecionar a atividade referente ao registro. (Escolha a atividade)</h4>
                 <div id="indicadores"></div>
             </div>
 
@@ -429,10 +440,15 @@
             
                 indicadoresDiv.innerHTML += `
                     <div>
+                        <h3>Selecione a parceria relacionada a atividade:</h3>
+                    </div>
+                    <div>
                         <label>${field.label}:</label>
                         ${optionsHTML}
-                        <input type="text" id="${fieldName}_new_nome" placeholder="Nova Parceria">
-                        <input type="text" id="${fieldName}_new_tipo" placeholder="Tipo de Parceria">
+                        <h3>Não encontrou a Parceria que deseja relatar?</h3>
+                        <h5>Adicione uma nova logo abaixo:</h5>
+                        <input type="text2" id="${fieldName}_new_nome" placeholder="Nova Parceria">
+                        <input type="text2" id="${fieldName}_new_tipo" placeholder="Tipo de Parceria">
                         <button type="button" class="custom-add-btn" id="${fieldName}_add_btn">Adicionar Nova Parceria</button>
                     </div>
                 `;
@@ -513,10 +529,15 @@
     
                 indicadoresDiv.innerHTML += `
                     <div>
+                        <h3>Selecione o plano relacionado a atividade:</h3>
+                        <h5>Se precisar atualizar a situação de um plano: escolha a nova situação, aperte 'atualizar situação' e depois selecione o plano para relaciona-lo ao atual registro de atividade!</h5>
+                    </div>
+                    <div>
                         <label>${field.label}:</label>
                         ${optionsHTML}
-                        <h3>Cadastrar um novo plano:</h3>
-                        <input type="text" id="${fieldName}_new_nome" placeholder="Nome do Plano">
+                        <h3>Não encontrou o Plano que deseja relatar?</h3>
+                        <h5>Adicione um novo logo abaixo:</h5>
+                        <input type="text2" id="${fieldName}_new_nome" placeholder="Nome do Plano">
                         <select id="${fieldName}_new_tipo" class="small-select">
                             <option value="">Selecione o Tipo</option>
                             <option value="PGTA">PGTA</option>
@@ -625,7 +646,7 @@
                         data.forEach(item => {
                             const indicadorKey = item.nome.toLowerCase().replace(" ", "_");
     
-                            indicadoresDiv.innerHTML += `<div class="indicator-section"><h3>Preencha os valores para o Indicador: ${item.nome}</h3>`;
+                            indicadoresDiv.innerHTML += `<div class="indicator-section"><h3>${item.nome}</h3>`;
     
                             if (indicadoresConfig[indicadorKey]) {
                                 indicadoresConfig[indicadorKey].forEach(field => {
