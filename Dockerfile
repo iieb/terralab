@@ -45,6 +45,9 @@ RUN apt-get autoremove --purge &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
+# Modificar o arquivo fixtures.ini para incluir o app 'ieb'
+RUN sed -i 's/favorite,geonode_client/favorite,geonode_client,ieb/' /usr/src/terralab/config/fixtures.ini
+
 # Export ports
 EXPOSE 8000
 
