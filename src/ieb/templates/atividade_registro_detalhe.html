@@ -80,7 +80,13 @@
         <div class="field-value">{{ atividade_registro.melhores_praticas }}</div>
 
         <label>Fotos:</label>
-        <div class="field-value"><img src="{{ atividade_registro.fotos.url }}" alt="Fotos"></div>
+        <div class="field-value">
+            {% if atividade_registro.fotos %}
+                <img src="{{ atividade_registro.fotos.url }}" alt="Fotos">
+            {% else %}
+                <p>Nenhuma foto disponível.</p>
+            {% endif %}
+        </div>
 
         <label>Lista de Presença:</label>
         <div class="field-value">{{ atividade_registro.lista_presenca }}</div>

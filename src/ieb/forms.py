@@ -41,13 +41,13 @@ class AtividadeRegistroForm(forms.ModelForm):
         self.fields['data_final'].required = True
         self.fields['descricao'].required = True
         self.fields['local'].required = True
-        self.fields['fotos'].required = True
+        self.fields['fotos'].required = False
 
         self.fields['descricao'].widget.attrs.update({
         'placeholder': 'Descreva a atividade realizada'
     })
         self.fields['local'].widget.attrs.update({
-        'placeholder': 'Indique o local em que a atividade foi realizada. Exemplo: Aldeia Nova Vista - TI Tenharim Marmelos'
+        'placeholder': 'Indique o local em que a atividade foi realizada. Aldeia - Terra Indígena'
     })
         self.fields['comentarios'].widget.attrs.update({
         'placeholder': 'Comente algo relevante sobre a realização da atividade'

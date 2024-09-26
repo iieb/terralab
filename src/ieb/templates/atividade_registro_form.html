@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Registro de Atividade</h1>
+        <h1>Formulário de Registro de Atividade</h1>
         
         {% if messages %}
             {% for message in messages %}
@@ -174,7 +174,7 @@
             {{ form.non_field_errors }}
 
             <div class='section'>
-                <h2>Informações Obrigatórias</h2>
+                <h2>Descrição:</h2>
 
                 <label for="id_projeto">Projeto: <span style="color: red;">*</span></label>
                 <select id="id_projeto" name="projeto">
@@ -220,8 +220,12 @@
                 {{ form.local }}
 
                 {{ form.fotos.errors }}
-                <label for="id_fotos">Fotos: <span style="color: red;">*</span></label>
+                <label for="id_fotos">Fotos: <span style="color: red;">{{ form.fotos.errors }}</span></label>
                 {{ form.fotos }}
+
+                {{ form.lista_presenca.errors }}
+                <label for="id_lista_presenca">Lista de Presença: <span style="color: red;">{{ form.fotos.errors }}</span></label>
+                {{ form.lista_presenca }}
 
             </div>
 
@@ -231,6 +235,7 @@
                 <div id="indicadores"></div>
             </div>
 
+            <!--
             <div class="section">
                 <h2>Perguntas Adicionais</h2>
 
@@ -258,7 +263,7 @@
                 <label for="id_lista_presenca">Lista de Presença:</label>
                 {{ form.lista_presenca }}
             </div>
-<!--
+
             {{ form.equipe_adicional.errors }}
             <label for="id_equipe_adicional">Equipe Adicional:</label>
             <div id="id_equipe_adicional" class="checkbox-group">
@@ -389,8 +394,7 @@
                 document.getElementById('id_data_inicio'),
                 document.getElementById('id_data_final'),
                 document.getElementById('id_descricao'),
-                document.getElementById('id_local'),
-                document.getElementById('id_fotos')
+                document.getElementById('id_local')
             ];
     
             requiredFields.forEach(field => {
@@ -635,7 +639,6 @@
     
             // Carregamento dos indicadores e suas respectivas opções
             document.getElementById('id_atividade').addEventListener('change', function() {
-                alert("Atividade alterada, iniciando carregamento de indicadores.");
                 const url = "{% url 'load_indicadores' %}?atividade=" + this.value;
                 fetch(url)
                     .then(response => response.json())

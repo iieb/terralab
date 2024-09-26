@@ -212,7 +212,7 @@ class AtividadeRegistro(models.Model):
     propostas = models.CharField(max_length=255, blank=True)
     sucesso = models.CharField(max_length=255, blank=True)
     melhores_praticas = models.CharField(max_length=255, blank=True)
-    fotos = models.ImageField(upload_to='fotos/')  # Usar ImageField para suportar upload de mídia
+    fotos = models.ImageField(upload_to='fotos/', blank = True)  # Usar ImageField para suportar upload de mídia
     descricao = models.TextField()
     local = models.CharField(max_length=255)
     comentarios = models.TextField(blank=True)
