@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes da Atividade</title>
-    <style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ieb/css/estilo.css' %}">
+    {% comment %} <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -34,7 +36,7 @@
             margin-bottom: 20px;
             border-radius: 4px;
         }
-    </style>
+    </style> {% endcomment %}
 </head>
 <body>
     <div class="container">
