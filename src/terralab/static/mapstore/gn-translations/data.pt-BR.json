@@ -2,7 +2,12 @@
     "locale": "pt-BR",
     "messages": {
         "geostory": {
-            "geoNode": "GeoNode"
+            "geoNode": "GeoNode",
+            "builder": {
+                "defaults": {
+                    "htmlTitlePlaceholder": ""
+                }
+            }
         },
         "mediaEditor": {
             "imageList": {
@@ -220,7 +225,7 @@
             "selectFiles": "Selecione arquivos",
             "upload": "Enviar",
             "uploadDataset": "Enviar conjuntos de dados",
-            "dragAndDropDataset": "Arraste e solte o arquivo",
+            "dragAndDropFile": "Arraste e solte o arquivo",
             "cancelUpload": "Cancelar o envio",
             "filterPendingUploadDataset": "Filtrar conjuntos de dados enviados",
             "title": "Título",
@@ -246,11 +251,90 @@
             "minLon": "Longitude Mínima",
             "maxLat": "Latitude Máxima",
             "maxLon": "Longitude Máxima",
+            "clone": "Duplicar",
+            "center": "Centróide",
+            "centerLat": "Latitude Central",
+            "centerLon": "Longitude Central",
+            "addLayer": "Adicionar Camada",
+            "copyFrom": "Copiar de..",
+            "applyStyle": "Aplicar",
+            "copy": "Copiar",
+            "uploadDocument": "Enviar Documento",
+            "titlePlaceholder": "Insira o Título",
+            "datasetsCatalogTitle": "Catálogo de Dados",
+            "datasetsCatalogFilterPlaceholder": "Insira o Filtro para o catálogo",
+            "extent": "Filtro por Extensão",
             "resourceOrigin": {
                 "a": "Um",
                 "from": "de"
+            },
+            "dateFilter": {
+                "from": "Filtro De",
+                "to": "Até"
             }
 
+        },
+        "styleeditor": {
+            "fill": "Preenchimento",
+            "outlineColor": "Cor do Contorno",
+            "outlineWidht": "Largura do Contorno",
+            "simpleStyle": "Estilo Simples",
+            "classificationStyle": "Estilo por Classes",
+            "patternMarkStyle": "Estilo com Marcador Padrão",
+            "patternIconStyle": "Estilo com Ícone Padrão",
+            "openFilterBuilder": "Abrir Construtor de Filtro",
+            "openScaleDenominator": "Abrir Denominador de Escala",
+            "removeRule": "Remover",
+            "addMarkRule": "Adicionar Regra de Marcador",
+            "addIconRule": "Adicionar Regra de Ícone",
+            "addLineRule": "Adicionar Regra de Linha",
+            "addFillRule": "Adicionar Regra de Preenchimento",
+            "addTextRule": "Adicionar Regra de Texto",
+            "addModelRule": "Adicionar Regra no Modelo",
+            "undoStyle": "Desfazer",
+            "redoStyle": "Refazer",
+            "switchToTextareaEditor": "Alterar para editor de código",
+            "switchToVisualEditor": "Alterar para editor visual"
+        },
+        
+        "toc": {
+            "emptyLayerTree": "Lista de Camadas Vazia",
+            "addGroup": "Adicionar Grupo",
+            "addAnnotations": "Adicionar Anotação",
+            "openOnMapIniticalization": "Aberto na inicialização do Mapa",
+            "closeOnMapIniticalization": "Fechado na inicialização do Mapa",
+            "defaultTheme": "Tema Padrão",
+            "legendTheme": "Tema Legenda",
+            "showFullTitle": "Título Completo Ligado",
+            "hideFullTitle": "Título Completo Desligado",
+            "showOpacitySlider": "Botão de Opacidade Ligado",
+            "hideOpacitySlider": "Botão de Opacidade Desligado",
+            "showOpacityTooltip": "Porcentagem Ligada",
+            "hideOpacityTooltip": "Porcentagem Desligada",
+            "toolGroupShowAllChildren": "Ligar todas as camadas",
+            "toolGroupHideAllCrildren": "Desligar todas as camadas",
+            "activateToolGroupMutuallyExclusive": "Ligar Vínculo Mútuo",
+            "deactivateToolGroupMutuallyExclusive": "Desligar Vínculo Mútuo",
+            "toolGroupCollapseAllChildren": "Recolher grupos",
+            "toolGroupExpandAllChildren": "Expandir grupos",
+            "addSubGroup": "Adicionar SubGrupo",
+            "toolTrashGroupTooltip": "Deletar",
+            "swipe": "Ligar Transição de Camada",
+            "spyGlass": "Ligar Lupa"
+
+        },
+        "annotations": {
+            "properties": "Propriedades",
+            "geometries": "Geometrias"
+
+        },
+        "addgroup": {
+            "groupName": "Nome do Grupo",
+            "addbtn": "Adicionar"
+            
+        },
+        "saveDialog": {
+            "descriptionPlaceholder": "Insira a descrição"
         }
     }
 }

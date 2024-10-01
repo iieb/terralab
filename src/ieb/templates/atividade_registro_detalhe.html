@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Atividade</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ieb/css/estilo.css' %}">
+    {% comment %} <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #636363;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .field-value {
+            padding: 8px;
+            background-color: #f4f4f4;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style> {% endcomment %}
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes da Atividade</h1>
+
+        <label>Projeto:</label>
+        <div class="field-value">{{ atividade_registro.projeto.nome }}</div>
+
+        <label>Componente:</label>
+        <div class="field-value">{{ atividade_registro.componente.nome }}</div>
+
+        <label>Atividade:</label>
+        <div class="field-value">{{ atividade_registro.atividade.nome }}</div>
+
+        <label>Equipe Responsável:</label>
+        <div class="field-value">{{ atividade_registro.equipe_projeto.equipe.nome }}</div>
+
+        <label>Data Início:</label>
+        <div class="field-value">{{ atividade_registro.data_inicio }}</div>
+
+        <label>Data Final:</label>
+        <div class="field-value">{{ atividade_registro.data_final }}</div>
+
+        <label>Descrição:</label>
+        <div class="field-value">{{ atividade_registro.descricao }}</div>
+
+        <label>Local:</label>
+        <div class="field-value">{{ atividade_registro.local }}</div>
+
+        <label>Comentários:</label>
+        <div class="field-value">{{ atividade_registro.comentarios }}</div>
+
+        <label>Desafios:</label>
+        <div class="field-value">{{ atividade_registro.desafios }}</div>
+
+        <label>Propostas:</label>
+        <div class="field-value">{{ atividade_registro.propostas }}</div>
+
+        <label>Sucesso:</label>
+        <div class="field-value">{{ atividade_registro.sucesso }}</div>
+
+        <label>Melhores Práticas:</label>
+        <div class="field-value">{{ atividade_registro.melhores_praticas }}</div>
+
+        <label>Fotos:</label>
+        <div class="field-value">
+            {% if atividade_registro.fotos %}
+                <img src="{{ atividade_registro.fotos.url }}" alt="Fotos">
+            {% else %}
+                <p>Nenhuma foto disponível.</p>
+            {% endif %}
+        </div>
+
+        <label>Lista de Presença:</label>
+        <div class="field-value">{{ atividade_registro.lista_presenca }}</div>
+    </div>
+</body>
+</html>
