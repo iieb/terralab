@@ -162,6 +162,8 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
       - dbbackups:/pg_backups
+      - /opt/terralab/docker/postgresql/config/postgresql.conf:/var/lib/postgresql/data/postgresql.conf   # mapeamento permanente
+      - /opt/terralab/docker/postgresql/config/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     restart: unless-stopped
     healthcheck:
       test: "pg_isready -d postgres -U postgres"
