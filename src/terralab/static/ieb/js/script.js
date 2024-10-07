@@ -17,22 +17,31 @@ function getCookie(name) {
 
 // DICIONÁRIO DE CONFIGURAÇÃO DOS INDICADORES
 // Nova forma de obter o dicionário diretamente do backend
-const indicadoresConfig = {{ indicadores_config|safe }}
+//console.log(document.getElementById('indicadores-config').textContent); // Adicione esta linha
+//const indicadoresConfig = JSON.parse(document.getElementById('indicadores-config').textContent);
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('id_projeto').addEventListener('change', function() {
-        var url = "{% url 'load_componentes' %}?projeto=" + this.value;
+        var url = loadComponentesUrl + "?projeto=" + this.value;
         fetch(url)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 var select = document.getElementById('id_componente');
                 select.innerHTML = '<option value="">Selecione um componente</option>';
                 data.forEach(item => {
                     select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
                 });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
             });
 
-        var equipes_url = "{% url 'load_equipes' %}?projeto=" + this.value;
+        var equipes_url = loadequipesUrl + "?projeto=" + this.value;
         fetch(equipes_url)
             .then(response => response.json())
             .then(data => {
@@ -43,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-        var equipes_adicionais_url = "{% url 'load_equipes_adicionais' %}?projeto=" + this.value;
+        var equipes_adicionais_url = loadequipesadicionaisUrl + "?projeto=" + this.value;
         fetch(equipes_adicionais_url)
             .then(response => response.json())
             .then(data => {
@@ -57,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     
     document.getElementById('id_componente').addEventListener('change', function() {
-        var url = "{% url 'load_atividades' %}?componente=" + this.value;
+        var url = loadatividadesUrl + "?componente=" + this.value;
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -291,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.atualizarSituacaoPlano = function(planoId, novaSituacao, fieldName) {
-        fetch("{% url 'atualizar_situacao_plano' %}", {
+        fetch(atualizarSituacaoPlanoUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -318,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function adicionarNovoPlano(nome, tipo, situacao, fieldName) {
         console.log(`Enviando dados: Nome=${nome}, Tipo=${tipo}, Situação=${situacao}`);
     
-        fetch("{% url 'adicionar_plano' %}", {
+        fetch(adicionarplanoUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -352,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Carregamento dos indicadores e suas respectivas opções
     document.getElementById('id_atividade').addEventListener('change', function() {
-        const url = "{% url 'load_indicadores' %}?atividade=" + this.value;
+        const url = loadindicadoresUrl + "?atividade=" + this.value;
         fetch(url)
             .then(response => response.json())
             .then(data => {
