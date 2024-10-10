@@ -358,7 +358,471 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Erro ao realizar a requisição:', error);
         });
     }
+            // Recuperar e analisar os dados de produtosOptions
+            const produtosOptions = JSON.parse(document.getElementById('produtos-options-data').textContent);
 
+            function renderProdutosField(field, fieldName, indicadoresDiv) {
+                console.log('Renderizando campo de Produtos...');
+                let optionsHTML = '';
+                field.options.forEach(option => {
+                    optionsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_${option.value}" name="${fieldName}" value="${option.value}" style="margin-right: 5px;">
+                            <label for="${fieldName}_${option.value}" style="font-size: 14px;">${option.label}</label>
+                        </div>
+                    `;
+                });
+
+                indicadoresDiv.innerHTML += `
+                    <div>
+                        <label>${field.label}:</label>
+                        ${optionsHTML}
+                        <h3>Não encontrou o Produto que deseja relatar?</h3>
+                        <h5>Adicione um novo logo abaixo:</h5>
+                        <input type="text2" id="${fieldName}_new_nome" placeholder="Nome do Produto">
+                        <button type="button" class="custom-add-btn" id="${fieldName}_add_btn">Adicionar Novo Produto</button>
+                    </div>
+                `;
+
+                setTimeout(function() {
+                    const addButton = document.getElementById(`${fieldName}_add_btn`);
+                    if (addButton) {
+                        addButton.addEventListener('click', function() {
+                            const nome = document.getElementById(`${fieldName}_new_nome`).value;
+
+                            if (nome) {
+                                adicionarNovoProduto(nome, fieldName);
+                            } else {
+                                alert('Preencha o nome do produto.');
+                            }
+                        });
+                    }
+                }, 500);
+            }
+
+            function adicionarNovoProduto(nome, fieldName) {
+                fetch("{% url 'adicionar_produto' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ nome: nome })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.id) {
+                        console.log("Novo produto adicionado com sucesso", data);
+                        const newCheckboxHTML = `
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <input type="checkbox" id="${fieldName}_${data.id}" name="${fieldName}" value="${data.id}" style="margin-right: 5px;" checked>
+                                <label for="${fieldName}_${data.id}" style="font-size: 14px;">${data.nome}</label>
+                            </div>
+                        `;
+                        document.querySelector(`#${fieldName}_new_nome`).insertAdjacentHTML('beforebegin', newCheckboxHTML);
+                        document.getElementById(`${fieldName}_new_nome`).value = '';
+                    } else {
+                        console.error("Erro ao adicionar novo produto");
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar a requisição:', error);
+                });
+            }
+
+
+
+            function renderContratosField(field, fieldName, indicadoresDiv) {
+                console.log('Renderizando campo de Contratos...');
+
+                let optionsHTML = '';
+                field.options.forEach(option => {
+                    const optionId = option.value;
+                    optionsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_${optionId}" name="${fieldName}" value="${optionId}" style="margin-right: 5px;">
+                            <label for="${fieldName}_${optionId}" style="font-size: 14px;">${option.label}</label>
+                            <select id="estado_${optionId}" name="novo_estado" class="small-select" style="margin-left: 10px;">
+                                <option value="alinhamento_realizado">Alinhamento Realizado</option>
+                                <option value="em_desenvolvimento">Contrato em Desenvolvimento</option>
+                                <option value="assinado">Contrato Assinado</option>
+                            </select>
+                            <button type="button" class="custom-add-btn" style="margin-left: 10px;" onclick="atualizarEstadoContrato(${optionId}, document.getElementById('estado_${optionId}').value, '${fieldName}')">Atualizar Estado</button>
+                        </div>
+                    `;
+                });
+
+                indicadoresDiv.innerHTML += `
+                    <div>
+                        <h3>Selecione o contrato relacionado à atividade:</h3>
+                        <h5>Se precisar atualizar o estado de um contrato: escolha o novo estado, clique em 'Atualizar Estado' e depois selecione o contrato para relacioná-lo ao registro de atividade!</h5>
+                    </div>
+                    <div>
+                        <label>${field.label}:</label>
+                        ${optionsHTML}
+                        <h3>Não encontrou o Contrato que deseja relatar?</h3>
+                        <h5>Adicione um novo logo abaixo:</h5>
+                        <input type="text2" id="${fieldName}_new_nome" placeholder="Nome do Contrato">
+                        <select id="${fieldName}_new_estado" class="small-select">
+                            <option value="">Selecione o Estado</option>
+                            <option value="alinhamento_realizado">Alinhamento Realizado</option>
+                            <option value="em_desenvolvimento">Contrato em Desenvolvimento</option>
+                            <option value="assinado">Contrato Assinado</option>
+                        </select>
+                        <label>Selecione os Produtos Relacionados:</label>
+                        <div id="${fieldName}_produtos" class="checkbox-group">
+                            <!-- Opções de produtos serão adicionadas aqui -->
+                        </div>
+                        <button type="button" class="custom-add-btn" id="${fieldName}_add_btn">Adicionar Novo Contrato</button>
+                    </div>
+                `;
+
+                // Carregar as opções de produtos
+                let produtosHTML = '';
+                produtosOptions.forEach(produto => {
+                    produtosHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_produto_${produto.value}" name="${fieldName}_novo_contrato_produtos" value="${produto.value}" style="margin-right: 5px;">
+                            <label for="${fieldName}_produto_${produto.value}" style="font-size: 14px;">${produto.label}</label>
+                        </div>
+                    `;
+                });
+                document.getElementById(`${fieldName}_produtos`).innerHTML = produtosHTML;
+
+                setTimeout(function() {
+                    const addButton = document.getElementById(`${fieldName}_add_btn`);
+                    if (addButton) {
+                        addButton.addEventListener('click', function() {
+                            const nome = document.getElementById(`${fieldName}_new_nome`).value;
+                            const estado = document.getElementById(`${fieldName}_new_estado`).value;
+                            const produtosCheckboxes = document.querySelectorAll(`input[name="${fieldName}_novo_contrato_produtos"]:checked`);
+                            const produtosIds = Array.from(produtosCheckboxes).map(cb => cb.value);
+
+                            if (nome && estado) {
+                                adicionarNovoContrato(nome, estado, produtosIds, fieldName);
+                            } else {
+                                alert('Preencha todos os campos.');
+                            }
+                        });
+                    }
+                }, 500);
+            }
+
+            window.atualizarEstadoContrato = function(contratoId, novoEstado, fieldName) {
+                fetch("{% url 'atualizar_estado_contrato' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ contrato_id: contratoId, estado: novoEstado })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const label = document.querySelector(`#${fieldName}_${contratoId} + label`);
+                        if (label) {
+                            const currentLabel = label.innerText;
+                            const newLabel = currentLabel.replace(/( - )(.*)$/, ` - ${novoEstado.replace('_', ' ')}`);
+                            label.innerText = newLabel;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao realizar a requisição", error);
+                });
+            }
+
+            function adicionarNovoContrato(nome, estado, produtosIds, fieldName) {
+                fetch("{% url 'adicionar_contrato' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ nome: nome, estado: estado, produtos: produtosIds })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.id) {
+                        console.log("Novo contrato adicionado com sucesso", data);
+                        const newCheckboxHTML = `
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <input type="checkbox" id="${fieldName}_${data.id}" name="${fieldName}" value="${data.id}" style="margin-right: 5px;" checked>
+                                <label for="${fieldName}_${data.id}" style="font-size: 14px;">${data.nome} - ${data.estado.replace('_', ' ')}</label>
+                            </div>
+                        `;
+                        document.querySelector(`#${fieldName}_new_nome`).insertAdjacentHTML('beforebegin', newCheckboxHTML);
+                        document.getElementById(`${fieldName}_new_nome`).value = '';
+                        document.getElementById(`${fieldName}_new_estado`).value = '';
+                        // Limpar checkboxes de produtos
+                        const produtosCheckboxes = document.querySelectorAll(`input[name="${fieldName}_novo_contrato_produtos"]`);
+                        produtosCheckboxes.forEach(cb => cb.checked = false);
+                    } else {
+                        console.error("Erro ao adicionar novo contrato", data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar a requisição:', error);
+                });
+            }
+
+            function renderLeisField(field, fieldName, indicadoresDiv) {
+                console.log('Renderizando campo de Leis...');
+
+                let optionsHTML = '';
+                field.options.forEach(option => {
+                    const optionId = option.value;
+                    optionsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_${optionId}" name="${fieldName}" value="${optionId}" style="margin-right: 5px;">
+                            <label for="${fieldName}_${optionId}" style="font-size: 14px;">${option.label}</label>
+                            <select id="situacao_${optionId}" name="nova_situacao" class="small-select" style="margin-left: 10px;">
+                                <option value="em desenvolvimento">Em Desenvolvimento</option>
+                                <option value="proposto">Proposto</option>
+                                <option value="aprovado">Aprovado</option>
+                                <option value="implementado">Implementado</option>
+                            </select>
+                            <button type="button" class="custom-add-btn" style="margin-left: 10px;" onclick="atualizarSituacaoLei(${optionId}, document.getElementById('situacao_${optionId}').value, '${fieldName}')">Atualizar Situação</button>
+                        </div>
+                    `;
+                });
+
+                indicadoresDiv.innerHTML += `
+                    <div>
+                        <h3>Selecione a lei relacionada à atividade:</h3>
+                        <h5>Se precisar atualizar a situação de uma lei: escolha a nova situação, clique em 'Atualizar Situação' e depois selecione a lei para relacioná-la ao registro de atividade!</h5>
+                    </div>
+                    <div>
+                        <label>${field.label}:</label>
+                        ${optionsHTML}
+                        <h3>Não encontrou a Lei que deseja relatar?</h3>
+                        <h5>Adicione uma nova logo abaixo:</h5>
+                        <input type="text2" id="${fieldName}_new_nome" placeholder="Nome da Lei">
+                        <select id="${fieldName}_new_tipo" class="small-select">
+                            <option value="">Selecione o Tipo</option>
+                            <option value="PGTA">PGTA</option>
+                        </select>
+                        <select id="${fieldName}_new_situacao" class="small-select">
+                            <option value="">Selecione a Situação</option>
+                            <option value="em desenvolvimento">Em Desenvolvimento</option>
+                            <option value="proposto">Proposto</option>
+                            <option value="aprovado">Aprovado</option>
+                            <option value="implementado">Implementado</option>
+                        </select>
+                        <button type="button" class="custom-add-btn" id="${fieldName}_add_btn">Adicionar Nova Lei</button>
+                    </div>
+                `;
+
+                setTimeout(function() {
+                    const addButton = document.getElementById(`${fieldName}_add_btn`);
+                    if (addButton) {
+                        addButton.addEventListener('click', function() {
+                            const nome = document.getElementById(`${fieldName}_new_nome`).value;
+                            const tipo = document.getElementById(`${fieldName}_new_tipo`).value;
+                            const situacao = document.getElementById(`${fieldName}_new_situacao`).value;
+
+                            if (nome && tipo && situacao) {
+                                adicionarNovaLei(nome, tipo, situacao, fieldName);
+                            } else {
+                                alert('Preencha todos os campos.');
+                            }
+                        });
+                    }
+                }, 500);
+            }
+
+            window.atualizarSituacaoLei = function(leiId, novaSituacao, fieldName) {
+                fetch("{% url 'atualizar_situacao_lei' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ lei_id: leiId, situacao: novaSituacao })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const label = document.querySelector(`#${fieldName}_${leiId} + label`);
+                        if (label) {
+                            const currentLabel = label.innerText;
+                            const newLabel = currentLabel.replace(/( - )(.*)$/, ` - ${novaSituacao}`);
+                            label.innerText = newLabel;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao realizar a requisição", error);
+                });
+            }
+
+            function adicionarNovaLei(nome, tipo, situacao, fieldName) {
+                fetch("{% url 'adicionar_lei' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ nome: nome, tipo: tipo, situacao: situacao })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.id) {
+                        console.log("Nova lei adicionada com sucesso", data);
+                        const newCheckboxHTML = `
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <input type="checkbox" id="${fieldName}_${data.id}" name="${fieldName}" value="${data.id}" style="margin-right: 5px;" checked>
+                                <label for="${fieldName}_${data.id}" style="font-size: 14px;">${data.nome} - ${data.tipo} - ${data.situacao}</label>
+                            </div>
+                        `;
+                        document.querySelector(`#${fieldName}_new_nome`).insertAdjacentHTML('beforebegin', newCheckboxHTML);
+                        document.getElementById(`${fieldName}_new_nome`).value = '';
+                        document.getElementById(`${fieldName}_new_tipo`).value = '';
+                        document.getElementById(`${fieldName}_new_situacao`).value = '';
+                    } else {
+                        console.error("Erro ao adicionar nova lei", data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar a requisição:', error);
+                });
+            }
+
+            function renderTextareaField(field, fieldName, indicadoresDiv) {
+                indicadoresDiv.innerHTML += `
+                    <div class="form-group">
+                        <label for="${fieldName}">${field.label}:</label>
+                        <textarea id="${fieldName}" name="${fieldName}" class="form-control"></textarea>
+                    </div>
+                `;
+            }
+
+            function renderModelosField(field, fieldName, indicadoresDiv) {
+                console.log('Renderizando campo de Modelos...');
+                let optionsHTML = '';
+                field.options.forEach(option => {
+                    optionsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" id="${fieldName}_${option.value}" name="${fieldName}" value="${option.value}" class="modelo-checkbox" style="margin-right: 5px;">
+                            <label for="${fieldName}_${option.value}" style="font-size: 14px;">${option.label}</label>
+                        </div>
+                    `;
+                });
+
+                indicadoresDiv.innerHTML += `
+                    <div>
+                        <h3>Selecione o modelo relacionado à atividade:</h3>
+                    </div>
+                    <div>
+                        <label>${field.label}:</label>
+                        ${optionsHTML}
+                        <h3>Não encontrou o Modelo que deseja relatar?</h3>
+                        <h5>Adicione um novo logo abaixo:</h5>
+                        <input type="text2" id="${fieldName}_new_nome" placeholder="Novo Modelo">
+                        <button type="button" class="custom-add-btn" id="${fieldName}_add_btn">Adicionar Novo Modelo</button>
+                    </div>
+                `;
+
+                // Associar o evento de clique ao botão após ele ser inserido no DOM
+                setTimeout(function() {
+                    const addButton = document.getElementById(`${fieldName}_add_btn`);
+                    if (addButton) {
+                        addButton.addEventListener('click', function() {
+                            const nome = document.getElementById(`${fieldName}_new_nome`).value;
+
+                            if (nome) {
+                                adicionarNovoModelo(nome, fieldName);
+                            } else {
+                                alert('Preencha o nome do modelo.');
+                            }
+                        });
+                    }
+                }, 500);
+            }
+
+            function adicionarNovoModelo(nome, fieldName) {
+                fetch("{% url 'adicionar_modelo' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ nome: nome })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.id) {
+                        console.log("Novo modelo adicionado com sucesso", data);
+                        // Adiciona o novo modelo na lista de checkboxes
+                        const newCheckboxHTML = `
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <input type="checkbox" id="${fieldName}_${data.id}" name="${fieldName}" value="${data.id}" class="modelo-checkbox" style="margin-right: 5px;" checked>
+                                <label for="${fieldName}_${data.id}" style="font-size: 14px;">${data.nome}</label>
+                            </div>
+                        `;
+                        document.querySelector(`#${fieldName}_new_nome`).insertAdjacentHTML('beforebegin', newCheckboxHTML);
+                        document.getElementById(`${fieldName}_new_nome`).value = '';
+                    } else {
+                        console.error("Erro ao adicionar novo modelo");
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar a requisição:', error);
+                });
+            }
+
+            document.addEventListener('change', function(event) {
+                if (event.target.classList.contains('modelo-checkbox')) {
+                    const modeloId = event.target.value;
+                    const fieldName = event.target.name;
+                    if (event.target.checked) {
+                        // Renderizar o campo de status para este modelo
+                        renderStatusField(modeloId, fieldName);
+                    } else {
+                        // Remover o campo de status para este modelo
+                        removeStatusField(modeloId);
+                    }
+                }
+            });
+
+            function renderStatusField(modeloId, fieldName) {
+                const statusOptions = [
+                    {"value": "Em desenvolvimento/proposto", "label": "Em desenvolvimento/proposto"},
+                    {"value": "Implementação ativa", "label": "Implementação ativa"},
+                    {"value": "Difundido (modelo adotado em outro lugar)", "label": "Difundido (modelo adotado em outro lugar)"},
+                ];
+
+                let optionsHTML = '';
+                statusOptions.forEach(option => {
+                    optionsHTML += `<option value="${option.value}">${option.label}</option>`;
+                });
+
+                const statusFieldHTML = `
+                    <div class="form-group" id="status_modelo_${modeloId}">
+                        <label for="status_${modeloId}">Status do Modelo Selecionado:</label>
+                        <select id="status_${modeloId}" name="status_modelo_${modeloId}" class="form-control">
+                            <option value="">Selecione um status</option>
+                            ${optionsHTML}
+                        </select>
+                    </div>
+                `;
+
+                // Adicionar o campo após a lista de modelos
+                const indicadoresDiv = document.getElementById('indicadores');
+                indicadoresDiv.insertAdjacentHTML('beforeend', statusFieldHTML);
+            }
+
+            function removeStatusField(modeloId) {
+                const statusField = document.getElementById(`status_modelo_${modeloId}`);
+                if (statusField) {
+                    statusField.remove();
+                }
+            }
+
+            function normalizeString(str) {
+                return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            }
     // Carregamento dos indicadores e suas respectivas opções
     document.getElementById('id_atividade').addEventListener('change', function() {
         const url = loadindicadoresUrl + "?atividade=" + this.value;
@@ -369,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 indicadoresDiv.innerHTML = ''; // Limpar indicadores anteriores
 
                 data.forEach(item => {
-                    const indicadorKey = item.nome.toLowerCase().replace(" ", "_");
+                    const indicadorKey = normalizeString(item.nome).toLowerCase().replace(/ /g, "_");
 
                     indicadoresDiv.innerHTML += `<div class="indicator-section"><h3>${item.nome}</h3>`;
 
@@ -377,12 +841,25 @@ document.addEventListener('DOMContentLoaded', function () {
                         indicadoresConfig[indicadorKey].forEach(field => {
                             const fieldName = `indicadores_${item.id}_${field.name}`;
                             if (field.type === 'number' || field.type === 'text') {
+                                let stepAttribute = '';
+                                        let langAttribute = '';
+                                        if (field.type === 'number') {
+                                            if (field.step) {
+                                                stepAttribute = `step="${field.step}"`;
+                                                // Se o step inclui ponto, definimos o lang para 'en' para garantir que o separador decimal seja o ponto
+                                                if (field.step.includes('.')) {
+                                                    langAttribute = `lang="en"`;
+                                                }
+                                            }
+                                        }
                                 indicadoresDiv.innerHTML += `
                                     <div>
                                         <label>${field.label}:</label>
-                                        <input type="${field.type}" name="${fieldName}" placeholder="${field.label}">
+                                        <input type="${field.type}" name="${fieldName}" placeholder="${field.label}" ${stepAttribute} ${langAttribute}>
                                     </div>
                                 `;
+                            } else if (field.type === 'textarea') {
+                                renderTextareaField(field, fieldName, indicadoresDiv);
                             } else if (field.type === 'select') {
                                 let optionsHTML = '';
                                 field.options.forEach(option => {
@@ -402,12 +879,24 @@ document.addEventListener('DOMContentLoaded', function () {
                             } else if (field.type === 'checkbox' && indicadorKey === 'parcerias') {
                                 alert("Renderizando Parcerias.");
                                 renderParceriasField(field, fieldName, indicadoresDiv);
+                            } else if (field.type === 'checkbox' && indicadorKey === 'produtos') {
+                                alert("Renderizando Produtos.");
+                                renderProdutosField(field, fieldName, indicadoresDiv);
+                            } else if (field.type === 'checkbox' && indicadorKey === 'contratos') {
+                                alert("Renderizando Contratos.");
+                                renderContratosField(field, fieldName, indicadoresDiv);
                             } else if (field.type === 'checkbox' && indicadorKey === 'planos') {
                                 renderPlanosField(field, fieldName, indicadoresDiv);
+                            } else if (field.type === 'checkbox' && indicadorKey === 'leis') {
+                                renderLeisField(field, fieldName, indicadoresDiv);
+                            } else if (field.type === 'checkbox' && indicadorKey === 'modelos') {
+                                renderModelosField(field, fieldName, indicadoresDiv);
                             } else if (field.type === 'checkbox') {
                                 renderCheckboxField(field, fieldName, indicadoresDiv);
                             }
                         });
+                    } else {
+                        console.error(`Indicador key '${indicadorKey}' not found in indicadoresConfig`);
                     }
 
                     indicadoresDiv.innerHTML += `</div>`; // Fechar a seção do indicador
@@ -447,4 +936,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
 });
