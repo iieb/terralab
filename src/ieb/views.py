@@ -640,3 +640,25 @@ def adicionar_modelo(request):
         except json.JSONDecodeError:
             return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
     return JsonResponse({"error": "Método não permitido"}, status=405)
+
+def atividade_registro_anterior(request, pk):
+    # Obter o registro atual
+    current_record = get_object_or_404(AtividadeRegistro, id=pk)
+    # Encontrar o registro anterior
+    previous_record = AtividadeRegistro.objects.filter(id__lt=current_record.id).order_by('-id').first()
+    if previous_record:
+        return redirect('atividade_registro_detalhe', pk=previous_record.id)
+    else:
+        # Se não houver registro anterior, redirecionar para o atual ou para uma página específica
+        return redirect('atividade_registro_detalhe', pk=current_record.id)
+
+def atividade_registro_proximo(request, pk):
+    # Obter o registro atual
+    current_record = get_object_or_404(AtividadeRegistro, id=pk)
+    # Encontrar o próximo registro
+    next_record = AtividadeRegistro.objects.filter(id__gt=current_record.id).order_by('id').first()
+    if next_record:
+        return redirect('atividade_registro_detalhe', pk=next_record.id)
+    else:
+        # Se não houver próximo registro, redirecionar para o atual ou para uma página específica
+        return redirect('atividade_registro_detalhe', pk=current_record.id)
