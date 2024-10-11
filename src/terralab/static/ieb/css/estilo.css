@@ -141,6 +141,7 @@ transition: background-color 0.3s ease, transform 0.3s ease;
 .custom-add-btn:hover {
 background-color: #e04a2b;
 transform: scale(1.1);
+}
 
 small-select {
 width: 30%;
@@ -148,3 +149,4 @@ padding: 2px;
 margin-bottom: 20px;
 border: 2px solid #ddd;
 border-radius: 6px;
+}

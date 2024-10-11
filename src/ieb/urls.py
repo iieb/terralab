@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from .views import atividade_registro_view, load_componentes, load_atividades, load_equipes, load_equipes_adicionais,load_indicadores, atividade_registro_detalhe_view, teste_parcerias_view,adicionar_parceria, adicionar_plano,atualizar_situacao_plano, adicionar_produto, adicionar_contrato, atualizar_estado_contrato, adicionar_lei, atualizar_situacao_lei, adicionar_modelo
+from . import views 
 
 urlpatterns = [
     path('atividade_registro/', atividade_registro_view, name='atividade_registro'),
@@ -21,7 +22,8 @@ urlpatterns = [
     path('adicionar_lei/', adicionar_lei, name='adicionar_lei'),
     path('atualizar_situacao_lei/', atualizar_situacao_lei, name='atualizar_situacao_lei'),
     path('adicionar_modelo/', adicionar_modelo, name='adicionar_modelo'),
-
+    path('atividade/<int:pk>/anterior/', views.atividade_registro_anterior, name='atividade_registro_anterior'),
+    path('atividade/<int:pk>/proximo/', views.atividade_registro_proximo, name='atividade_registro_proximo'),
 
 
 ]

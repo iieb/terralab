@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes da Atividade</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'ieb/css/estilo.css' %}">
+    <link rel="stylesheet" href="{% static 'ieb/css/detalhe.css' %}">
     {% comment %} <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,6 +92,10 @@
 
         <label>Lista de Presença:</label>
         <div class="field-value">{{ atividade_registro.lista_presenca }}</div>
+        <div class="navigation-buttons">
+            <a href="{% url 'atividade_registro_anterior' atividade_registro.id %}" class="btn btn-primary">Anterior</a>
+            <a href="{% url 'atividade_registro_proximo' atividade_registro.id %}" class="btn btn-secondary">Próximo</a>
+        </div>
     </div>
 </body>
 </html>
