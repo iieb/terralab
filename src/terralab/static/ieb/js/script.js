@@ -15,6 +15,15 @@ function getCookie(name) {
     return cookieValue;
 }
 
+// Substitua as URLs do Django por variáveis globais
+const loadComponentesUrl = window.loadComponentesUrl || '/url/para/load_componentes/';
+const loadequipesUrl = window.loadequipesUrl || '/url/para/load_equipes/';
+const loadequipesadicionaisUrl = window.loadequipesadicionaisUrl || '/url/para/load_equipes_adicionais/';
+const loadatividadesUrl = window.loadatividadesUrl || '/url/para/load_atividades/';
+const loadindicadoresUrl = window.loadindicadoresUrl || '/url/para/load_indicadores/';
+const atualizarSituacaoPlanoUrl = window.atualizarSituacaoPlanoUrl || '/url/para/atualizar_situacao_plano/';
+const adicionarplanoUrl = window.adicionarplanoUrl || '/url/para/adicionar_plano/';
+
 // DICIONÁRIO DE CONFIGURAÇÃO DOS INDICADORES
 // Nova forma de obter o dicionário diretamente do backend
 //console.log(document.getElementById('indicadores-config').textContent); // Adicione esta linha
@@ -202,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para adicionar uma nova parceria ao backend
     function adicionarNovaParceria(nome, tipo, fieldName) {
-        fetch("{% url 'adicionar_parceria' %}", {
+        fetch(getAdicionarParceiraUrl(), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -300,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.atualizarSituacaoPlano = function(planoId, novaSituacao, fieldName) {
-        fetch(atualizarSituacaoPlanoUrl, {
+        fetch(getAtualizarEstadoContratoUrl(), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -358,8 +367,17 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Erro ao realizar a requisição:', error);
         });
     }
+            // Adicione esta função antes de usá-la
+            function getProdutosOptionsData() {
+                // Aqui você deve retornar os dados dos produtos
+                // Por exemplo, você pode obter esses dados de um elemento HTML oculto
+                // ou fazer uma chamada AJAX para obtê-los do servidor
+                // Por enquanto, vamos retornar um array vazio como exemplo
+                return [];
+            }
+
             // Recuperar e analisar os dados de produtosOptions
-            const produtosOptions = JSON.parse(document.getElementById('produtos-options-data').textContent);
+            const produtosOptions = getProdutosOptionsData();
 
             function renderProdutosField(field, fieldName, indicadoresDiv) {
                 console.log('Renderizando campo de Produtos...');
@@ -401,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function adicionarNovoProduto(nome, fieldName) {
-                fetch("{% url 'adicionar_produto' %}", {
+                fetch(getAdicionarModeloUrl(), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -509,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             window.atualizarEstadoContrato = function(contratoId, novoEstado, fieldName) {
-                fetch("{% url 'atualizar_estado_contrato' %}", {
+                fetch(getAtualizarEstadoContratoUrl(), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -534,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function adicionarNovoContrato(nome, estado, produtosIds, fieldName) {
-                fetch("{% url 'adicionar_contrato' %}", {
+                fetch(getAdicionarContratoUrl(), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -633,7 +651,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             window.atualizarSituacaoLei = function(leiId, novaSituacao, fieldName) {
-                fetch("{% url 'atualizar_situacao_lei' %}", {
+                fetch(getAtualizarSituacaoLeiUrl(), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -658,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function adicionarNovaLei(nome, tipo, situacao, fieldName) {
-                fetch("{% url 'adicionar_lei' %}", {
+                fetch(getAdicionarLeiUrl(), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -742,7 +760,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function adicionarNovoModelo(nome, fieldName) {
-                fetch("{% url 'adicionar_modelo' %}", {
+                fetch(getAdicionarModeloUrl(), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -938,3 +956,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+

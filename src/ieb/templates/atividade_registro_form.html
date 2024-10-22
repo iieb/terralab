@@ -134,14 +134,14 @@
         </form>
     </div>
     <script>
-        const loadComponentesUrl = "{% url 'load_componentes' %}";
-        const loadequipesUrl = "{% url 'load_equipes' %}";
-        const loadequipesadicionaisUrl = "{% url 'load_equipes_adicionais' %}";
-        const loadatividadesUrl = "{% url 'load_atividades' %}";
-        const indicadoresConfig = {{ indicadores_config|safe }};
-        const atualizarSituacaoPlanoUrl = "{% url 'atualizar_situacao_plano' %}";
-        const adicionarplanoUrl = "{% url 'adicionar_plano' %}";
-        const loadindicadoresUrl = "{% url 'load_indicadores' %}";
+        window.loadComponentesUrl = "{% url 'load_componentes' %}";
+        window.loadequipesUrl = "{% url 'load_equipes' %}";
+        window.loadequipesadicionaisUrl = "{% url 'load_equipes_adicionais' %}";
+        window.loadatividadesUrl = "{% url 'load_atividades' %}";
+        window.indicadoresConfig = {{ indicadores_config|safe }};
+        window.atualizarSituacaoPlanoUrl = "{% url 'atualizar_situacao_plano' %}";
+        window.adicionarplanoUrl = "{% url 'adicionar_plano' %}";
+        window.loadindicadoresUrl = "{% url 'load_indicadores' %}";
     </script>
     
     <script src="{% static 'ieb/js/script.js' %}"></script>
