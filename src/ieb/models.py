@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 from django.utils import timezone
-from django.contrib.gis.db import models as gis_models
 
 # Create your models here.
 # MOVIMENTO INDÍGENA
@@ -47,6 +46,9 @@ class TIs(models.Model):
     municipio = models.CharField(max_length=255)
     uf = models.CharField(max_length=255)
     modalidade = models.CharField(max_length=255)
+    oilocal = models.ForeignKey(OIsLocal, on_delete=models.CASCADE)
+    cr_id = models.IntegerField()
+    dsei_id = models.IntegerField()
 
     def __str__(self):
         return self.nome
@@ -230,60 +232,6 @@ class AtividadeRegistroEquipe(models.Model):
 
 # GESTÃO DE PROJETOS - INDICADORES USAID
 
-# 10.2-1 restrito - OK
-class AreaRestrito(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    ti = models.ForeignKey(TIs, on_delete=models.CASCADE, related_name='area_restrito')
-    area_em_ha = models.DecimalField(max_digits=12, decimal_places=2)
-
-    class Meta:
-        verbose_name = 'Área Restrita'
-        verbose_name_plural = 'Áreas Restritas'
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.ti.nome} - {self.area_em_ha} ha"
-
-# 10.2-2 direto - OK
-class AreaDireto(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    tis = models.ManyToManyField(TIs, related_name='area_direto')
-    total_tis = models.PositiveIntegerField(default=0, editable=False)
-    total_area = models.FloatField(default=0.0, editable=False)  # Novo campo para armazenar a soma da área das TIs
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            super().save(*args, **kwargs)
-        
-        # Calcula o total de TIs e a soma da área
-        self.total_tis = self.tis.count()
-        self.total_area = self.tis.aggregate(total_area=models.Sum('area'))['total_area'] or 0.0
-
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_tis} TIs - {self.total_area} ha de área"
-
-# 10.2-3 geral - OK
-class AreaGeral(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    tis = models.ManyToManyField(TIs, related_name='area_geral')
-    total_tis = models.PositiveIntegerField(default=0, editable=False)
-    total_area = models.FloatField(default=0.0, editable=False)  # Novo campo para armazenar a soma da área das TIs
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            super().save(*args, **kwargs)
-        
-        # Calcula o total de TIs e a soma da área
-        self.total_tis = self.tis.count()
-        self.total_area = self.tis.aggregate(total_area=models.Sum('area'))['total_area'] or 0.0
-
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_tis} TIs - {self.total_area} ha de área"
-    
-# 10.2-4 treinados - OK
 class Treinados(models.Model):
     atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
     total_pessoas = models.PositiveIntegerField(default=0)
@@ -300,94 +248,6 @@ class Treinados(models.Model):
     def __str__(self):
         return f"{self.atividade_registro} - {self.total_pessoas}"
 
-# 10.2-5 Leis Políticas - OK
-class Lei(models.Model):
-    TIPO_CHOICES = [
-        ('PGTA', 'PGTA'),
-    ]
-    
-    SITUACAO_CHOICES = [
-        ('em desenvolvimento', 'Em Desenvolvimento'),
-        ('proposto', 'Proposto'),
-        ('aprovado', 'Aprovado'),
-        ('implementado', 'Implementado')
-    ]
-
-    nome = models.CharField(max_length=255)
-    tipo = models.CharField(max_length=255, choices=TIPO_CHOICES)
-    situacao = models.CharField(max_length=255, choices=SITUACAO_CHOICES)
-
-    def __str__(self):
-        return f"{self.nome} - {self.tipo} - {self.situacao}"
-
-class Leis(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    leis = models.ManyToManyField(Lei, related_name='leis')
-    total_leis = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        # Evitar contar leis antes que a instância tenha um ID
-        if self.pk is None:
-            super().save(*args, **kwargs)
-
-        # Atualiza o campo `total_leis` com a contagem de leis selecionadas
-        self.total_leis = self.leis.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_leis} leis"
-
-class LeiHistorico(models.Model):
-    lei = models.ForeignKey(Lei, on_delete=models.CASCADE)
-    situacao_anterior = models.CharField(max_length=255, choices=Lei.SITUACAO_CHOICES)
-    situacao_nova = models.CharField(max_length=255, choices=Lei.SITUACAO_CHOICES)
-    data_alteracao = models.DateTimeField(auto_now_add=True)
-    usuario = models.CharField(max_length=255)  # Ou usar um ForeignKey para o modelo de usuário
-
-    def __str__(self):
-        return f"{self.lei.nome} - Alteração de {self.situacao_anterior} para {self.situacao_nova} em {self.data_alteracao}"
-    
-# 7 Capacitados - OK
-class Organizacao(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-    
-class Capacitados(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    organizacoes = models.ManyToManyField(Organizacao, related_name='capacitados')
-    total_organizacoes = models.PositiveIntegerField(default=0, editable=False)
-    foco_capacitacao = models.CharField(max_length=50, choices=[
-        ('implementacao', 'Implementação melhorada/monitoramento/vigilância'),
-        ('ativ_prod', 'Meios de subsistência/cadeia de valor sustentáveis melhorados'),
-        ('governanca', 'Fortalecimento institucional/capacitação organizacional/governança')
-    ])
-
-    def save(self, *args, **kwargs):
-        # Evite contar organizações antes que a instância tenha um ID
-        if self.pk is None:
-            super().save(*args, **kwargs)
-        
-        # Atualiza o campo `total_organizacoes` com a contagem de organizações selecionadas
-        self.total_organizacoes = self.organizacoes.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_organizacoes} organizações - {self.foco_capacitacao}"
-    
-# 8 aplicação - OK
-class Aplicacao(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    total_pessoas = models.PositiveIntegerField()
-    homens = models.PositiveIntegerField()
-    mulheres = models.PositiveIntegerField()
-    jovens = models.PositiveIntegerField()
-
-    def __str__(self):
-        return f"Aplicação - Total: {self.total_pessoas}"
-    
-# 9 Planos APs - OK
 class Plano(models.Model):
     TIPO_CHOICES = [
         ('PGTA', 'PGTA'),
@@ -440,7 +300,40 @@ class PlanoHistorico(models.Model):
     def __str__(self):
         return f"{self.plano.nome} - Alteração de {self.situacao_anterior} para {self.situacao_nova} em {self.data_alteracao}"
     
-# 10 Parcerias - OK
+class Leis(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    total_leis = models.PositiveIntegerField(default=0)
+    desenvolvimento = models.PositiveIntegerField(default=0)
+    proposto = models.PositiveIntegerField(default=0)
+    adotado = models.PositiveIntegerField(default=0)
+    implementado = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.atividade_registro} - {self.total_leis}"
+
+class Organizacao(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+    
+class Capacitados(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    organizacoes = models.ManyToManyField(Organizacao, related_name='capacitados')
+    total_organizacoes = models.PositiveIntegerField(default=0, editable=False)
+
+    def save(self, *args, **kwargs):
+        # Evite contar organizações antes que a instância tenha um ID
+        if self.pk is None:
+            super().save(*args, **kwargs)
+        
+        # Atualiza o campo `total_organizacoes` com a contagem de organizações selecionadas
+        self.total_organizacoes = self.organizacoes.count()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.atividade_registro} - {self.total_organizacoes} organizações"
+    
 class Parceria(models.Model):
     nome = models.CharField(max_length=255)
     tipo = models.CharField(max_length=255)
@@ -462,110 +355,7 @@ class Parcerias(models.Model):
     def __str__(self):
         return f"{self.atividade_registro} - {self.total_parcerias} parcerias"
     
-# 11 mobilizados - OK
 
-class Mobilizados(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    valor_mobilizado = models.DecimalField(max_digits=12, decimal_places=2)
-    tipo_apoio = models.CharField(max_length=255, choices=[
-        ('Contribuição em dinheiro', 'Contribuição em dinheiro'),
-        ('Voluntariado', 'Voluntariado'),
-        ('Doação do tempo dos funcionários', 'Doação do tempo dos funcionários'),
-        ('Doação de suprimentos, equipamentos', 'Doação de suprimentos, equipamentos'),
-        ('Propriedade intelectual', 'Propriedade intelectual'),
-    ])
-    fonte_apoio = models.CharField(max_length=255, choices=[
-        ('Renda proveniente da atividades/projeto', 'Renda proveniente da atividades/projeto'),
-        ('Empresas', 'Empresas'),
-        ('Fundação privada', 'Fundação privada'),
-        ('Outros doadores (incluindo multilaterais)', 'Outros doadores (incluindo multilaterais)'),
-        ('Outras organizações sem fins lucrativos', 'Outras organizações sem fins lucrativos'),
-        ('Indivíduo de alta renda/Investidor anjo', 'Indivíduo de alta renda/Investidor anjo'),
-        ('OUTRO (especifique)', 'OUTRO (especifique)'),
-    ])
-
-    class Meta:
-        verbose_name = 'Mobilizado'
-        verbose_name_plural = 'Mobilizados'
-
-    def __str__(self):
-        return f"Mobilizado - Valor: {self.valor_mobilizado}"
-    
-# 12 beneficios PPPs - N/A
-
-# 13 produtos - OK
-class Produto(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-    
-class Produtos(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    produtos = models.ManyToManyField(Produto, related_name='produtos')
-    total_produtos = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            super().save(*args, **kwargs)
-        self.total_produtos = self.produtos.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_produtos} produtos"
-    
-# 14 contratos - OK
-class Contrato(models.Model):
-    ESTADO_CHOICES = [
-        ('alinhamento_realizado', 'Alinhamento Realizado'),
-        ('em_desenvolvimento', 'Contrato em Desenvolvimento'),
-        ('assinado', 'Contrato Assinado'),
-    ]
-
-    nome = models.CharField(max_length=100)
-    estado = models.CharField(max_length=30, choices=ESTADO_CHOICES, default='alinhamento_realizado')
-    produtos = models.ManyToManyField(Produto, related_name='contratos')
-
-    def __str__(self):
-        produtos_nomes = ', '.join([produto.nome for produto in self.produtos.all()])
-        return f"{self.nome} - {self.get_estado_display()} - Produtos: {produtos_nomes}"
-
-class Contratos(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    contratos = models.ManyToManyField(Contrato, related_name='contratos_registro')
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.contratos.count()} contratos"
-# 15 modelos
-class Modelo(models.Model):
-    nome = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'Modelo'
-        verbose_name_plural = 'Modelos'
-
-    def __str__(self):
-        return self.nome
-    
-class AtividadeRegistroModelo(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
-    status = models.CharField(
-        max_length=50,
-        choices=[
-            ('Em desenvolvimento/proposto', 'Em desenvolvimento/proposto'),
-            ('Implementação ativa', 'Implementação ativa'),
-            ('Difundido (modelo adotado em outro lugar)', 'Difundido (modelo adotado em outro lugar)'),
-        ],
-        verbose_name='Status do Modelo'
-    )
-
-    class Meta:
-        verbose_name = 'Atividade Registro Modelo'
-        verbose_name_plural = 'Atividades Registro Modelos'
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.modelo} - {self.status}"
 
 class FormacaoIndigena(models.Model):
     formacao = models.CharField(max_length=255)
@@ -574,6 +364,84 @@ class FormacaoIndigena(models.Model):
     def __str__(self):
         return self.formacao
 
+
+
+
+
+class Modelos(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+
+class Produtos(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class Contratos(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class AreaRestrito(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class AreaDireto(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    nome = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class AreaDiretoTIs(models.Model):
+    areadireto = models.ForeignKey(AreaDireto, on_delete=models.CASCADE)
+    tis = models.ForeignKey(TIs, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.areadireto.nome} - {self.tis.nome}"
+
+
+class AreaGeral(models.Model):
+    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=255)
+    tis = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class AreaGeralTIs(models.Model):
+    areageral = models.ForeignKey(AreaGeral, on_delete=models.CASCADE)
+    tis = models.ForeignKey(TIs, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.areageral.nome} - {self.tis.nome}"
 
 # FUNAI
 
