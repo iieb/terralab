@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para adicionar uma nova parceria ao backend
     function adicionarNovaParceria(nome, tipo, fieldName) {
-        fetch("{% url 'adicionar_parceria' %}", {
+        fetch(adicionarParceriaUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
