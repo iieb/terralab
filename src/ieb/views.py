@@ -1,657 +1,642 @@
-from django.db import models
-
-# Create your models here.
-from django.utils import timezone
-from django.contrib.gis.db import models as gis_models
-
-# Create your models here.
-# MOVIMENTO INDÍGENA
-
-class OIsRegional(models.Model):
-    ois_reg = models.CharField(max_length=255)
-    ois_reg_sigla = models.CharField(max_length=255)
-    endereco = models.CharField(max_length=255)
-    cnpj = models.CharField(max_length=255)
-    nome_repr = models.CharField(max_length=255)
-    cargo = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.ois_reg
-
-
-class OIsLocal(models.Model):
-    nome = models.CharField(max_length=255)
-    sigla = models.CharField(max_length=255)
-    endereco = models.CharField(max_length=255)
-    cnpj = models.CharField(max_length=255)
-    nome_repr = models.CharField(max_length=255)
-    cargo_repr = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-
-class OIRegLoc(models.Model):
-    oiregional = models.ForeignKey(OIsRegional, on_delete=models.CASCADE)
-    oilocal = models.ForeignKey(OIsLocal, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.oiregional.ois_reg} - {self.oilocal.nome}"
-
-
-class TIs(models.Model):
-    nome = models.CharField(max_length=255)
-    area = models.FloatField()
-    fase = models.CharField(max_length=255)
-    etnia = models.CharField(max_length=255)
-    municipio = models.CharField(max_length=255)
-    uf = models.CharField(max_length=255)
-    modalidade = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-
-class Aldeia(models.Model):
-    nome = models.CharField(max_length=255)
-    tis = models.ForeignKey(TIs, on_delete=models.CASCADE)
-    populacao = models.IntegerField()
-    ano = models.IntegerField()
-
-    def __str__(self):
-        return self.nome
-
-
-class Indigena(models.Model):
-    nome = models.CharField(max_length=255)
-    etnia = models.CharField(max_length=255)
-    genero = models.CharField(max_length=255)
-    cpf = models.CharField(max_length=255)
-    rg = models.CharField(max_length=255)
-    data_nasc = models.DateField()
-    aldeia = models.ForeignKey(Aldeia, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.nome
-    
-
-# MOVIMENTO INDÍGENA - IGATI
-
-class IGATI(models.Model):
-    tipo = models.CharField(max_length=255)
-    nome = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-
-class TIsIGATI(models.Model):
-    igati = models.ForeignKey(IGATI, on_delete=models.CASCADE)
-    tis = models.ForeignKey(TIs, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.igati.nome} - {self.tis.nome}"
-
-
-
-# GESTÃO DE PROJETOS - FINANCIADORES/INTITUIÇÕES
-
-class Financiador(models.Model):
-    nome = models.CharField(max_length=255)
-    sigla = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return self.sigla
-
-
-class Instituicao(models.Model):
-    nome = models.CharField(max_length=255)
-    sigla = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-
-class Equipe(models.Model):
-    nome = models.CharField(max_length=255)
-    cargo = models.CharField(max_length=255)
-    cpf = models.CharField(max_length=255)
-    instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.nome} - {self.instituicao}"
-
-# GESTÃO DE PROJETOS - PROJETOS/COMPONENTES/ATIVIDADES/EQUIPE
-
-class Projeto(models.Model):
-    nome = models.CharField(max_length=255)
-    nome_fant = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-
-class Componente(models.Model):
-    nome = models.CharField(max_length=255)
-    codigo = models.CharField(max_length=255)
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
-    instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Componente {self.codigo}: {self.nome}"
-
-
-class Atividade(models.Model):
-    nome = models.CharField(max_length=255)
-    codigo = models.CharField(max_length=255)
-    descricao = models.CharField(max_length=255)
-    componente = models.ForeignKey(Componente, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Atividade {self.codigo}: {self.nome}"
-
-
-class EquipeProjeto(models.Model):
-    equipe = models.ForeignKey(Equipe, on_delete=models.CASCADE)
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.equipe.nome} - {self.equipe.instituicao}"
-
-
-class ProjetoOI(models.Model):
-    oilocal = models.ForeignKey(OIsLocal, on_delete=models.CASCADE)
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.oilocal.nome} - {self.projeto.nome}"
-
-
-class ProjetoTI(models.Model):
-    tis = models.ForeignKey(TIs, on_delete=models.CASCADE)
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.tis.nome} - {self.projeto.nome}"
-
-
-# GESTÃO DE PROJETOS - INDICADORES/METAS/REGISTROS
-
-class Indicador(models.Model):
-    nome = models.CharField(max_length=255)
-    codigo = models.CharField(max_length=255)
-    descricao = models.CharField(max_length=255)
-    reporte = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-
-class Meta(models.Model):
-    atividade = models.ForeignKey(Atividade, on_delete=models.CASCADE)
-    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
-    base = models.FloatField()
-    meta = models.FloatField()
-    data = models.DateField()
-
-    def __str__(self):
-        return f"{self.atividade.codigo} - {self.indicador.nome} - {self.base} - {self.meta}"
-
-
-class AtividadeRegistro(models.Model):
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
-    componente = models.ForeignKey(Componente, on_delete=models.CASCADE)
-    atividade = models.ForeignKey(Atividade, on_delete=models.CASCADE)
-    equipe_projeto = models.ForeignKey(EquipeProjeto, on_delete=models.CASCADE)
-    equipe_adicional = models.ManyToManyField(EquipeProjeto, related_name='atividades_registradas', blank=True)
-    data_inicio = models.DateField()
-    data_final = models.DateField()
-    desafios = models.CharField(max_length=255, blank=True)
-    propostas = models.CharField(max_length=255, blank=True)
-    sucesso = models.CharField(max_length=255, blank=True)
-    melhores_praticas = models.CharField(max_length=255, blank=True)
-    fotos = models.ImageField(upload_to='fotos/', blank = True)  # Usar ImageField para suportar upload de mídia
-    descricao = models.TextField()
-    local = models.CharField(max_length=255)
-    comentarios = models.TextField(blank=True)
-    lista_presenca = models.ImageField(upload_to='listas_presenca/', blank=True)  # Novo campo para lista de presença
-
-
-    def __str__(self):
-        return f"{self.data_inicio} - {self.projeto.nome}/COMP-{self.componente.codigo}/ATIV-{self.atividade.codigo} - {self.atividade.nome}"
-
-
-class AtividadeRegistroEquipe(models.Model):
-    equipe_projeto = models.ForeignKey(EquipeProjeto, on_delete=models.CASCADE)
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-
-    def __str__(self):
-        return f"{self.equipe_projeto} - {self.atividade_registro}"
-
-# GESTÃO DE PROJETOS - INDICADORES USAID
-
-# 10.2-1 restrito - OK
-class AreaRestrito(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    ti = models.ForeignKey(TIs, on_delete=models.CASCADE, related_name='area_restrito')
-    area_em_ha = models.DecimalField(max_digits=12, decimal_places=2)
-
-    class Meta:
-        verbose_name = 'Área Restrita'
-        verbose_name_plural = 'Áreas Restritas'
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.ti.nome} - {self.area_em_ha} ha"
-
-# 10.2-2 direto - OK
-class AreaDireto(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    tis = models.ManyToManyField(TIs, related_name='area_direto')
-    total_tis = models.PositiveIntegerField(default=0, editable=False)
-    total_area = models.FloatField(default=0.0, editable=False)  # Novo campo para armazenar a soma da área das TIs
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            super().save(*args, **kwargs)
-        
-        # Calcula o total de TIs e a soma da área
-        self.total_tis = self.tis.count()
-        self.total_area = self.tis.aggregate(total_area=models.Sum('area'))['total_area'] or 0.0
-
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_tis} TIs - {self.total_area} ha de área"
-
-# 10.2-3 geral - OK
-class AreaGeral(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    tis = models.ManyToManyField(TIs, related_name='area_geral')
-    total_tis = models.PositiveIntegerField(default=0, editable=False)
-    total_area = models.FloatField(default=0.0, editable=False)  # Novo campo para armazenar a soma da área das TIs
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            super().save(*args, **kwargs)
-        
-        # Calcula o total de TIs e a soma da área
-        self.total_tis = self.tis.count()
-        self.total_area = self.tis.aggregate(total_area=models.Sum('area'))['total_area'] or 0.0
-
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_tis} TIs - {self.total_area} ha de área"
-    
-# 10.2-4 treinados - OK
-class Treinados(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    total_pessoas = models.PositiveIntegerField(default=0)
-    homens = models.PositiveIntegerField(default=0)
-    mulheres = models.PositiveIntegerField(default=0)
-    jovens = models.PositiveIntegerField(default=0)
-    FOCO_CHOICES = [
-        ('implementacao', 'Implementação melhorada/monitoramento/vigilância'),
-        ('ativ_prod', 'Meios de subsistência/cadeia de valor sustentáveis melhorados'),
-        ('governanca', 'Fortalecimento institucional/capacitação organizacional/governança'),
-    ]
-    foco_treinamento = models.CharField(max_length=20, choices=FOCO_CHOICES, default='governanca')
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_pessoas}"
-
-# 10.2-5 Leis Políticas - OK
-class Lei(models.Model):
-    TIPO_CHOICES = [
-        ('PGTA', 'PGTA'),
-    ]
-    
-    SITUACAO_CHOICES = [
-        ('em desenvolvimento', 'Em Desenvolvimento'),
-        ('proposto', 'Proposto'),
-        ('aprovado', 'Aprovado'),
-        ('implementado', 'Implementado')
-    ]
-
-    nome = models.CharField(max_length=255)
-    tipo = models.CharField(max_length=255, choices=TIPO_CHOICES)
-    situacao = models.CharField(max_length=255, choices=SITUACAO_CHOICES)
-
-    def __str__(self):
-        return f"{self.nome} - {self.tipo} - {self.situacao}"
-
-class Leis(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    leis = models.ManyToManyField(Lei, related_name='leis')
-    total_leis = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        # Evitar contar leis antes que a instância tenha um ID
-        if self.pk is None:
-            super().save(*args, **kwargs)
-
-        # Atualiza o campo `total_leis` com a contagem de leis selecionadas
-        self.total_leis = self.leis.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_leis} leis"
-
-class LeiHistorico(models.Model):
-    lei = models.ForeignKey(Lei, on_delete=models.CASCADE)
-    situacao_anterior = models.CharField(max_length=255, choices=Lei.SITUACAO_CHOICES)
-    situacao_nova = models.CharField(max_length=255, choices=Lei.SITUACAO_CHOICES)
-    data_alteracao = models.DateTimeField(auto_now_add=True)
-    usuario = models.CharField(max_length=255)  # Ou usar um ForeignKey para o modelo de usuário
-
-    def __str__(self):
-        return f"{self.lei.nome} - Alteração de {self.situacao_anterior} para {self.situacao_nova} em {self.data_alteracao}"
-    
-# 7 Capacitados - OK
-class Organizacao(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-    
-class Capacitados(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    organizacoes = models.ManyToManyField(Organizacao, related_name='capacitados')
-    total_organizacoes = models.PositiveIntegerField(default=0, editable=False)
-    foco_capacitacao = models.CharField(max_length=50, choices=[
-        ('implementacao', 'Implementação melhorada/monitoramento/vigilância'),
-        ('ativ_prod', 'Meios de subsistência/cadeia de valor sustentáveis melhorados'),
-        ('governanca', 'Fortalecimento institucional/capacitação organizacional/governança')
-    ])
-
-    def save(self, *args, **kwargs):
-        # Evite contar organizações antes que a instância tenha um ID
-        if self.pk is None:
-            super().save(*args, **kwargs)
-        
-        # Atualiza o campo `total_organizacoes` com a contagem de organizações selecionadas
-        self.total_organizacoes = self.organizacoes.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_organizacoes} organizações - {self.foco_capacitacao}"
-    
-# 8 aplicação - OK
-class Aplicacao(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    total_pessoas = models.PositiveIntegerField()
-    homens = models.PositiveIntegerField()
-    mulheres = models.PositiveIntegerField()
-    jovens = models.PositiveIntegerField()
-
-    def __str__(self):
-        return f"Aplicação - Total: {self.total_pessoas}"
-    
-# 9 Planos APs - OK
-class Plano(models.Model):
-    TIPO_CHOICES = [
-        ('PGTA', 'PGTA'),
-        ('Plano de Enfrentamento', 'Plano de Enfrentamento'),
-        ('Plano de Diagnóstico', 'Plano de Diagnóstico')
-    ]
-    
-    SITUACAO_CHOICES = [
-        ('em desenvolvimento', 'Em Desenvolvimento'),
-        ('proposto', 'Proposto'),
-        ('adotado', 'Adotado'),
-        ('implementado', 'Implementado')
-    ]
-
-    nome = models.CharField(max_length=255)
-    tipo = models.CharField(max_length=255, choices=TIPO_CHOICES)
-    situacao = models.CharField(max_length=255, choices=SITUACAO_CHOICES)
-
-    def __str__(self):
-        return f"{self.nome} - {self.tipo} - {self.situacao}"
-
-class Planos(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    planos = models.ManyToManyField(Plano, related_name='planos')
-    total_planos = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        # Evitar contar planos antes que a instância tenha um ID
-        if self.pk is None:
-            super().save(*args, **kwargs)
-
-        # Atualiza o campo `total_planos` com a contagem de planos selecionados
-        self.total_planos = self.planos.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_planos} planos"
-
-
-    def __str__(self):
-        return f"{self.nome} - {self.tipo} - {self.situacao}"
-    
-class PlanoHistorico(models.Model):
-    plano = models.ForeignKey(Plano, on_delete=models.CASCADE)
-    situacao_anterior = models.CharField(max_length=255, choices=[('em desenvolvimento', 'Em Desenvolvimento'), ('proposto', 'Proposto'), ('adotado', 'Adotado'), ('implementado', 'Implementado')])
-    situacao_nova = models.CharField(max_length=255, choices=[('em desenvolvimento', 'Em Desenvolvimento'), ('proposto', 'Proposto'), ('adotado', 'Adotado'), ('implementado', 'Implementado')])
-    data_alteracao = models.DateTimeField(auto_now_add=True)
-    usuario = models.CharField(max_length=255)  # Ou usar um ForeignKey para um modelo de usuário, se necessário
-
-    def __str__(self):
-        return f"{self.plano.nome} - Alteração de {self.situacao_anterior} para {self.situacao_nova} em {self.data_alteracao}"
-    
-# 10 Parcerias - OK
-class Parceria(models.Model):
-    nome = models.CharField(max_length=255)
-    tipo = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.nome
-
-class Parcerias(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    parcerias = models.ManyToManyField(Parceria, related_name='parcerias')
-    total_parcerias = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            super().save(*args, **kwargs)
-        self.total_parcerias = self.parcerias.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_parcerias} parcerias"
-    
-# 11 mobilizados - OK
-
-class Mobilizados(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    valor_mobilizado = models.DecimalField(max_digits=12, decimal_places=2)
-    tipo_apoio = models.CharField(max_length=255, choices=[
-        ('Contribuição em dinheiro', 'Contribuição em dinheiro'),
-        ('Voluntariado', 'Voluntariado'),
-        ('Doação do tempo dos funcionários', 'Doação do tempo dos funcionários'),
-        ('Doação de suprimentos, equipamentos', 'Doação de suprimentos, equipamentos'),
-        ('Propriedade intelectual', 'Propriedade intelectual'),
-    ])
-    fonte_apoio = models.CharField(max_length=255, choices=[
-        ('Renda proveniente da atividades/projeto', 'Renda proveniente da atividades/projeto'),
-        ('Empresas', 'Empresas'),
-        ('Fundação privada', 'Fundação privada'),
-        ('Outros doadores (incluindo multilaterais)', 'Outros doadores (incluindo multilaterais)'),
-        ('Outras organizações sem fins lucrativos', 'Outras organizações sem fins lucrativos'),
-        ('Indivíduo de alta renda/Investidor anjo', 'Indivíduo de alta renda/Investidor anjo'),
-        ('OUTRO (especifique)', 'OUTRO (especifique)'),
-    ])
-
-    class Meta:
-        verbose_name = 'Mobilizado'
-        verbose_name_plural = 'Mobilizados'
-
-    def __str__(self):
-        return f"Mobilizado - Valor: {self.valor_mobilizado}"
-    
-# 12 beneficios PPPs - N/A
-
-# 13 produtos - OK
-class Produto(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-    
-class Produtos(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE, default=1)
-    produtos = models.ManyToManyField(Produto, related_name='produtos')
-    total_produtos = models.PositiveIntegerField(default=0, editable=False)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            super().save(*args, **kwargs)
-        self.total_produtos = self.produtos.count()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.total_produtos} produtos"
-    
-# 14 contratos - OK
-class Contrato(models.Model):
-    ESTADO_CHOICES = [
-        ('alinhamento_realizado', 'Alinhamento Realizado'),
-        ('em_desenvolvimento', 'Contrato em Desenvolvimento'),
-        ('assinado', 'Contrato Assinado'),
-    ]
-
-    nome = models.CharField(max_length=100)
-    estado = models.CharField(max_length=30, choices=ESTADO_CHOICES, default='alinhamento_realizado')
-    produtos = models.ManyToManyField(Produto, related_name='contratos')
-
-    def __str__(self):
-        produtos_nomes = ', '.join([produto.nome for produto in self.produtos.all()])
-        return f"{self.nome} - {self.get_estado_display()} - Produtos: {produtos_nomes}"
-
-class Contratos(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    contratos = models.ManyToManyField(Contrato, related_name='contratos_registro')
-
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.contratos.count()} contratos"
-# 15 modelos
-class Modelo(models.Model):
-    nome = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'Modelo'
-        verbose_name_plural = 'Modelos'
-
-    def __str__(self):
-        return self.nome
-    
-class AtividadeRegistroModelo(models.Model):
-    atividade_registro = models.ForeignKey(AtividadeRegistro, on_delete=models.CASCADE)
-    modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
-    status = models.CharField(
-        max_length=50,
-        choices=[
-            ('Em desenvolvimento/proposto', 'Em desenvolvimento/proposto'),
-            ('Implementação ativa', 'Implementação ativa'),
-            ('Difundido (modelo adotado em outro lugar)', 'Difundido (modelo adotado em outro lugar)'),
+import json
+
+# Create your views here.
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.contrib import messages
+from .forms import AtividadeRegistroForm
+from .models import Projeto, Componente, Atividade, EquipeProjeto, Indicador, Meta, AtividadeRegistro, Treinados, Leis, Planos, Capacitados, Organizacao, Parceria, Parcerias, Plano, PlanoHistorico, TIs, AreaDireto, AreaGeral, AreaRestrito, Produtos, Produto, Contrato, Contratos, Lei, LeiHistorico, Aplicacao, Mobilizados, Modelo, AtividadeRegistroModelo
+from django.views.decorators.csrf import csrf_exempt
+import unicodedata
+import re
+from decimal import Decimal, InvalidOperation
+
+def normalize_string(s):
+    # Remover acentos e caracteres especiais
+    s = unicodedata.normalize('NFD', s)
+    s = s.encode('ascii', 'ignore').decode('utf-8')
+    # Converter para minúsculas e substituir espaços por underscores
+    s = re.sub(r'\s+', '_', s.lower())
+    return s
+
+def atividade_registro_view(request):
+    if request.method == 'POST':
+        form = AtividadeRegistroForm(request.POST, request.FILES)
+        if form.is_valid():
+            atividade_registro = form.save()
+
+            # Inicialização das variáveis para capturar os dados
+            treinados_data = {'total_pessoas': None, 'homens': None, 'mulheres': None, 'jovens': None, 'foco_treinamento': None}
+            planos_data = {'nome': '', 'tipo': '', 'situacao': ''}
+            capacitados_data = {
+                'organizacoes': [],
+                'total_organizacoes': 0,
+                'foco_capacitacao': None  # Novo campo
+            }
+            parcerias_data = {'parcerias': [], 'total_parcerias': 0}  # Adicionar suporte para Parcerias
+            area_geral_data = {'tis': []}
+            area_direto_data = {'tis': []}
+            area_restrito_data = {'ti': None, 'area_em_ha': None}
+            produtos_data = {'produtos': [], 'total_produtos': 0}
+            contratos_data = {'contratos': []}
+            leis_data = {'leis': []}
+            aplicacao_data = {'total_pessoas': None, 'homens': None, 'mulheres': None, 'jovens': None}
+            mobilizados_data = {
+                'valor_mobilizado': None,
+                'tipo_apoio': None,
+                'fonte_apoio': None,
+            }
+            modelos_data = {
+                'modelos': [],   # IDs dos modelos selecionados
+                'status': {}     # Dicionário com o status para cada modelo
+            }
+
+
+            treinados_exist = leis_exist = planos_exist = capacitados_exist = parcerias_exist = area_geral_exist = area_direto_exist = area_restrito_exist = produtos_exist = contratos_exist = leis_exist = aplicacao_exist = mobilizados_exist = modelos_exist = False
+
+            # Processamento dos campos enviados pelo formulário
+            for key, value in request.POST.items():
+                if key.startswith('indicadores_'):
+                    try:
+                        parts = key.split('_')
+                        indicador_id = int(parts[1])
+                        field_name = '_'.join(parts[2:])
+                        indicador = Indicador.objects.get(id=indicador_id)
+
+                        if indicador.nome.lower() == 'treinados':
+                            treinados_exist = True
+                            if field_name == 'total_pessoas':
+                                treinados_data['total_pessoas'] = int(value)
+                            elif field_name == 'homens':
+                                treinados_data['homens'] = int(value)
+                            elif field_name == 'mulheres':
+                                treinados_data['mulheres'] = int(value)
+                            elif field_name == 'jovens':
+                                treinados_data['jovens'] = int(value)
+                            elif field_name == 'foco_treinamento':
+                                treinados_data['foco_treinamento'] = value
+
+                        elif indicador.nome.lower() == 'planos':
+                            planos_exist = True
+                            if field_name == 'nome':
+                                planos_data['nome'] = value
+                            elif field_name == 'tipo':
+                                planos_data['tipo'] = value
+                            elif field_name == 'situacao':
+                                planos_data['situacao'] = value
+
+                        elif indicador.nome.lower() == 'capacitados':
+                            capacitados_exist = True
+                            if field_name == 'organizacoes':
+                                capacitados_data['organizacoes'].extend(request.POST.getlist(key))
+                            elif field_name == 'foco_capacitacao':
+                                capacitados_data['foco_capacitacao'] = value
+
+                        elif indicador.nome.lower() == 'parcerias':
+                            parcerias_exist = True
+                            if field_name == 'parcerias':
+                                parcerias_data['parcerias'].extend(request.POST.getlist(key))
+
+                        elif indicador.nome.lower() == 'área geral':
+                            area_geral_exist = True
+                            if field_name == 'tis':
+                                area_geral_data['tis'].extend(request.POST.getlist(key))
+
+                        elif indicador.nome.lower() == 'área direto':
+                            area_direto_exist = True
+                            if field_name == 'tis':
+                                area_direto_data['tis'].extend(request.POST.getlist(key))
+
+                        elif indicador.nome.lower() == 'área restrito':
+                            area_restrito_exist = True
+                            if field_name == 'ti':
+                                area_restrito_data['ti'] = value  # Assumindo que `value` é o ID da TI selecionada
+                            elif field_name == 'area_em_ha':
+                                valor = value.replace(',', '.')
+                                try:
+                                    area_restrito_data['area_em_ha'] = Decimal(valor)
+                                except (InvalidOperation, ValueError):
+                                    area_restrito_data['area_em_ha'] = None  # Ou lidar com o erro de forma apropriada
+
+                        elif indicador.nome.lower() == 'produtos':
+                            produtos_exist = True
+                            if field_name == 'produtos':
+                                produtos_data['produtos'].extend(request.POST.getlist(key))
+
+                        elif indicador.nome.lower() == 'contratos':
+                            contratos_exist = True
+                            if field_name == 'contratos':
+                                contratos_data['contratos'].extend(request.POST.getlist(key))
+
+                        elif indicador.nome.lower() == 'leis':
+                            leis_exist = True
+                            if field_name == 'leis':
+                                leis_data['leis'].extend(request.POST.getlist(key))
+
+                        elif indicador.nome.lower() == 'aplicação':
+                            aplicacao_exist = True
+                            if field_name == 'total_pessoas':
+                                aplicacao_data['total_pessoas'] = int(value)
+                            elif field_name == 'homens':
+                                aplicacao_data['homens'] = int(value)
+                            elif field_name == 'mulheres':
+                                aplicacao_data['mulheres'] = int(value)
+                            elif field_name == 'jovens':
+                                aplicacao_data['jovens'] = int(value)
+
+                        if indicador.nome.lower() == 'mobilizados':
+                            mobilizados_exist = True
+                            if field_name == 'valor_mobilizado':
+                                mobilizados_data['valor_mobilizado'] = value  # Manter como string para DecimalField
+                            elif field_name == 'tipo_apoio':
+                                mobilizados_data['tipo_apoio'] = value
+                            elif field_name == 'fonte_apoio':
+                                mobilizados_data['fonte_apoio'] = value
+
+                        if indicador.nome.lower() == 'modelos':
+                            modelos_exist = True
+                            if field_name == 'modelos':
+                                modelos_data['modelos'].extend(request.POST.getlist(key))
+                            elif field_name.startswith('status_modelo_'):
+                                modelo_id = field_name.split('status_modelo_')[1]
+                                status = value
+                                modelos_data['status'][modelo_id] = status
+                            elif field_name == 'novos_modelos':
+                                novos_modelos = [nome.strip() for nome in value.split(',') if nome.strip()]
+                                for nome in novos_modelos:
+                                    novo_modelo = Modelo.objects.create(nome=nome)
+                                    modelos_data['modelos'].append(str(novo_modelo.id))
+
+
+
+                    except (Indicador.DoesNotExist, ValueError) as e:
+                        print(f"Erro ao processar o indicador {key}: {e}")
+                        continue
+
+            # Salvar dados processados
+            if treinados_exist and all(v is not None for v in treinados_data.values()):
+                Treinados.objects.create(atividade_registro=atividade_registro, **treinados_data)
+
+            if capacitados_exist and capacitados_data['organizacoes'] and capacitados_data['foco_capacitacao']:
+                # Salvar instância de Capacitados
+                capacitados_instance = Capacitados(
+                    atividade_registro=atividade_registro,
+                    foco_capacitacao=capacitados_data['foco_capacitacao']
+                )
+                capacitados_instance.save()
+
+                # Associar organizações e atualizar total
+                capacitados_instance.organizacoes.set(capacitados_data['organizacoes'])
+                capacitados_instance.total_organizacoes = capacitados_instance.organizacoes.count()
+                capacitados_instance.save()
+
+            if parcerias_exist and parcerias_data['parcerias']:
+                parcerias_instance = Parcerias(atividade_registro=atividade_registro)
+                parcerias_instance.save()
+                parcerias_instance.parcerias.set(parcerias_data['parcerias'])
+                parcerias_instance.total_parcerias = len(parcerias_data['parcerias'])
+                parcerias_instance.save()
+
+            if planos_exist and planos_data['nome'] and planos_data['tipo'] and planos_data['situacao']:
+                # Criar um novo plano associado ao registro de atividade
+                Plano.objects.create(
+                    atividade_registro=atividade_registro,
+                    nome=planos_data['nome'],
+                    tipo=planos_data['tipo'],
+                    situacao=planos_data['situacao']
+                )
+
+            if area_geral_exist and area_geral_data['tis']:
+                area_geral_instance = AreaGeral(atividade_registro=atividade_registro)
+                area_geral_instance.save()
+                area_geral_instance.tis.set(area_geral_data['tis'])
+                area_geral_instance.total_tis = area_geral_instance.tis.count()
+                area_geral_instance.save()
+
+            if area_direto_exist and area_direto_data['tis']:
+                area_direto_instance = AreaDireto(atividade_registro=atividade_registro)
+                area_direto_instance.save()
+                area_direto_instance.tis.set(area_direto_data['tis'])
+                area_direto_instance.total_tis = area_direto_instance.tis.count()
+                area_direto_instance.save()
+
+            if area_restrito_exist and area_restrito_data['ti'] and area_restrito_data['area_em_ha']:
+                area_restrito_instance = AreaRestrito(
+                    atividade_registro=atividade_registro,
+                    ti_id=area_restrito_data['ti'],
+                    area_em_ha=area_restrito_data['area_em_ha']
+                )
+                area_restrito_instance.save()
+
+            if produtos_exist and produtos_data['produtos']:
+                produtos_instance = Produtos(atividade_registro=atividade_registro)
+                produtos_instance.save()
+                produtos_instance.produtos.set(produtos_data['produtos'])
+                produtos_instance.total_produtos = produtos_instance.produtos.count()
+                produtos_instance.save()
+
+            if contratos_exist and contratos_data['contratos']:
+                contratos_instance = Contratos(atividade_registro=atividade_registro)
+                contratos_instance.save()
+                contratos_instance.contratos.set(contratos_data['contratos'])
+                contratos_instance.save()
+
+            if leis_exist and leis_data['leis']:
+                leis_instance = Leis(atividade_registro=atividade_registro)
+                leis_instance.save()
+                leis_instance.leis.set(leis_data['leis'])  # Correção aqui
+                leis_instance.save()
+
+            if aplicacao_exist and all(v is not None for v in aplicacao_data.values()):
+                Aplicacao.objects.create(atividade_registro=atividade_registro, **aplicacao_data)
+
+            if mobilizados_exist and mobilizados_data['valor_mobilizado'] and mobilizados_data['tipo_apoio'] and mobilizados_data['fonte_apoio']:
+                Mobilizados.objects.create(atividade_registro=atividade_registro, **mobilizados_data)
+
+            if modelos_exist:
+                for modelo_id in modelos_data['modelos']:
+                    status = modelos_data['status'].get(modelo_id, '')
+                    if status:
+                        AtividadeRegistroModelo.objects.create(
+                            atividade_registro=atividade_registro,
+                            modelo_id=int(modelo_id),
+                            status=status
+                        )
+
+
+            
+
+            messages.success(request, 'Registro de atividade salvo com sucesso!')
+            return redirect('atividade_registro_detalhe', pk=atividade_registro.pk)
+        else:
+            messages.error(request, 'Erro ao salvar o registro de atividade. Verifique os campos e tente novamente.')
+            print(form.errors)
+    else:
+        form = AtividadeRegistroForm()
+
+    # Gerar o dicionário de configuração dos indicadores dinamicamente
+    organizacoes = Organizacao.objects.all()
+    organizacoes_options = [{'value': org.id, 'label': org.nome} for org in organizacoes]
+
+    parcerias = Parceria.objects.all()
+    parcerias_options = [{'value': p.id, 'label': f"{p.nome} - {p.tipo}"} for p in parcerias]
+
+    planos = Plano.objects.all()
+    planos_options = [{'value': plano.id, 'label': f'{plano.nome} - {plano.tipo} - {plano.situacao}'} for plano in planos]
+
+    tis_list = TIs.objects.all()
+    tis_options = [{'value': ti.id, 'label': ti.nome} for ti in tis_list]
+
+    produtos = Produto.objects.all()
+    produtos_options = [{'value': produto.id, 'label': produto.nome} for produto in produtos]
+
+    contratos = Contrato.objects.all()
+    contratos_options = [{'value': contrato.id, 'label': str(contrato)} for contrato in contratos]
+
+    leis = Lei.objects.all()
+    leis_options = [{'value': lei.id, 'label': str(lei)} for lei in leis]   
+
+    modelos_existentes = Modelo.objects.all()
+    modelos_options = [{'value': modelo.id, 'label': modelo.nome} for modelo in modelos_existentes]
+
+
+
+
+    indicadores_config = {
+        "treinados": [
+            {"name": "total_pessoas", "type": "number", "label": "Total de Pessoas Treinadas"},
+            {"name": "homens", "type": "number", "label": "Homens"},
+            {"name": "mulheres", "type": "number", "label": "Mulheres"},
+            {"name": "jovens", "type": "number", "label": "Jovens"},
+            {"name": "foco_treinamento", "type": "select", "label": "Foco do Treinamento", "options": [
+                {"value": "implementacao", "label": "Implementação melhorada/monitoramento/vigilância"},
+                {"value": "ativ_prod", "label": "Meios de subsistência/cadeia de valor sustentáveis melhorados"},
+                {"value": "governanca", "label": "Fortalecimento institucional/capacitação organizacional/governança"}
+            ]}
         ],
-        verbose_name='Status do Modelo'
-    )
+        "leis": [
+            {"name": "leis", "type": "checkbox", "label": "Leis", "options": leis_options}
+        ],
+        "planos": [
+            {"name": "plano", "type": "checkbox", "label": "Planos", "options": planos_options}
+        ],
+        "capacitados": [
+            {"name": "organizacoes", "type": "checkbox", "label": "Organizações", "options": organizacoes_options},
+            {"name": "foco_capacitacao", "type": "select", "label": "Foco da Capacitação", "options": [
+                {"value": "implementacao", "label": "Implementação melhorada/monitoramento/vigilância"},
+                {"value": "ativ_prod", "label": "Meios de subsistência/cadeia de valor sustentáveis melhorados"},
+                {"value": "governanca", "label": "Fortalecimento institucional/capacitação organizacional/governança"}
+            ]}
+        ],
+        "parcerias": [
+            {"name": "parcerias", "type": "checkbox", "label": "Parcerias", "options": parcerias_options}
+        ],
+        "area_geral": [
+            {
+                "name": "tis",
+                "type": "checkbox",
+                "label": "Selecione as TIs para Área Geral",
+                "options": tis_options
+            }
+        ],
+        "area_direto": [
+            {
+                "name": "tis",
+                "type": "checkbox",
+                "label": "Selecione as TIs para Área Direto",
+                "options": tis_options
+            }
+        ],
+        "area_restrito": [
+            {
+                "name": "ti",
+                "type": "select",
+                "label": "Selecione a TI para Área Restrito",
+                "options": tis_options  # Certifique-se de que `tis_options` está no formato correto
+            },
+            {
+                "name": "area_em_ha",
+                "type": "number",
+                "label": "Área em hectares (ha)",
+                "step": "0.01"
+            }
+        ],
+        "produtos": [
+            {"name": "produtos", "type": "checkbox", "label": "Produtos", "options": produtos_options}
+        ],
+        "contratos": [
+            {"name": "contratos", "type": "checkbox", "label": "Contratos", "options": contratos_options}
+        ],
+        normalize_string("Aplicação"): [
+            {"name": "total_pessoas", "type": "number", "label": "Total de Pessoas"},
+            {"name": "homens", "type": "number", "label": "Homens"},
+            {"name": "mulheres", "type": "number", "label": "Mulheres"},
+            {"name": "jovens", "type": "number", "label": "Jovens"},
+        ],  
+        "mobilizados": [
+            {"name": "valor_mobilizado", "type": "number", "label": "Valor Mobilizado"},
+            {"name": "tipo_apoio", "type": "select", "label": "Tipo de Apoio", "options": [
+                {"value": "Contribuição em dinheiro", "label": "Contribuição em dinheiro"},
+                {"value": "Voluntariado", "label": "Voluntariado"},
+                {"value": "Doação do tempo dos funcionários", "label": "Doação do tempo dos funcionários"},
+                {"value": "Doação de suprimentos, equipamentos", "label": "Doação de suprimentos, equipamentos"},
+                {"value": "Propriedade intelectual", "label": "Propriedade intelectual"},
+            ]},
+            {"name": "fonte_apoio", "type": "select", "label": "Fonte de Apoio", "options": [
+                {"value": "Renda proveniente da atividades/projeto", "label": "Renda proveniente da atividades/projeto"},
+                {"value": "Empresas", "label": "Empresas"},
+                {"value": "Fundação privada", "label": "Fundação privada"},
+                {"value": "Outros doadores (incluindo multilaterais)", "label": "Outros doadores (incluindo multilaterais)"},
+                {"value": "Outras organizações sem fins lucrativos", "label": "Outras organizações sem fins lucrativos"},
+                {"value": "Indivíduo de alta renda/Investidor anjo", "label": "Indivíduo de alta renda/Investidor anjo"},
+                {"value": "OUTRO (especifique)", "label": "OUTRO (especifique)"},
+            ]},
+        ],
+        "modelos": [
+            {
+                "name": "modelos",
+                "type": "checkbox",
+                "label": "Selecione os Modelos",
+                "options": modelos_options
+            },
+            {
+                "name": "novos_modelos",
+                "type": "text",
+                "label": "Adicionar Novos Modelos (separados por vírgula)"
+            },
+            # O campo de status será renderizado dinamicamente no template
+        ],
+    }
 
-    class Meta:
-        verbose_name = 'Atividade Registro Modelo'
-        verbose_name_plural = 'Atividades Registro Modelos'
+    return render(request, 'atividade_registro_form.html', {
+        'form': form,
+        'indicadores_config': indicadores_config,  # Passando o dicionário para o template
+        'produtos_options': produtos_options,  
+    })
 
-    def __str__(self):
-        return f"{self.atividade_registro} - {self.modelo} - {self.status}"
+def load_componentes(request):
+    projeto_id = request.GET.get('projeto')
+    componentes = Componente.objects.filter(projeto_id=projeto_id).all()
+    componente_data = [{'id': componente.id, 'nome': str(componente)} for componente in componentes]
+    return JsonResponse(componente_data, safe=False)
 
-class FormacaoIndigena(models.Model):
-    formacao = models.CharField(max_length=255)
-    indigena = models.ForeignKey(Indigena, on_delete=models.CASCADE)
+def load_atividades(request):
+    componente_id = request.GET.get('componente')
+    atividades = Atividade.objects.filter(componente_id=componente_id).all()
+    atividade_data = [{'id': atividade.id, 'nome': str(atividade)} for atividade in atividades]
+    return JsonResponse(atividade_data, safe=False)
 
-    def __str__(self):
-        return self.formacao
+def load_equipes(request):
+    projeto_id = request.GET.get('projeto')
+    equipes = EquipeProjeto.objects.filter(projeto_id=projeto_id).all()
+    equipes_data = [{'id': equipe.id, 'nome': str(equipe)} for equipe in equipes]
 
+    return JsonResponse(equipes_data, safe=False)
 
-# FUNAI
+def load_equipes_adicionais(request):
+    projeto_id = request.GET.get('projeto')
+    equipes = EquipeProjeto.objects.filter(projeto_id=projeto_id).all()
+    return JsonResponse(list(equipes.values('id', 'equipe__nome')), safe=False)
 
-class CR(models.Model):
-    nome = models.CharField(max_length=255)
-    coordenador = models.CharField(max_length=255)
+def load_indicadores(request):
+    atividade_id = request.GET.get('atividade')
+    indicadores = Indicador.objects.filter(meta__atividade_id=atividade_id).distinct()
+    data = [{'id': indicador.id, 'nome': indicador.nome} for indicador in indicadores]
+    return JsonResponse(data, safe=False)
 
-    def __str__(self):
-        return self.nome
+def atividade_registro_detalhe_view(request, pk):
+    # Busca o registro específico com base na chave primária (pk)
+    atividade_registro = get_object_or_404(AtividadeRegistro, pk=pk)
+    
+    # Renderiza o template passando o registro encontrado
+    return render(request, 'atividade_registro_detalhe.html', {
+        'atividade_registro': atividade_registro
+    })
 
+def teste_parcerias_view(request):
+    parcerias = Parceria.objects.all()
+    return render(request, 'teste_parcerias.html', {'parcerias': parcerias})
 
-class CTL(models.Model):
-    nome = models.CharField(max_length=255)
-    coordenador = models.CharField(max_length=255)
-    cr = models.ForeignKey(CR, on_delete=models.CASCADE)
+def adicionar_parceria(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
 
-    def __str__(self):
-        return self.nome
+        nome = data.get("nome")
+        tipo = data.get("tipo")
+        if nome and tipo:
+            nova_parceria = Parceria.objects.create(nome=nome, tipo=tipo)
+            return JsonResponse({"id": nova_parceria.id, "nome": nova_parceria.nome, "tipo": nova_parceria.tipo})
+        else:
+            return JsonResponse({"error": "Nome e tipo não fornecidos"}, status=400)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
 
+def adicionar_plano(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
 
-# SAÚDE INDÍGENA
+        nome = data.get("nome")
+        tipo = data.get("tipo")
+        situacao = data.get("situacao")
+        if nome and tipo and situacao:
+            novo_plano = Plano.objects.create(nome=nome, tipo=tipo, situacao=situacao)
+            return JsonResponse({"id": novo_plano.id, "nome": novo_plano.nome, "tipo": novo_plano.tipo, "situacao": novo_plano.situacao})
+        else:
+            return JsonResponse({"error": "Nome, tipo e situação não fornecidos"}, status=400)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
 
-class DSEI(models.Model):
-    nome = models.CharField(max_length=255)
-    coordenador = models.CharField(max_length=255)
+def atualizar_situacao_plano(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            plano_id = data.get('plano_id')
+            nova_situacao = data.get('situacao')
 
-    def __str__(self):
-        return self.nome
+            plano = get_object_or_404(Plano, id=plano_id)
 
+            # Registrar a alteração no histórico
+            PlanoHistorico.objects.create(
+                plano=plano,
+                situacao_anterior=plano.situacao,
+                situacao_nova=nova_situacao,
+                usuario=request.user.username  # Se estiver usando autenticação de usuário
+            )
 
-class Posto(models.Model):
-    nome = models.CharField(max_length=255)
-    dsei = models.ForeignKey(DSEI, on_delete=models.CASCADE)
-    aldeia = models.ForeignKey(Aldeia, on_delete=models.CASCADE)
+            # Atualizar a situação atual do plano
+            plano.situacao = nova_situacao
+            plano.save()
 
-    def __str__(self):
-        return self.nome
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+        
 
+def adicionar_produto(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
 
-class Casai(models.Model):
-    nome = models.CharField(max_length=255)
-    dsei = models.ForeignKey(DSEI, on_delete=models.CASCADE)
+        nome = data.get("nome")
+        if nome:
+            novo_produto = Produto.objects.create(nome=nome)
+            return JsonResponse({"id": novo_produto.id, "nome": novo_produto.nome})
+        else:
+            return JsonResponse({"error": "Nome não fornecido"}, status=400)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
 
-    def __str__(self):
-        return self.nome
+def adicionar_contrato(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
 
+        nome = data.get("nome")
+        estado = data.get("estado")
+        produtos_ids = data.get("produtos", [])
 
-class Polo(models.Model):
-    nome = models.CharField(max_length=255)
-    dsei = models.ForeignKey(DSEI, on_delete=models.CASCADE)
+        if nome and estado:
+            novo_contrato = Contrato.objects.create(nome=nome, estado=estado)
+            if produtos_ids:
+                novo_contrato.produtos.set(produtos_ids)
+            return JsonResponse({
+                "id": novo_contrato.id,
+                "nome": novo_contrato.nome,
+                "estado": novo_contrato.get_estado_display(),
+                "produtos": list(novo_contrato.produtos.values('id', 'nome'))
+            })
+        else:
+            return JsonResponse({"error": "Nome e estado não fornecidos"}, status=400)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
 
-    def __str__(self):
-        return self.nome
+def atualizar_estado_contrato(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            contrato_id = data.get('contrato_id')
+            novo_estado = data.get('estado')
 
+            contrato = get_object_or_404(Contrato, id=contrato_id)
 
-class AIS(models.Model):
-    nome = models.CharField(max_length=255)
-    dsei = models.ForeignKey(DSEI, on_delete=models.CASCADE)
+            # Atualizar o estado atual do contrato
+            contrato.estado = novo_estado
+            contrato.save()
 
-    def __str__(self):
-        return self.nome
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+    return JsonResponse({"error": "Método não permitido"}, status=405)
 
+@csrf_exempt
+def adicionar_lei(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
 
-# EDUCAÇÃO INDÍGENA
+        nome = data.get("nome")
+        tipo = data.get("tipo")
+        situacao = data.get("situacao")
 
-class Escola(models.Model):
-    nome = models.CharField(max_length=255)
-    esfera = models.CharField(max_length=255)
-    aldeia = models.ForeignKey(Aldeia, on_delete=models.CASCADE)
-    coordenador = models.CharField(max_length=255)
+        if nome and tipo and situacao:
+            nova_lei = Lei.objects.create(nome=nome, tipo=tipo, situacao=situacao)
+            return JsonResponse({
+                "id": nova_lei.id,
+                "nome": nova_lei.nome,
+                "tipo": nova_lei.tipo,
+                "situacao": nova_lei.situacao,
+            })
+        else:
+            return JsonResponse({"error": "Dados incompletos"}, status=400)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
 
-    def __str__(self):
-        return self.nome
+@csrf_exempt
+def atualizar_situacao_lei(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            lei_id = data.get('lei_id')
+            nova_situacao = data.get('situacao')
 
+            lei = get_object_or_404(Lei, id=lei_id)
+            situacao_anterior = lei.situacao
 
-class Professores(models.Model):
-    nome = models.CharField(max_length=255)
-    escola = models.ForeignKey(Escola, on_delete=models.CASCADE)
+            # Atualizar a situação atual da lei
+            lei.situacao = nova_situacao
+            lei.save()
 
-    def __str__(self):
-        return self.nome
+            # Registrar no histórico (se o modelo LeiHistorico estiver sendo usado)
+            LeiHistorico.objects.create(
+                lei=lei,
+                situacao_anterior=situacao_anterior,
+                situacao_nova=nova_situacao,
+                usuario=request.user.username  # Ajuste conforme necessário
+            )
+
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+    return JsonResponse({"error": "Método não permitido"}, status=405)
+
+@csrf_exempt
+def adicionar_modelo(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            nome = data.get("nome")
+            if nome:
+                novo_modelo = Modelo.objects.create(nome=nome)
+                return JsonResponse({"id": novo_modelo.id, "nome": novo_modelo.nome})
+            else:
+                return JsonResponse({"error": "Nome não fornecido"}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Erro ao processar a solicitação JSON"}, status=400)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
