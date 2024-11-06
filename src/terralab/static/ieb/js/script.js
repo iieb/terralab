@@ -198,4 +198,42 @@ document.addEventListener('DOMContentLoaded', function () {
             return v.toString(16);
         });
     }
+
+    const form = document.querySelector('form');
+    const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+
+    // Função para validar campos
+    function validateField(field) {
+        if (!field.value.trim()) {
+            field.classList.add('invalid');
+            field.classList.remove('valid');
+        } else {
+            field.classList.remove('invalid');
+            field.classList.add('valid');
+        }
+    }
+
+    // Valida todos os campos obrigatórios no carregamento da página
+    requiredFields.forEach(validateField);
+
+    form.addEventListener('submit', function(event) {
+        let allValid = true;
+
+        requiredFields.forEach(field => {
+            validateField(field);
+            if (field.classList.contains('invalid')) {
+                allValid = false;
+            }
+        });
+
+        if (!allValid) {
+            event.preventDefault(); // Impede o envio do formulário se houver campos inválidos
+        }
+    });
+
+    requiredFields.forEach(field => {
+        field.addEventListener('input', function() {
+            validateField(field);
+        });
+    });
 });
