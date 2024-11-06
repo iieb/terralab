@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlAtividades = urlContainer.dataset.urlAtividades || '';
     const urlIndicadores = urlContainer.dataset.urlIndicadores || '';
 
+    
     // Verificar se todas as URLs necessárias estão disponíveis
     if (!urlComponentes || !urlEquipes || !urlEquipesAdicionais || !urlAtividades || !urlIndicadores) {
         console.error('Algumas URLs necessárias não foram encontradas. Verifique se todos os atributos data-url estão presentes no elemento url-container.');
@@ -49,6 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.forEach(item => {
                         select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
                     });
+                    // Revalidar o campo e adicionar listener
+                    validateField(select);
+                    addValidationListeners([select]);
                 });
         }
 
@@ -63,6 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.forEach(item => {
                         select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
                     });
+                    // Revalidar o campo e adicionar listener
+                    validateField(select);
+                    addValidationListeners([select]);
                 });
         }
 
@@ -79,6 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         data.forEach(item => {
                             checkboxGroup.innerHTML += '<label><input type="checkbox" name="equipe_adicional" value="' + item.id + '"> ' + item.nome + '</label>';
                         });
+                        // Revalidar o campo e adicionar listener
+                    validateField(select);
+                    addValidationListeners([select]);
                     }
                 });
         }
@@ -98,6 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.forEach(item => {
                         select.innerHTML += '<option value="' + item.id + '">' + item.nome + '</option>';
                     });
+                    // Revalidar o campo e adicionar listener
+                    validateField(select);
+                    addValidationListeners([select]);
                 });
         }
     });
@@ -168,6 +181,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(error => {
                     console.error('Erro ao carregar indicadores:', error);
                 });
+                // Revalidar o campo e adicionar listener
+                validateField(select);
+                addValidationListeners([select]);
         }
     });
 
@@ -200,40 +216,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const form = document.querySelector('form');
-    const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+   // Seleciona todos os campos obrigatórios do formulário
+    let requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
 
-    // Função para validar campos
-    function validateField(field) {
-        if (!field.value.trim()) {
-            field.classList.add('invalid');
-            field.classList.remove('valid');
-        } else {
-            field.classList.remove('invalid');
-            field.classList.add('valid');
-        }
+// Função para validar um campo específico
+function validateField(field) {
+    if (!field.value.trim()) {
+        field.classList.add('invalid');
+        field.classList.remove('valid');
+    } else {
+        field.classList.remove('invalid');
+        field.classList.add('valid');
+    }
+}
+
+    // Função para adicionar eventos de validação em campos obrigatórios
+    function addValidationListeners(fields) {
+        fields.forEach(field => {
+            field.addEventListener('input', function() {
+                validateField(field);
+            });
+        });
     }
 
-    // Valida todos os campos obrigatórios no carregamento da página
-    requiredFields.forEach(validateField);
+ // Valida todos os campos obrigatórios no carregamento da página
+ requiredFields.forEach(field => validateField(field));
+ addValidationListeners(requiredFields);
 
-    form.addEventListener('submit', function(event) {
-        let allValid = true;
+ // Evento para validar todos os campos obrigatórios na submissão do formulário
+ form.addEventListener('submit', function(event) {
+     let allValid = true;
 
-        requiredFields.forEach(field => {
-            validateField(field);
-            if (field.classList.contains('invalid')) {
-                allValid = false;
-            }
-        });
+     requiredFields.forEach(field => {
+         validateField(field);
+         if (field.classList.contains('invalid')) {
+             allValid = false; // Se houver qualquer campo inválido, o formulário não deve ser enviado
+         }
+     });
 
-        if (!allValid) {
-            event.preventDefault(); // Impede o envio do formulário se houver campos inválidos
-        }
-    });
+     if (!allValid) {
+         event.preventDefault(); // Impede o envio do formulário se houver campos inválidos
+         alert("Por favor, preencha todos os campos obrigatórios.");
+     }
+ });
 
-    requiredFields.forEach(field => {
-        field.addEventListener('input', function() {
-            validateField(field);
-        });
-    });
+
 });
