@@ -1,0 +1,1188 @@
+[33mcommit 39638759a84de25ae87ab46cc822423f58dd2769[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: hiure <hiure@riseup.net>
+Date:   Thu Oct 10 19:44:20 2024 -0300
+
+    Merge all branches to main
+
+[1mdiff --git a/src/.override_env b/src/.override_env[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/src/geoserver/data/README.rst b/src/geoserver/data/README.rst[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0b2d765[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/README.rst[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mIncluded Data[m
+[32m+[m[32m=============[m
+[32m+[m
+[32m+[m[32mThis directory provides an empty GeoServer data directory, as such this directory[m
+[32m+[m[32mdoes not contain any published data and is not subject to a data license.[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/cluster/cluster.properties b/src/geoserver/data/cluster/cluster.properties[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c8a0969[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/cluster/cluster.properties[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32m#[m
+[32m+[m[32m#Sun Oct 01 12:58:43 BST 2017[m
+[32m+[m[32mtoggleSlave=true[m
+[32m+[m[32mtopicName=VirtualTopic.geoserver[m
+[32m+[m[32mconnection=enabled[m
+[32m+[m[32mbrokerURL=[m
+[32m+[m[32mdurable=true[m
+[32m+[m[32mxbeanURL=./broker.xml[m
+[32m+[m[32mtoggleMaster=true[m
+[32m+[m[32membeddedBroker=enabled[m
+[32m+[m[32mCLUSTER_CONFIG_DIR=D\:\\work\\code\\python\\geonode\\geoserver-geonode-ext-2.12.x\\geoserver\\data\\geonode_v213x\\cluster[m
+[32m+[m[32membeddedBrokerProperties=embedded-broker.properties[m
+[32m+[m[32mconnection.retry=10[m
+[32m+[m[32mreadOnly=disabled[m
+[32m+[m[32minstanceName=ed0eae4a-dfc1-4f71-b2fe-6befcb933e2e[m
+[32m+[m[32mgroup=geoserver-cluster[m
+[32m+[m[32mconnection.maxwait=500[m
+[1mdiff --git a/src/geoserver/data/cluster/embedded-broker.properties b/src/geoserver/data/cluster/embedded-broker.properties[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9395bf0[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/cluster/embedded-broker.properties[m
+[36m@@ -0,0 +1,37 @@[m
+[32m+[m[32m## JMX settings (can be overridden by env vars)[m
+[32m+[m[32m## For more information, see: http://activemq.apache.org/jmx.html[m
+[32m+[m[32m# enable/disable broker jmx[m
+[32m+[m[32mactivemq.jmx.useJmx=false[m
+[32m+[m[32m# set the JMX connector port[m
+[32m+[m[32mactivemq.jmx.port=1098[m
+[32m+[m[32m# set the JMX connector host[m
+[32m+[m[32mactivemq.jmx.host=localhost[m
+[32m+[m[32m# enable the JMX connector[m
+[32m+[m[32mactivemq.jmx.createConnector=false[m
+[32m+[m
+[32m+[m[32m## broker settings[m
+[32m+[m[32m# set the base path of the temporary broker dir[m
+[32m+[m[32m# this is also used as persistence base dir[m[41m  [m
+[32m+[m[32m#activemq.base=./[m
+[32m+[m
+[32m+[m[32m## configuring the embedded broker[m
+[32m+[m[32m# connects the server via native I/O socket to the local network broadcast using an automatic assigned port[m[41m [m
+[32m+[m[32m# maximumConnections and wireFormat.maxFrameSize are added to avoid ddos attacks[m
+[32m+[m[32mactivemq.transportConnectors.server.uri=nio://127.0.0.1:0?maximumConnections=1000&wireFormat.maxFrameSize=104857600&jms.useAsyncSend=true&transport.daemon=true&trace=true[m
+[32m+[m
+[32m+[m[32m## the broker performs discovery using the following protocol:[m
+[32m+[m[32m# multicast on default network[m
+[32m+[m[32mactivemq.transportConnectors.server.discoveryURI=multicast://default[m
+[32m+[m
+[32m+[m[32m## persistence settings and system usage[m
+[32m+[m[32m## The systemUsage controls the maximum amount of space the broker will[m[41m [m
+[32m+[m[32m## use before slowing down producers.[m[41m [m
+[32m+[m[32m## For more information, see: http://activemq.apache.org/producer-flow-control.html[m
+[32m+[m[32m# enable/disable persistence[m
+[32m+[m[32mactivemq.broker.persistent=true[m
+[32m+[m[32m# heap memory usage[m
+[32m+[m[32mactivemq.broker.systemUsage.memoryUsage=128 mb[m
+[32m+[m[32m# disk space memory usage[m
+[32m+[m[32mactivemq.broker.systemUsage.storeUsage=1 gb[m
+[32m+[m[32m# temp disk space memory usage[m
+[32m+[m[32mactivemq.broker.systemUsage.tempUsage=128 mb[m
+[1mdiff --git a/src/geoserver/data/controlflow.properties b/src/geoserver/data/controlflow.properties[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3acd7d7[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/controlflow.properties[m
+[36m@@ -0,0 +1,16 @@[m
+[32m+[m[32m# if a request waits in queue for more than 60 seconds it's not worth executing,[m
+[32m+[m[32m# the client will  likely have given up by then[m
+[32m+[m[32mtimeout=60[m
+[32m+[m[32m# don't allow the execution of more than 100 requests total in parallel[m
+[32m+[m[32mows.global=100[m
+[32m+[m[32m# don't allow more than 10 GetMap in parallel[m
+[32m+[m[32mows.wms.getmap=10[m
+[32m+[m[32m# don't allow more than 4 outputs with Excel output as it's memory bound[m
+[32m+[m[32mows.wfs.getfeature.application/msexcel=4[m
+[32m+[m[32m# don't allow a single user to perform more than 6 requests in parallel[m
+[32m+[m[32m# (6 being the Firefox default concurrency level at the time of writing)[m
+[32m+[m[32muser=6[m
+[32m+[m[32m# don't allow the execution of more than 16 tile requests in parallel[m
+[32m+[m[32m# (assuming a server with 4 cores, GWC empirical tests show that throughput[m
+[32m+[m[32m# peaks up at 4 x number of cores. Adjust as appropriate to your system)[m
+[32m+[m[32mows.gwc=16[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_describeCoverage.xml b/src/geoserver/data/demo/WCS_describeCoverage.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8d673b4[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_describeCoverage.xml[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32m<!-- A sample describe request.  The schema is generated automatically by  -->[m
+[32m+[m[32m<!-- GeoServer.  You can modify the schema with the web interface to hide  -->[m
+[32m+[m[32m<!-- and/or require certain attributes. -->[m
+[32m+[m[32m<!--[m[41m [m
+[32m+[m[32m      If you change the "<Coverage>" tag below to the name of another[m[41m [m
+[32m+[m[32m      coverage, you can see the GML Schema for that layer.[m
+[32m+[m[32m      The getCapabilities demo will tell you the names of all the layers![m
+[32m+[m[32m  -->[m
+[32m+[m[32m<DescribeCoverage[m
+[32m+[m[32m  version="1.0.0"[m
+[32m+[m[32m  service="WCS"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wcs"[m
+[32m+[m[32m  xmlns:nurc="http://www.nurc.nato.int"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/describeCoverage.xsd">[m
+[32m+[m[41m  [m
+[32m+[m[32m    <Coverage>nurc:Pk50095</Coverage>[m
+[32m+[m[41m    [m
+[32m+[m[32m</DescribeCoverage>[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_describeCoverage_2.0.1.url b/src/geoserver/data/demo/WCS_describeCoverage_2.0.1.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..d98f14c[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_describeCoverage_2.0.1.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?service=WCS&version=2.0.1&request=describecoverage&coverageid=nurc__mosaic[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_describeCoverage_2.0.1.xml b/src/geoserver/data/demo/WCS_describeCoverage_2.0.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6e88c41[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_describeCoverage_2.0.1.xml[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<wcs:DescribeCoverage service="WCS" version="2.0.1"[m
+[32m+[m[32m  xmlns:wcs="http://www.opengis.net/wcs/2.0"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsAll.xsd">[m
+[32m+[m
+[32m+[m[32m  <wcs:CoverageId>nurc__mosaic</wcs:CoverageId>[m
+[32m+[m[32m</wcs:DescribeCoverage>[m
+[32m+[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCapabilities.xml b/src/geoserver/data/demo/WCS_getCapabilities.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5c85793[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCapabilities.xml[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m<!-- Gets the WCS capabilities. For WMS capabilities, see WMS_getCapabilities demo-->[m
+[32m+[m[32m<!--[m
+[32m+[m
+[32m+[m[32m      This will briefly describe all the layers (Coverages) in that you have[m
+[32m+[m[32m      in your WCS server, plus more generic information about what your server[m
+[32m+[m[32m      supports.[m
+[32m+[m[41m      [m
+[32m+[m[32m      For more information about a particular Coverage, use the[m[41m [m
+[32m+[m[32m      WCS_describeCoverage.xml demo![m
+[32m+[m[41m      [m
+[32m+[m[32m  -->[m
+[32m+[m[32m<GetCapabilities[m
+[32m+[m[32m  service="WCS"[m
+[32m+[m[32m  version="1.0.0"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wcs"[m
+[32m+[m[32m  xmlns:nurc="http://www.nurc.nato.int"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/wcsCapabilities.xsd"/>[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCapabilities_2.0.1.url b/src/geoserver/data/demo/WCS_getCapabilities_2.0.1.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c2ecba0[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCapabilities_2.0.1.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCapabilities&VERSION=2.0.1[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCapabilities_2.0.1.xml b/src/geoserver/data/demo/WCS_getCapabilities_2.0.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8ff05a7[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCapabilities_2.0.1.xml[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<GetCapabilities[m
+[32m+[m[32m  version="2.0.1"[m
+[32m+[m[32m  service="WCS"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wcs/2.0"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsGetCapabilities.xsd" />[m
+[32m+[m[41m		[m
+[32m+[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage.xml b/src/geoserver/data/demo/WCS_getCoverage.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f74b053[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage.xml[m
+[36m@@ -0,0 +1,38 @@[m
+[32m+[m[32m<!-- Performs a get coverage.  Feel free to play with the elements,        -->[m
+[32m+[m[32m<!-- to get different results.                                             -->[m
+[32m+[m[32m<GetCoverage service="WCS" version="1.0.0"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wcs"[m
+[32m+[m[32m  xmlns:nurc="http://www.nurc.nato.int"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/getCoverage.xsd">[m
+[32m+[m[32m<sourceCoverage>nurc:Pk50095</sourceCoverage>[m
+[32m+[m[32m  <domainSubset>[m
+[32m+[m[32m    <spatialSubset>[m
+[32m+[m[32m      <gml:Envelope srsName="EPSG:32633">[m
+[32m+[m[32m        <gml:pos>347649.93086859107 5176214.082539256</gml:pos>[m
+[32m+[m[32m        <gml:pos>370725.976428591 5196961.352859256</gml:pos>[m
+[32m+[m[32m      </gml:Envelope>[m
+[32m+[m[32m      <gml:Grid dimension="2" srsName="EPSG:4326">[m
+[32m+[m[32m        <gml:limits>[m
+[32m+[m[32m          <gml:GridEnvelope>[m
+[32m+[m[32m            <gml:low>0 0</gml:low>[m
+[32m+[m[32m            <gml:high>545 490</gml:high>[m
+[32m+[m[32m          </gml:GridEnvelope>[m
+[32m+[m[32m        </gml:limits>[m
+[32m+[m[32m        <gml:axisName>E</gml:axisName>[m
+[32m+[m[32m        <gml:axisName>N</gml:axisName>[m
+[32m+[m[32m      </gml:Grid>[m
+[32m+[m[32m    </spatialSubset>[m
+[32m+[m[32m  </domainSubset>[m
+[32m+[m[32m  <rangeSubset>[m
+[32m+[m[32m    <axisSubset name="Band">[m
+[32m+[m[32m      <singleValue>1</singleValue>[m
+[32m+[m[32m    </axisSubset>[m
+[32m+[m[32m  </rangeSubset>[m
+[32m+[m[32m  <output>[m
+[32m+[m[32m      <crs>EPSG:32633</crs>[m
+[32m+[m[32m      <format>GeoTIFF</format>[m
+[32m+[m[32m  </output>[m
+[32m+[m[32m</GetCoverage>[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_format_geotiff.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_format_geotiff.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1c6cf33[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_format_geotiff.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&compression=LZW&tiling=true&tileheight=256&tilewidth=256[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_format_gmlcov.xml b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_format_gmlcov.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e470672[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_format_gmlcov.xml[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<wcs:GetCoverage service="WCS" version="2.0.1"[m
+[32m+[m[32m  xmlns:wcs="http://www.opengis.net/wcs/2.0"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsAll.xsd">[m
+[32m+[m
+[32m+[m[32m  <wcs:CoverageId>nurc__mosaic</wcs:CoverageId>[m
+[32m+[m[32m  <wcs:format>application/gml+xml</wcs:format>[m
+[32m+[m
+[32m+[m[32m</wcs:GetCoverage>[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_extent.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_extent.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..bb5cff9[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_extent.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&SCALEEXTENT=http://www.opengis.net/def/axis/OGC/1/i(0,1024),http://www.opengis.net/def/axis/OGC/1/j(0,1024)[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_factor.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_factor.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6f1d282[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_factor.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&SCALEFACTOR=0.5[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_factor.xml b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_factor.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f058392[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_factor.xml[m
+[36m@@ -0,0 +1,21 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<!-- Demonstrates use of WCS scale factor -->[m
+[32m+[m[32m<wcs:GetCoverage service="WCS" version="2.0.1"[m
+[32m+[m[32m    xmlns:wcs="http://www.opengis.net/wcs/2.0" xmlns:scal="http://www.opengis.net/WCS_service-extension_scaling/1.0"[m
+[32m+[m[32m    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m    xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsAll.xsd">[m
+[32m+[m[32m    <!--[m
+[32m+[m[32m        The full schemaLocation permits schema-validation but causes the[m
+[32m+[m[32m        request to fail [GEOS-7779]:[m
+[32m+[m[32m        xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsAll.xsd[m
+[32m+[m[32m        http://www.opengis.net/WCS_service-extension_scaling/1.0 http://schemas.opengis.net/wcs/scaling/1.0/wcsScal.xsd">[m
+[32m+[m[32m    -->[m
+[32m+[m[32m    <wcs:Extension>[m
+[32m+[m[32m        <scal:Scaling>[m
+[32m+[m[32m            <scal:ScaleByFactor>[m
+[32m+[m[32m                <scal:scaleFactor>0.5</scal:scaleFactor>[m
+[32m+[m[32m            </scal:ScaleByFactor>[m
+[32m+[m[32m        </scal:Scaling>[m
+[32m+[m[32m    </wcs:Extension>[m
+[32m+[m[32m    <wcs:CoverageId>nurc__mosaic</wcs:CoverageId>[m
+[32m+[m[32m</wcs:GetCoverage>[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_size.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_size.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9ad87e4[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_scale_size.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&SCALESIZE=http://www.opengis.net/def/axis/OGC/1/i(100),http://www.opengis.net/def/axis/OGC/1/j(100)[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_epsg32632.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_epsg32632.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7b47280[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_epsg32632.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&subset=http://www.opengis.net/def/axis/OGC/0/E(412801.12,580844.55)&subset=http://www.opengis.net/def/axis/OGC/0/N(4261767.16,4816827.04)&SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/32632&OUTPUTCRS=http://www.opengis.net/def/crs/EPSG/0/32632[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_epsg32632.xml b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_epsg32632.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..802ab73[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_epsg32632.xml[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<wcs:GetCoverage service="WCS" version="2.0.1"[m
+[32m+[m[32m  xmlns:wcs="http://www.opengis.net/wcs/2.0"[m
+[32m+[m[32m  xmlns:crs="http://www.opengis.net/spec/WCS_service-extension_crs/1.0"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsAll.xsd">[m
+[32m+[m
+[32m+[m[32m  <wcs:CoverageId>nurc__mosaic</wcs:CoverageId>[m
+[32m+[m[32m  <wcs:DimensionTrim>[m
+[32m+[m[32m    <wcs:Dimension>E</wcs:Dimension>[m
+[32m+[m[32m    <wcs:TrimLow>412801.12</wcs:TrimLow>[m
+[32m+[m[32m    <wcs:TrimHigh>580844.55</wcs:TrimHigh>[m
+[32m+[m[32m  </wcs:DimensionTrim>[m
+[32m+[m[32m  <wcs:DimensionTrim>[m
+[32m+[m[32m    <wcs:Dimension>N</wcs:Dimension>[m
+[32m+[m[32m    <wcs:TrimLow>4261767.16</wcs:TrimLow>[m
+[32m+[m[32m    <wcs:TrimHigh>4816827.04</wcs:TrimHigh>[m
+[32m+[m[32m  </wcs:DimensionTrim>[m
+[32m+[m[32m  <wcs:Extension>[m
+[32m+[m[32m    <crs:subsettingCrs>[m
+[32m+[m[32m      http://www.opengis.net/def/crs/EPSG/0/32632[m
+[32m+[m[32m    </crs:subsettingCrs>[m
+[32m+[m[32m    <crs:outputCrs>[m
+[32m+[m[32m      http://www.opengis.net/def/crs/EPSG/0/32632[m
+[32m+[m[32m    </crs:outputCrs>[m
+[32m+[m[32m  </wcs:Extension>[m
+[32m+[m
+[32m+[m[32m</wcs:GetCoverage>[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_latlon.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_latlon.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f08073c[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_latlon.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&subset=http://www.opengis.net/def/axis/OGC/0/Long(8.0,10.0)&subset=http://www.opengis.net/def/axis/OGC/0/Lat(38.5,43.5)&SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/4326[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_latlon.xml b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_latlon.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0edf0fb[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_latlon.xml[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<wcs:GetCoverage service="WCS" version="2.0.1"[m
+[32m+[m[32m  xmlns:wcs="http://www.opengis.net/wcs/2.0"[m
+[32m+[m[32m  xmlns:crs="http://www.opengis.net/spec/WCS_service-extension_crs/1.0"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wcs/2.0 http://schemas.opengis.net/wcs/2.0/wcsAll.xsd">[m
+[32m+[m
+[32m+[m[32m  <wcs:CoverageId>nurc__mosaic</wcs:CoverageId>[m
+[32m+[m[32m  <wcs:DimensionTrim>[m
+[32m+[m[32m    <wcs:Dimension>Long</wcs:Dimension>[m
+[32m+[m[32m    <wcs:TrimLow>8</wcs:TrimLow>[m
+[32m+[m[32m    <wcs:TrimHigh>10</wcs:TrimHigh>[m
+[32m+[m[32m  </wcs:DimensionTrim>[m
+[32m+[m[32m  <wcs:DimensionTrim>[m
+[32m+[m[32m    <wcs:Dimension>Lat</wcs:Dimension>[m
+[32m+[m[32m    <wcs:TrimLow>38.5</wcs:TrimLow>[m
+[32m+[m[32m    <wcs:TrimHigh>43.5</wcs:TrimHigh>[m
+[32m+[m[32m  </wcs:DimensionTrim>[m
+[32m+[m[32m  <wcs:Extension>[m
+[32m+[m[32m    <crs:subsettingCrs>[m
+[32m+[m[32m      http://www.opengis.net/def/crs/EPSG/0/4326[m
+[32m+[m[32m    </crs:subsettingCrs>[m
+[32m+[m[32m  </wcs:Extension>[m
+[32m+[m
+[32m+[m[32m</wcs:GetCoverage>[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_component.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_component.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..da6597d[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_component.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&RANGESUBSET=RED_BAND[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_falsecolor.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_falsecolor.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a3e6779[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_falsecolor.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&RANGESUBSET=RED_BAND,BLUE_BAND,GREEN_BAND[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_interval.url b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_interval.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1bfd4c6[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WCS_getCoverage_2.0.1_subset_range_interval.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwcs?SERVICE=WCS&REQUEST=GetCoverage&VERSION=2.0.1&CoverageId=nurc__mosaic&RANGESUBSET=RED_BAND:GREEN_BAND[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_describeFeatureType-1.0.xml b/src/geoserver/data/demo/WFS_describeFeatureType-1.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1e43143[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_describeFeatureType-1.0.xml[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32m<!-- A sample describe request.  The schema is generated automatically by  -->[m
+[32m+[m[32m<!-- GeoServer.  You can modify the schema with the web interface to hide  -->[m
+[32m+[m[32m<!-- and/or require certain attributes. -->[m
+[32m+[m[32m<!--[m[41m [m
+[32m+[m[32m      If you change the "<TypeName>" tag below to the name of another[m[41m [m
+[32m+[m[32m      dataset, you can see the GML Schema for that layer.[m
+[32m+[m[32m      This will have all the column names and types.[m
+[32m+[m[32m      The getCapabilities demo will tell you the names of all the layers![m
+[32m+[m[32m  -->[m
+[32m+[m[32m<DescribeFeatureType[m
+[32m+[m[32m  version="1.0.0"[m
+[32m+[m[32m  service="WFS"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">[m
+[32m+[m[41m  [m
+[32m+[m[32m    <TypeName>topp:states</TypeName>[m
+[32m+[m[41m    [m
+[32m+[m[32m</DescribeFeatureType>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_describeFeatureType-1.1.xml b/src/geoserver/data/demo/WFS_describeFeatureType-1.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..543d188[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_describeFeatureType-1.1.xml[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32m<!-- A sample describe request.  The schema is generated automatically by  -->[m
+[32m+[m[32m<!-- GeoServer.  You can modify the schema with the web interface to hide  -->[m
+[32m+[m[32m<!-- and/or require certain attributes. -->[m
+[32m+[m[32m<!--[m[41m [m
+[32m+[m[32m      If you change the "<TypeName>" tag below to the name of another[m[41m [m
+[32m+[m[32m      dataset, you can see the GML Schema for that layer.[m
+[32m+[m[32m      This will have all the column names and types.[m
+[32m+[m[32m      The getCapabilities demo will tell you the names of all the layers![m
+[32m+[m[32m  -->[m
+[32m+[m[32m<DescribeFeatureType[m
+[32m+[m[32m  version="1.1.0"[m
+[32m+[m[32m  service="WFS"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">[m
+[32m+[m[41m  [m
+[32m+[m[32m    <TypeName>topp:states</TypeName>[m
+[32m+[m[41m    [m
+[32m+[m[32m</DescribeFeatureType>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getCapabilities-1.0.xml b/src/geoserver/data/demo/WFS_getCapabilities-1.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f419819[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getCapabilities-1.0.xml[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32m<!-- Gets the WFS capabilities. For WMS capabilities, see WMS_getCapabilities demo-->[m
+[32m+[m[32m<!--[m
+[32m+[m
+[32m+[m[32m      This will briefly describe all the layers (FeatureTypes) in that you have[m
+[32m+[m[32m      in your WFS server, plus more generic information about what your server[m
+[32m+[m[32m      supports.[m
+[32m+[m[41m      [m
+[32m+[m[32m      For more information about a particular FeatureType, use the[m[41m [m
+[32m+[m[32m      WFS_describeFeatureType.xml demo![m
+[32m+[m[41m      [m
+[32m+[m[32m  -->[m
+[32m+[m[32m<GetCapabilities[m
+[32m+[m[32m  service="WFS"[m
+[32m+[m[32m  version="1.0.0"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd"/>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getCapabilities-1.1.xml b/src/geoserver/data/demo/WFS_getCapabilities-1.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6355709[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getCapabilities-1.1.xml[m
+[36m@@ -0,0 +1,16 @@[m
+[32m+[m[32m<!-- Gets the WFS capabilities. For WMS capabilities, see WMS_getCapabilities demo-->[m
+[32m+[m[32m<!--[m
+[32m+[m
+[32m+[m[32m      This will briefly describe all the layers (FeatureTypes) in that you have[m
+[32m+[m[32m      in your WFS server, plus more generic information about what your server[m
+[32m+[m[32m      supports.[m
+[32m+[m[41m      [m
+[32m+[m[32m      For more information about a particular FeatureType, use the[m[41m [m
+[32m+[m[32m      WFS_describeFeatureType.xml demo![m
+[32m+[m[41m      [m
+[32m+[m[32m  -->[m
+[32m+[m[32m<GetCapabilities[m
+[32m+[m[32m  service="WFS"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"/>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeature-1.0.xml b/src/geoserver/data/demo/WFS_getFeature-1.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1fb2145[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeature-1.0.xml[m
+[36m@@ -0,0 +1,29 @@[m
+[32m+[m[32m<!-- Performs a get feature.  Feel free to play with the Filter elements,  -->[m
+[32m+[m[32m<!-- to get different results.  No filter will get all features, and you   -->[m
+[32m+[m[32m<!-- can do filtering on spatial and non-spatial attributes.  See the ogc  -->[m
+[32m+[m[32m<!-- filter specification http://www.opengis.org/docs/02-059.pdf for the   -->[m
+[32m+[m[32m<!-- the complete syntax and examples.                                     -->[m
+[32m+[m[32m<!--[m
+[32m+[m[32m    This particular Query will return the topp:states with the FID (unique ID)[m
+[32m+[m[32m    of 'states:3'. (Thats Delaware)[m
+[32m+[m[41m    [m
+[32m+[m[32m    You can also try a filter like:[m
+[32m+[m[32m          <PropertyIsEqualTo>[m
+[32m+[m[32m                <PropertyName>STATE_NAME</PropertyName>[m
+[32m+[m[32m                <Literal>Delaware</Literal>[m
+[32m+[m[32m          </PropertyIsEqualTo>[m
+[32m+[m[32m  -->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.0.0"[m
+[32m+[m[32m  outputFormat="GML2"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m       <ogc:FeatureId fid="states.3"/>[m
+[32m+[m[32m    </ogc:Filter>[m
+[32m+[m[32m    </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeature-1.1.xml b/src/geoserver/data/demo/WFS_getFeature-1.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0cb0e82[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeature-1.1.xml[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m[32m<!-- Performs a get feature.  Feel free to play with the Filter elements,  -->[m
+[32m+[m[32m<!-- to get different results.  No filter will get all features, and you   -->[m
+[32m+[m[32m<!-- can do filtering on spatial and non-spatial attributes.  See the ogc  -->[m
+[32m+[m[32m<!-- filter specification http://www.opengis.org/docs/02-059.pdf for the   -->[m
+[32m+[m[32m<!-- the complete syntax and examples.                                     -->[m
+[32m+[m[32m<!--[m
+[32m+[m[32m    This particular Query will return the topp:states with the FID (unique ID)[m
+[32m+[m[32m    of 'states:3'. (Thats Delaware)[m
+[32m+[m[41m    [m
+[32m+[m[32m    You can also try a filter like:[m
+[32m+[m[32m          <PropertyIsEqualTo>[m
+[32m+[m[32m                <PropertyName>STATE_NAME</PropertyName>[m
+[32m+[m[32m                <Literal>Delaware</Literal>[m
+[32m+[m[32m          </PropertyIsEqualTo>[m
+[32m+[m[32m  -->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.1.0"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m       <ogc:FeatureId fid="states.3"/>[m
+[32m+[m[32m    </ogc:Filter>[m
+[32m+[m[32m    </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeature-2.0.url b/src/geoserver/data/demo/WFS_getFeature-2.0.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e95e64b[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeature-2.0.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?service=WFS&version=2.0.0&request=GetFeature&typenames=sf:bugsites&filter=%3Cfes:Filter%20xmlns:fes=%22http://www.opengis.net/fes/2.0%22%3E%3Cfes:ResourceId%20rid=%22bugsites.3%22/%3E%3C/fes:Filter%3E[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeature-2.0.xml b/src/geoserver/data/demo/WFS_getFeature-2.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..20e1b43[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeature-2.0.xml[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<!--[m
+[32m+[m[32m    This example demonstrates a WFS 2.0 GetFeature POST request.[m
+[32m+[m
+[32m+[m[32m    This filter selects a single feature with id "bugsites.3".[m
+[32m+[m
+[32m+[m[32m    See also:[m
+[32m+[m[32m    WFS Standard: http://www.opengeospatial.org/standards/wfs[m
+[32m+[m[32m    Filter Encoding Standard: http://www.opengeospatial.org/standards/filter[m
+[32m+[m[32m-->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="2.0.0"[m
+[32m+[m[32m    xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:fes="http://www.opengis.net/fes/2.0"[m
+[32m+[m[32m    xmlns:sf="http://www.openplans.org/spearfish" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m    xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd">[m
+[32m+[m[32m    <wfs:Query typeNames="sf:bugsites">[m
+[32m+[m[32m        <fes:Filter>[m
+[32m+[m[32m            <fes:ResourceId rid="bugsites.3"/>[m
+[32m+[m[32m        </fes:Filter>[m
+[32m+[m[32m    </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBBOX-1.0.xml b/src/geoserver/data/demo/WFS_getFeatureBBOX-1.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..cafa5ae[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBBOX-1.0.xml[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m[32m<!-- Performs a get feature with a bounding box filter.      -->[m
+[32m+[m[32m<!-- The BBOX filter is a convenience for a <Not><Disjoint>, -->[m
+[32m+[m[32m<!-- it fetches all features that spatially interact with the given box. -->[m
+[32m+[m[32m<!-- This example also shows how to request specific properties, in this -->[m
+[32m+[m[32m<!-- case we just get the STATE_NAME and PERSONS -->[m
+[32m+[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.0.0"[m
+[32m+[m[32m  outputFormat="GML2"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <ogc:PropertyName>topp:STATE_NAME</ogc:PropertyName>[m
+[32m+[m[32m    <ogc:PropertyName>topp:PERSONS</ogc:PropertyName>[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m      <ogc:BBOX>[m
+[32m+[m[32m        <ogc:PropertyName>the_geom</ogc:PropertyName>[m
+[32m+[m[32m        <gml:Box srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m           <gml:coordinates>-75.102613,40.212597 -72.361859,41.512517</gml:coordinates>[m
+[32m+[m[32m        </gml:Box>[m
+[32m+[m[32m      </ogc:BBOX>[m
+[32m+[m[32m   </ogc:Filter>[m
+[32m+[m[32m  </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBBOX-1.1.xml b/src/geoserver/data/demo/WFS_getFeatureBBOX-1.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1718a52[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBBOX-1.1.xml[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m[32m<!-- Performs a get feature with a bounding box filter.      -->[m
+[32m+[m[32m<!-- The BBOX filter is a convenience for a <Not><Disjoint>, -->[m
+[32m+[m[32m<!-- it fetches all features that spatially interact with the given box. -->[m
+[32m+[m[32m<!-- This example also shows how to request specific properties, in this -->[m
+[32m+[m[32m<!-- case we just get the STATE_NAME and PERSONS -->[m
+[32m+[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.1.0"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <wfs:PropertyName>topp:STATE_NAME</wfs:PropertyName>[m
+[32m+[m[32m    <wfs:PropertyName>topp:PERSONS</wfs:PropertyName>[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m      <ogc:BBOX>[m
+[32m+[m[32m        <ogc:PropertyName>the_geom</ogc:PropertyName>[m
+[32m+[m[32m        <gml:Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m           <gml:lowerCorner>-75.102613 40.212597</gml:lowerCorner>[m
+[32m+[m[32m           <gml:upperCorner>-72.361859 41.512517</gml:upperCorner>[m
+[32m+[m[32m        </gml:Envelope>[m
+[32m+[m[32m      </ogc:BBOX>[m
+[32m+[m[32m   </ogc:Filter>[m
+[32m+[m[32m  </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBBOX.url b/src/geoserver/data/demo/WFS_getFeatureBBOX.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3264c8b[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBBOX.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.1.0&typeName=topp:states&propertyName=STATE_NAME,PERSONS&BBOX=-75.102613,40.212597,-72.361859,41.512517,EPSG:4326[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBetween-1.0.xml b/src/geoserver/data/demo/WFS_getFeatureBetween-1.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..095228f[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBetween-1.0.xml[m
+[36m@@ -0,0 +1,27 @@[m
+[32m+[m[32m<!-- Performs a between filter to find the states with an area[m
+[32m+[m[32m     between 100,000 and 150,000.[m
+[32m+[m[32m     Also, it just returns the STATE_NAME, LAND_KM, and geometry[m[41m [m
+[32m+[m[32m     (instead of all the attributes).[m
+[32m+[m[32m  -->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.0.0"[m
+[32m+[m[32m  outputFormat="GML2"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m  <ogc:PropertyName>topp:STATE_NAME</ogc:PropertyName>[m[41m [m
+[32m+[m[32m  <ogc:PropertyName>topp:LAND_KM</ogc:PropertyName>[m[41m [m
+[32m+[m[32m   <ogc:PropertyName>topp:the_geom</ogc:PropertyName>[m[41m [m
+[32m+[m[32m<ogc:Filter>[m
+[32m+[m[32m<ogc:PropertyIsBetween>[m
+[32m+[m[32m<ogc:PropertyName>topp:LAND_KM</ogc:PropertyName>[m
+[32m+[m[32m<ogc:LowerBoundary><ogc:Literal>100000</ogc:Literal></ogc:LowerBoundary>[m
+[32m+[m[32m<ogc:UpperBoundary><ogc:Literal>150000</ogc:Literal></ogc:UpperBoundary>[m
+[32m+[m[32m</ogc:PropertyIsBetween>[m
+[32m+[m[32m</ogc:Filter>[m
+[32m+[m[32m  </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBetween-1.1.xml b/src/geoserver/data/demo/WFS_getFeatureBetween-1.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..40679e5[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBetween-1.1.xml[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32m<!-- Performs a between filter to find the states with an area[m
+[32m+[m[32m     between 100,000 and 150,000.[m
+[32m+[m[32m     Also, it just returns the STATE_NAME, LAND_KM, and geometry[m[41m [m
+[32m+[m[32m     (instead of all the attributes).  -->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.1.0"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m  <wfs:PropertyName>topp:STATE_NAME</wfs:PropertyName>[m[41m [m
+[32m+[m[32m  <wfs:PropertyName>topp:LAND_KM</wfs:PropertyName>[m[41m [m
+[32m+[m[32m  <wfs:PropertyName>topp:the_geom</wfs:PropertyName>[m[41m [m
+[32m+[m[32m<ogc:Filter>[m
+[32m+[m[32m<ogc:PropertyIsBetween>[m
+[32m+[m[32m<ogc:PropertyName>topp:LAND_KM</ogc:PropertyName>[m
+[32m+[m[32m<ogc:LowerBoundary><ogc:Literal>100000</ogc:Literal></ogc:LowerBoundary>[m
+[32m+[m[32m<ogc:UpperBoundary><ogc:Literal>150000</ogc:Literal></ogc:UpperBoundary>[m
+[32m+[m[32m</ogc:PropertyIsBetween>[m
+[32m+[m[32m</ogc:Filter>[m
+[32m+[m[32m  </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBetween.url b/src/geoserver/data/demo/WFS_getFeatureBetween.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..36ca4ac[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBetween.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.1.0&typeName=topp:states&propertyName=STATE_NAME,LAND_KM,the_geom&outputFormat=GML2&FILTER=%3CFilter%20xmlns=%22http://www.opengis.net/ogc%22%3E%3CPropertyIsBetween%3E%3CPropertyName%3Etopp:LAND_KM%3C/PropertyName%3E%3CLowerBoundary%3E%3CLiteral%3E100000%3C/Literal%3E%3C/LowerBoundary%3E%3CUpperBoundary%3E%3CLiteral%3E150000%3C/Literal%3E%3C/UpperBoundary%3E%3C/PropertyIsBetween%3E%3C/Filter%3E[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureBetweenCQL.url b/src/geoserver/data/demo/WFS_getFeatureBetweenCQL.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5cb79e4[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureBetweenCQL.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&typeName=topp:states&propertyName=STATE_NAME,LAND_KM,the_geom&CQL_FILTER=LAND_KM%20BETWEEN%20100000%20AND%20150000&version=1.0.0[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureFid.url b/src/geoserver/data/demo/WFS_getFeatureFid.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c66e93d[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureFid.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.1.0&typeName=topp:states&outputFormat=GML2&FEATUREID=states.3[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureFidFilter.url b/src/geoserver/data/demo/WFS_getFeatureFidFilter.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..087061f[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureFidFilter.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.1.0&typeName=topp:states&outputFormat=GML2&FILTER=%3CFilter%20xmlns=%22http://www.opengis.net/ogc%22%3E%3CFeatureId%20fid=%22states.23%22/%3E%3C/Filter%3E[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureIntersects-1.0.xml b/src/geoserver/data/demo/WFS_getFeatureIntersects-1.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..84a254a[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureIntersects-1.0.xml[m
+[36m@@ -0,0 +1,34 @@[m
+[32m+[m[32m<!-- Performs an intersects against a point.  This is functionally -->[m
+[32m+[m[32m<!-- equivalent to <Not><Disjoint>.  This call can be used by a    -->[m
+[32m+[m[32m<!-- client application to select a feature clicked on.[m[41m  [m
+[32m+[m
+[32m+[m[32m     This will search through the dataset and return any polygons that[m
+[32m+[m[32m     contain the search point.[m[41m  [m
+[32m+[m[41m     [m
+[32m+[m[32m     If you were searching in a point or line dataset, you might want[m
+[32m+[m[32m     to make a little polygon to search with instead of a single point[m
+[32m+[m[32m     so the user doesnt have to *exactly* click on the (mathematically[m
+[32m+[m[32m     infinitely thin) line or point.[m[41m     [m
+[32m+[m
+[32m+[m[32m -->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.0.0"[m
+[32m+[m[32m  outputFormat="GML2"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <Filter>[m
+[32m+[m[32m      <Intersects>[m
+[32m+[m[32m        <PropertyName>the_geom</PropertyName>[m
+[32m+[m[32m          <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m            <gml:coordinates>-74.817265,40.5296504</gml:coordinates>[m
+[32m+[m[32m          </gml:Point>[m
+[32m+[m[32m        </Intersects>[m
+[32m+[m[32m      </Filter>[m
+[32m+[m[32m  </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[32m+[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureIntersects-1.1.xml b/src/geoserver/data/demo/WFS_getFeatureIntersects-1.1.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5e310cf[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureIntersects-1.1.xml[m
+[36m@@ -0,0 +1,33 @@[m
+[32m+[m[32m<!-- Performs an intersects against a point.  This is functionally -->[m
+[32m+[m[32m<!-- equivalent to <Not><Disjoint>.  This call can be used by a    -->[m
+[32m+[m[32m<!-- client application to select a feature clicked on.[m[41m  [m
+[32m+[m
+[32m+[m[32m     This will search through the dataset and return any polygons that[m
+[32m+[m[32m     contain the search point.[m[41m  [m
+[32m+[m[41m     [m
+[32m+[m[32m     If you were searching in a point or line dataset, you might want[m
+[32m+[m[32m     to make a little polygon to search with instead of a single point[m
+[32m+[m[32m     so the user doesnt have to *exactly* click on the (mathematically[m
+[32m+[m[32m     infinitely thin) line or point.[m[41m     [m
+[32m+[m
+[32m+[m[32m -->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.1.0"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <Filter>[m
+[32m+[m[32m      <Intersects>[m
+[32m+[m[32m        <PropertyName>the_geom</PropertyName>[m
+[32m+[m[32m          <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m            <gml:coordinates>-74.817265,40.5296504</gml:coordinates>[m
+[32m+[m[32m          </gml:Point>[m
+[32m+[m[32m        </Intersects>[m
+[32m+[m[32m      </Filter>[m
+[32m+[m[32m  </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[32m+[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureIntersects.url b/src/geoserver/data/demo/WFS_getFeatureIntersects.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3dbd459[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureIntersects.url[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.0.0&typeName=topp:states&outputFormat=GML2&FILTER=%3CFilter%20xmlns=%22http://www.opengis.net/ogc%22%20xmlns:gml=%22http://www.opengis.net/gml%22%3E%3CIntersects%3E%3CPropertyName%3Ethe_geom%3C/PropertyName%3E%3Cgml:Point%20srsName=%22EPSG:4326%22%3E%3Cgml:coordinates%3E-74.817265,40.5296504%3C/gml:coordinates%3E%3C/gml:Point%3E%3C/Intersects%3E%3C/Filter%3E[m
+[32m+[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureMultiFilter.url b/src/geoserver/data/demo/WFS_getFeatureMultiFilter.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9f92eaa[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureMultiFilter.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.1.0&typeName=topp:states,tiger:tiger_roads&outputFormat=GML2&FILTER=(%3CFilter%20xmlns=%22http://www.opengis.net/ogc%22%3E%3CFeatureId%20fid=%22states.3%22/%3E%3C/Filter%3E)(%3CFilter%20xmlns=%22http://www.opengis.net/ogc%22%3E%3CFeatureId%20fid=%22tiger_roads.3%22/%3E%3C/Filter%3E)[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureNotDisjoint-2.0.url b/src/geoserver/data/demo/WFS_getFeatureNotDisjoint-2.0.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5e634e4[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureNotDisjoint-2.0.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?service=WFS&version=2.0.0&request=GetFeature&typenames=sf:bugsites&filter=%3Cfes:Filter%20xmlns:fes=%22http://www.opengis.net/fes/2.0%22%20xmlns:gml=%22http://www.opengis.net/gml/3.2%22%3E%3Cfes:Not%3E%3Cfes:Disjoint%3E%3Cfes:ValueReference%3Esf:the_geom%3C/fes:ValueReference%3E%3Cgml:Polygon%20gml:id=%27polygon.1%27%20srsName=%27http://www.opengis.net/def/crs/EPSG/0/26713%27%3E%3Cgml:exterior%3E%3Cgml:LinearRing%3E%3Cgml:posList%3E590431%204915204%20590430%204915205%20590429%204915204%20590430%204915203%20590431%204915204%3C/gml:posList%3E%3C/gml:LinearRing%3E%3C/gml:exterior%3E%3C/gml:Polygon%3E%3C/fes:Disjoint%3E%3C/fes:Not%3E%3C/fes:Filter%3E[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_getFeatureNotDisjoint-2.0.xml b/src/geoserver/data/demo/WFS_getFeatureNotDisjoint-2.0.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..520d320[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_getFeatureNotDisjoint-2.0.xml[m
+[36m@@ -0,0 +1,42 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<!--[m
+[32m+[m[32m    This example demonstrates a WFS 2.0 GetFeature POST request.[m
+[32m+[m
+[32m+[m[32m    WFS 2.0 does not depend on any one GML version and thus[m
+[32m+[m[32m    requires an explicit namespace and schemaLocation for GML.[m
+[32m+[m
+[32m+[m[32m    This spatial filter selects a single feature with[m
+[32m+[m[32m    gml:id="bugsites.2".[m
+[32m+[m
+[32m+[m[32m    See also:[m
+[32m+[m[32m    WFS Standard: http://www.opengeospatial.org/standards/wfs[m
+[32m+[m[32m    Filter Encoding Standard: http://www.opengeospatial.org/standards/filter[m
+[32m+[m[32m-->[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="2.0.0"[m
+[32m+[m[32m    xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:fes="http://www.opengis.net/fes/2.0"[m
+[32m+[m[32m    xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:sf="http://www.openplans.org/spearfish"[m
+[32m+[m[32m    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m    xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd[m
+[32m+[m[32m        http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd">[m
+[32m+[m[32m    <wfs:Query typeNames="sf:bugsites">[m
+[32m+[m[32m        <fes:Filter>[m
+[32m+[m[32m            <fes:Not>[m
+[32m+[m[32m                <fes:Disjoint>[m
+[32m+[m[32m                    <fes:ValueReference>sf:the_geom</fes:ValueReference>[m
+[32m+[m[32m                    <!-- gml:id is mandatory on GML 3.2 geometry elements -->[m
+[32m+[m[32m                    <gml:Polygon gml:id="polygon.1"[m
+[32m+[m[32m                        srsName='http://www.opengis.net/def/crs/EPSG/0/26713'>[m
+[32m+[m[32m                        <gml:exterior>[m
+[32m+[m[32m                            <gml:LinearRing>[m
+[32m+[m[32m                                <!-- pairs must form a closed ring -->[m
+[32m+[m[32m                                <gml:posList>590431 4915204 590430[m
+[32m+[m[32m                                    4915205 590429 4915204 590430[m
+[32m+[m[32m                                    4915203 590431 4915204</gml:posList>[m
+[32m+[m[32m                            </gml:LinearRing>[m
+[32m+[m[32m                        </gml:exterior>[m
+[32m+[m[32m                    </gml:Polygon>[m
+[32m+[m[32m                </fes:Disjoint>[m
+[32m+[m[32m            </fes:Not>[m
+[32m+[m[32m        </fes:Filter>[m
+[32m+[m[32m    </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_mathGetFeature.url b/src/geoserver/data/demo/WFS_mathGetFeature.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4dab41d[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_mathGetFeature.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwfs?request=GetFeature&version=1.1.0&typeName=topp:states&formatName=GML2&FILTER=%3Cogc:Filter%20xmlns:ogc=%22http://www.opengis.net/ogc%22%3E%3Cogc:PropertyIsGreaterThan%3E%3Cogc:Div%3E%3Cogc:PropertyName%3EMANUAL%3C/ogc:PropertyName%3E%3Cogc:PropertyName%3EWORKERS%3C/ogc:PropertyName%3E%3C/ogc:Div%3E%3Cogc:Literal%3E0.25%3C/ogc:Literal%3E%3C/ogc:PropertyIsGreaterThan%3E%3C/ogc:Filter%3E[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_mathGetFeature.xml b/src/geoserver/data/demo/WFS_mathGetFeature.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..84b2f60[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_mathGetFeature.xml[m
+[36m@@ -0,0 +1,26 @@[m
+[32m+[m[32m<!-- Example of a getFeature with a math filter.  In this case  -->[m
+[32m+[m[32m<!-- we want the states that have over 25% of their workers -->[m
+[32m+[m[32m<!-- doing manual labor.  So we divide the manual field by    -->[m
+[32m+[m[32m<!-- the total number of workers and compare it against 0.25 -->[m
+[32m+[m
+[32m+[m[32m<wfs:GetFeature service="WFS" version="1.0.0"[m
+[32m+[m[32m  outputFormat="GML2"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs[m
+[32m+[m[32m                      http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">[m
+[32m+[m[32m  <wfs:Query typeName="topp:states">[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m      <ogc:PropertyIsGreaterThan>[m
+[32m+[m[32m        <ogc:Div>[m
+[32m+[m[32m            <ogc:PropertyName>MANUAL</ogc:PropertyName>[m
+[32m+[m[32m            <ogc:PropertyName>WORKERS</ogc:PropertyName>[m
+[32m+[m[32m        </ogc:Div>[m
+[32m+[m[32m         <ogc:Literal>0.25</ogc:Literal>[m
+[32m+[m[32m    </ogc:PropertyIsGreaterThan>[m
+[32m+[m[32m    </ogc:Filter>[m
+[32m+[m[32m    </wfs:Query>[m
+[32m+[m[32m</wfs:GetFeature>[m
+[32m+[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_transactionDelete.xml b/src/geoserver/data/demo/WFS_transactionDelete.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8c1d600[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_transactionDelete.xml[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32m<!-- We include this transaction as a sample for deletes.        -->[m
+[32m+[m[32m<!--[m
+[32m+[m[32m      YOU PROBABLY DO NOT WANT TO RUN THIS QUERY SINCE[m[41m [m
+[32m+[m[32m       IT WILL MODIFY YOUR SOURCE DATA FILES[m
+[32m+[m[32m  -->[m
+[32m+[m[32m<wfs:Transaction service="WFS" version="1.0.0"[m
+[32m+[m[32m  xmlns:cdf="http://www.opengis.net/cite/data"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp">[m
+[32m+[m[32m  <wfs:Delete typeName="topp:tasmania_roads">[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m      <ogc:PropertyIsEqualTo>[m
+[32m+[m[32m        <ogc:PropertyName>topp:TYPE</ogc:PropertyName>[m
+[32m+[m[32m        <ogc:Literal>alley</ogc:Literal>[m
+[32m+[m[32m      </ogc:PropertyIsEqualTo>[m
+[32m+[m[32m    </ogc:Filter>[m
+[32m+[m[32m  </wfs:Delete>[m
+[32m+[m[32m</wfs:Transaction>[m
+[32m+[m[41m [m
+[1mdiff --git a/src/geoserver/data/demo/WFS_transactionInsert.xml b/src/geoserver/data/demo/WFS_transactionInsert.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c8af97c[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_transactionInsert.xml[m
+[36m@@ -0,0 +1,30 @@[m
+[32m+[m[32m<!--[m
+[32m+[m[32m      YOU PROBABLY DO NOT WANT TO RUN THIS QUERY SINCE[m[41m [m
+[32m+[m[32m       IT WILL MODIFY YOUR SOURCE DATA FILES[m
+[32m+[m[41m       [m
+[32m+[m[32m       It will add a simple line to the tasmania_roads dataset.[m
+[32m+[m[41m       [m
+[32m+[m[32m  -->[m
+[32m+[m[32m<wfs:Transaction service="WFS" version="1.0.0"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd http://www.openplans.org/topp http://localhost:8080/geoserver/wfs/DescribeFeatureType?typename=topp:tasmania_roads">[m
+[32m+[m[32m  <wfs:Insert>[m
+[32m+[m[32m    <topp:tasmania_roads>[m
+[32m+[m[32m      <topp:the_geom>[m
+[32m+[m[32m        <gml:MultiLineString srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m          <gml:lineStringMember>[m
+[32m+[m[32m            <gml:LineString>[m
+[32m+[m[32m              <gml:coordinates decimal="." cs="," ts=" ">[m
+[32m+[m[32m494475.71056415,5433016.8189323 494982.70115662,5435041.95096618[m
+[32m+[m[32m              </gml:coordinates>[m
+[32m+[m[32m            </gml:LineString>[m
+[32m+[m[32m          </gml:lineStringMember>[m
+[32m+[m[32m        </gml:MultiLineString>[m
+[32m+[m[32m      </topp:the_geom>[m
+[32m+[m[32m      <topp:TYPE>alley</topp:TYPE>[m
+[32m+[m[32m    </topp:tasmania_roads>[m
+[32m+[m[32m  </wfs:Insert>[m
+[32m+[m[32m</wfs:Transaction>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_transactionUpdate.xml b/src/geoserver/data/demo/WFS_transactionUpdate.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c39d539[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_transactionUpdate.xml[m
+[36m@@ -0,0 +1,22 @@[m
+[32m+[m[32m <!--       YOU PROBABLY DO NOT WANT TO RUN THIS QUERY SINCE[m[41m [m
+[32m+[m[32m       IT WILL MODIFY YOUR SOURCE DATA FILES[m
+[32m+[m
+[32m+[m[32m      This will update the type field for the tasmania_roads dataset.[m
+[32m+[m[41m      [m
+[32m+[m[32m   -->[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<wfs:Transaction service="WFS" version="1.0.0"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs">[m
+[32m+[m[32m  <wfs:Update typeName="topp:tasmania_roads">[m
+[32m+[m[32m    <wfs:Property>[m
+[32m+[m[32m      <wfs:Name>TYPE</wfs:Name>[m
+[32m+[m[32m      <wfs:Value>street</wfs:Value>[m
+[32m+[m[32m    </wfs:Property>[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m      <ogc:FeatureId fid="tasmania_roads.1"/>[m
+[32m+[m[32m    </ogc:Filter>[m
+[32m+[m[32m  </wfs:Update>[m
+[32m+[m[32m</wfs:Transaction>[m
+[1mdiff --git a/src/geoserver/data/demo/WFS_transactionUpdateGeom.xml b/src/geoserver/data/demo/WFS_transactionUpdateGeom.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4fce66b[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WFS_transactionUpdateGeom.xml[m
+[36m@@ -0,0 +1,32 @@[m
+[32m+[m[32m<!--       YOU PROBABLY DO NOT WANT TO RUN THIS QUERY SINCE[m[41m [m
+[32m+[m[32m              IT WILL MODIFY YOUR SOURCE DATA FILES[m
+[32m+[m
+[32m+[m[32m     This will update one of the geometry fields in the tasmania_roads dataset.[m
+[32m+[m[41m     [m
+[32m+[m[41m     [m
+[32m+[m[32m-->[m
+[32m+[m[32m<wfs:Transaction service="WFS" version="1.0.0"[m
+[32m+[m[32m  xmlns:topp="http://www.openplans.org/topp"[m
+[32m+[m[32m  xmlns:ogc="http://www.opengis.net/ogc"[m
+[32m+[m[32m  xmlns:wfs="http://www.opengis.net/wfs"[m
+[32m+[m[32m  xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[m
+[32m+[m[32m  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd">[m
+[32m+[m[32m  <wfs:Update typeName="topp:tasmania_roads">[m
+[32m+[m[32m    <wfs:Property>[m
+[32m+[m[32m      <wfs:Name>the_geom</wfs:Name>[m
+[32m+[m[32m      <wfs:Value>[m
+[32m+[m[32m        <gml:MultiLineString srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m          <gml:lineStringMember>[m
+[32m+[m[41m          [m	[32m<gml:LineString>[m
+[32m+[m[41m            [m	[32m<gml:coordinates>500000,5450000,0 540000,5450000,0</gml:coordinates>[m
+[32m+[m[41m          [m	[32m</gml:LineString>[m
+[32m+[m[32m          </gml:lineStringMember>[m
+[32m+[m[32m        </gml:MultiLineString>[m
+[32m+[m[32m      </wfs:Value>[m
+[32m+[m[32m    </wfs:Property>[m
+[32m+[m[32m    <ogc:Filter>[m
+[32m+[m[32m      <ogc:FeatureId fid="tasmania_roads.1"/>[m
+[32m+[m[32m    </ogc:Filter>[m
+[32m+[m[32m  </wfs:Update>[m
+[32m+[m[32m</wfs:Transaction>[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_GetLegendGraphic-SLD.url b/src/geoserver/data/demo/WMS_GetLegendGraphic-SLD.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9a5f907[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_GetLegendGraphic-SLD.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=topp:states&SLD=http://localhost:8080/geoserver/www/styles/green.sld[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_GetLegendGraphic-SLD_BODY.url b/src/geoserver/data/demo/WMS_GetLegendGraphic-SLD_BODY.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c28dfa4[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_GetLegendGraphic-SLD_BODY.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=topp:states&SLD_BODY=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22ISO-8859-1%22%3F%3E%3CStyledLayerDescriptor+version%3D%221.0.0%22+xsi%3AschemaLocation%3D%22http%3A%2F%2Fwww.opengis.net%2Fsld+StyledLayerDescriptor.xsd%22+xmlns%3D%22http%3A%2F%2Fwww.opengis.net%2Fsld%22+xmlns%3Aogc%3D%22http%3A%2F%2Fwww.opengis.net%2Fogc%22+xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3CNamedLayer%3E%3CName%3EATestLayer%3C%2FName%3E%3CUserStyle%3E%3CName%3Epolyshp%3C%2FName%3E%3CFeatureTypeStyle%3E%3CRule%3E%3CPolygonSymbolizer%3E%3CFill%3E%3CCssParameter%20name%3D%22fill%22%3E%2366FF66%3C%2FCssParameter%3E%3C%2FFill%3E%3CStroke%2F%3E%3C%2FPolygonSymbolizer%3E%3C%2FRule%3E%3C%2FFeatureTypeStyle%3E%3C%2FUserStyle%3E%3C%2FNamedLayer%3E%3C%2FStyledLayerDescriptor%3E&[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_GetLegendGraphic.url b/src/geoserver/data/demo/WMS_GetLegendGraphic.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..fc5d551[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_GetLegendGraphic.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=topp:states[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_describeLayer.url b/src/geoserver/data/demo/WMS_describeLayer.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..2a71e85[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_describeLayer.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?request=DescribeLayer&version=1.1.1&layers=topp:states[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_featureInfo.url b/src/geoserver/data/demo/WMS_featureInfo.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..724da36[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_featureInfo.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?bbox=-130,24,-66,50&styles=population&format=jpeg&info_format=text/plain&request=GetFeatureInfo&layers=topp:states&query_layers=topp:states&width=550&height=250&x=170&y=160[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_getCapabilities.url b/src/geoserver/data/demo/WMS_getCapabilities.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9745fcb[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_getCapabilities.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?request=getCapabilities[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_getMap.url b/src/geoserver/data/demo/WMS_getMap.url[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a405795[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_getMap.url[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mwms?bbox=-130,24,-66,50&styles=population&Format=image/png&request=GetMap&layers=topp:states&width=550&height=250&srs=EPSG:4326[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_getMap.xml b/src/geoserver/data/demo/WMS_getMap.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..633e264[m
+[1m--- /dev/null[m
+[1m+++ b/src/geoserver/data/demo/WMS_getMap.xml[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<ogc:GetMap xmlns:ogc="http://www.opengis.net/ows"[m
+[32m+[m[32m            xmlns:gml="http://www.opengis.net/gml"[m
+[32m+[m[32m   version="1.1.1" service="WMS">[m
+[32m+[m[32m   <StyledLayerDescriptor version="1.0.0">[m
+[32m+[m[32m      <NamedLayer>[m
+[32m+[m[32m        <Name>topp:states</Name>[m
+[32m+[m[32m        <NamedStyle><Name>population</Name></NamedStyle>[m[41m [m
+[32m+[m[32m      </NamedLayer>[m[41m [m
+[32m+[m[32m   </StyledLayerDescriptor>[m
+[32m+[m[32m   <BoundingBox srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">[m
+[32m+[m[32m      <gml:coord><gml:X>-130</gml:X><gml:Y>24</gml:Y></gml:coord>[m
+[32m+[m[32m      <gml:coord><gml:X>-55</gml:X><gml:Y>50</gml:Y></gml:coord>[m
+[32m+[m[32m   </BoundingBox>[m
+[32m+[m[32m   <Output>[m
+[32m+[m[32m      <Format>image/png</Format>[m
+[32m+[m[32m      <Size><Width>550</Width><Height>250</Height></Size>[m
+[32m+[m[32m   </Output>[m
+[32m+[m[32m</ogc:GetMap>[m
+\ No newline at end of file[m
+[1mdiff --git a/src/geoserver/data/demo/WMS_getMap_OpenLayers.url b/src/geoserve
