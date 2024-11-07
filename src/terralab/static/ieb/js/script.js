@@ -34,17 +34,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Logar todas as chaves disponíveis em `indicadoresConfig`
-    console.log("Chaves disponíveis em normalizedIndicadoresConfig:", Object.keys(normalizedIndicadoresConfig));
+    
 
     // Ao mudar o projeto, carregar componentes, equipes e equipes adicionais
     document.getElementById('id_projeto').addEventListener('change', function() {
-        console.log("Projeto selecionado:", this.value);
+        
         if (urlComponentes) {
             var url = urlComponentes + "?projeto=" + this.value;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Componentes recebidos:", data);
+                    
                     var select = document.getElementById('id_componente');
                     select.innerHTML = '<option value="">Selecione um componente</option>';
                     data.forEach(item => {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(equipes_url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Equipes recebidas:", data);
+                    
                     var select = document.getElementById('id_equipe_projeto');
                     select.innerHTML = '<option value="">Selecione uma equipe</option>';
                     data.forEach(item => {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(equipes_adicionais_url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Equipes adicionais recebidas:", data);
+                    
                     var checkboxGroup = document.getElementById('id_equipe_adicional');
                     
                     if (checkboxGroup) {
@@ -96,13 +96,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Ao mudar o componente, carregar atividades
     document.getElementById('id_componente').addEventListener('change', function() {
-        console.log("Componente selecionado:", this.value);
+        
         if (urlAtividades) {
             var url = urlAtividades + "?componente=" + this.value;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Atividades recebidas:", data);
+                    
                     var select = document.getElementById('id_atividade');
                     select.innerHTML = '<option value="">Selecione uma atividade</option>';
                     data.forEach(item => {
@@ -117,14 +117,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Ao mudar a atividade, carregar indicadores
     document.getElementById('id_atividade').addEventListener('change', function() {
-        console.log("Atividade selecionada:", this.value);
+        
         if (urlIndicadores) {
             const url = urlIndicadores + "?atividade=" + this.value;
             
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Indicadores recebidos:", data);
+                    
                     const indicadoresDiv = document.getElementById('indicadores');
                     
                     if (indicadoresDiv) {
@@ -133,10 +133,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         data.forEach(item => {
                             const indicadorKey = normalizeKey(item.nome);
                             
-                            console.log(`Tentando acessar indicador com a chave: "${indicadorKey}"`);
+                            
                             
                             if (normalizedIndicadoresConfig[indicadorKey]) {
-                                console.log("Renderizando indicador:", item.nome);
+                               
                                 indicadoresDiv.innerHTML += `<div class="indicator-section"><h3>${item.nome}</h3>`;
 
                                 normalizedIndicadoresConfig[indicadorKey].forEach(field => {
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para renderizar checkbox
     function renderCheckboxField(field, fieldName, indicadoresDiv) {
-        console.log("Renderizando checkbox para campo:", fieldName);
+        
         let optionsHTML = '';
         field.options.forEach(option => {
             optionsHTML += `
