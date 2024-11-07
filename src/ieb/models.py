@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 from django.contrib.gis.db import models as gis_models
+from PIL import Image
+import os
 
 # Create your models here.
 # MOVIMENTO INDÍGENA
@@ -211,11 +213,39 @@ class AtividadeRegistro(models.Model):
     sucesso = models.CharField(max_length=255, blank=True)
     melhores_praticas = models.CharField(max_length=255, blank=True)
     fotos = models.ImageField(upload_to='fotos/', blank = True)  # Usar ImageField para suportar upload de mídia
+    fotos_thumbnail = models.ImageField(upload_to='fotos/thumbnails/', blank=True, editable=False)
     descricao = models.TextField()
     local = models.CharField(max_length=255)
     comentarios = models.TextField(blank=True)
     lista_presenca = models.ImageField(upload_to='listas_presenca/', blank=True)  # Novo campo para lista de presença
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.fotos:
+            # Caminho da imagem original
+            img_path = self.fotos.path
+
+            # Abrindo a imagem usando Pillow
+            with Image.open(img_path) as img:
+                # Definindo o tamanho máximo da miniatura
+                img.thumbnail((300, 300))  # Redimensiona mantendo a proporção
+
+                # Definindo o caminho da miniatura
+                thumbnail_dir = os.path.join(os.path.dirname(img_path), 'thumbnails')
+                # Verificar se o diretório existe, se não, cria-o
+                if not os.path.exists(thumbnail_dir):
+                    os.makedirs(thumbnail_dir)
+
+                thumbnail_path = os.path.join(thumbnail_dir, os.path.basename(img_path))
+                
+                # Salvando a miniatura no caminho definido
+                img.save(thumbnail_path, format='JPEG', quality=85)
+
+                # Atualizando o campo fotos_thumbnail com o caminho da miniatura
+                self.fotos_thumbnail.name = os.path.join('fotos/thumbnails/', os.path.basename(img_path))
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.data_inicio} - {self.projeto.nome}/COMP-{self.componente.codigo}/ATIV-{self.atividade.codigo} - {self.atividade.nome}"

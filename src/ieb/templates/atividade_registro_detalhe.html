@@ -6,6 +6,7 @@
     <title>Detalhes da Atividade</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'ieb/css/detalhe.css' %}">
+    <link rel="stylesheet" href="{% static 'ieb/css/lightbox.css' %}">
 </head>
 <body>
     <div class="container">
@@ -52,11 +53,19 @@
 
         <label>Fotos:</label>
         <div class="field-value">
-            {% if atividade_registro.fotos %}
-                <img src="{{ atividade_registro.fotos.url }}" alt="Fotos">
+            {% if atividade_registro.fotos_thumbnail %}
+                <img id="thumbnail" src="{{ atividade_registro.fotos_thumbnail.url }}" alt="Fotos Miniatura" style="cursor: pointer;">
+            {% elif atividade_registro.fotos %}
+                <img id="thumbnail" src="{{ atividade_registro.fotos.url }}" alt="Fotos Original" style="max-width: 300px; height: auto; cursor: pointer;">
             {% else %}
                 <p>Nenhuma foto disponível.</p>
             {% endif %}
+        </div>
+
+         <!-- Lightbox para visualização ampliada -->
+         <div id="lightbox" class="lightbox">
+            <span class="close" id="close-lightbox">&times;</span>
+            <img id="lightbox-img" src="" alt="Visualização Ampliada">
         </div>
 
         <label>Lista de Presença:</label>
@@ -89,5 +98,6 @@
             <a href="{% url 'atividade_registro_proximo' atividade_registro.id %}" class="btn btn-secondary">Próximo</a>
         </div>
     </div>
+    <script src="{% static 'ieb/js/lightbox.js' %}"></script>
 </body>
 </html>
