@@ -448,9 +448,33 @@ def atividade_registro_detalhe_view(request, pk):
     # Busca o registro específico com base na chave primária (pk)
     atividade_registro = get_object_or_404(AtividadeRegistro, pk=pk)
     
-    # Renderiza o template passando o registro encontrado
+    # Obtém os indicadores e outros relacionamentos
+    treinados = Treinados.objects.filter(atividade_registro=atividade_registro).first()
+    capacitados = Capacitados.objects.filter(atividade_registro=atividade_registro).first()
+    parcerias = Parcerias.objects.filter(atividade_registro=atividade_registro).first()
+    area_restrito = AreaRestrito.objects.filter(atividade_registro=atividade_registro).first()
+    area_direto = AreaDireto.objects.filter(atividade_registro=atividade_registro).first()
+    area_geral = AreaGeral.objects.filter(atividade_registro=atividade_registro).first()
+    produtos = Produtos.objects.filter(atividade_registro=atividade_registro).first()
+    contratos = Contratos.objects.filter(atividade_registro=atividade_registro).first()
+    leis = Leis.objects.filter(atividade_registro=atividade_registro).first()
+    aplicacao = Aplicacao.objects.filter(atividade_registro=atividade_registro).first()
+    mobilizados = Mobilizados.objects.filter(atividade_registro=atividade_registro).first()
+
+    # Renderiza o template passando o registro encontrado e os indicadores
     return render(request, 'atividade_registro_detalhe.html', {
-        'atividade_registro': atividade_registro
+        'atividade_registro': atividade_registro,
+        'treinados': treinados,
+        'capacitados': capacitados,
+        'parcerias': parcerias,
+        'area_restrito': area_restrito,
+        'area_direto': area_direto,
+        'area_geral': area_geral,
+        'produtos': produtos,
+        'contratos': contratos,
+        'leis': leis,
+        'aplicacao': aplicacao,
+        'mobilizados': mobilizados,
     })
 
 def teste_parcerias_view(request):

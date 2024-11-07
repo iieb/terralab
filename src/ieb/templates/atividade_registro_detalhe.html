@@ -6,37 +6,6 @@
     <title>Detalhes da Atividade</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'ieb/css/detalhe.css' %}">
-    {% comment %} <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #636363;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .field-value {
-            padding: 8px;
-            background-color: #f4f4f4;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-    </style> {% endcomment %}
 </head>
 <body>
     <div class="container">
@@ -92,6 +61,29 @@
 
         <label>Lista de Presença:</label>
         <div class="field-value">{{ atividade_registro.lista_presenca }}</div>
+
+        <h2>Indicadores Registrados</h2>
+
+        {% if parcerias %}
+            <h3>Parcerias</h3>
+            <ul>
+                {% for parceria in parcerias.parcerias.all %}
+                    <li>{{ parceria.nome }} - {{ parceria.tipo }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if treinados %}
+            <h3>Pessoas Treinadas</h3>
+            <p>Total: {{ treinados.total_pessoas }}</p>
+            <p>Homens: {{ treinados.homens }}</p>
+            <p>Mulheres: {{ treinados.mulheres }}</p>
+            <p>Jovens: {{ treinados.jovens }}</p>
+            <p>Foco do Treinamento: {{ treinados.get_foco_treinamento_display }}</p>
+        {% endif %}
+
+        <!-- Outros indicadores, como capacitados, produtos, contratos, etc. -->
+        
         <div class="navigation-buttons">
             <a href="{% url 'atividade_registro_anterior' atividade_registro.id %}" class="btn btn-primary">Anterior</a>
             <a href="{% url 'atividade_registro_proximo' atividade_registro.id %}" class="btn btn-secondary">Próximo</a>
