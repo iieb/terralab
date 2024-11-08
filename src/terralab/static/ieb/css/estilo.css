@@ -78,6 +78,12 @@ button:hover {
     background-color: #3e8e41;
     transform: scale(1.25);
 }
+.center-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Ajuste conforme necessário */
+}
 .errorlist {
     color: #ff0000;
     margin-bottom: 20px;

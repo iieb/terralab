@@ -81,7 +81,17 @@
                 <div id="indicadores"></div>
             </div>
      
-            <button type="submit">Salvar</button>
+            <div class='section'>
+                
+                <label for="id_email_organizacao">Email para notificação: <span style="color: red;">*</span></label>
+                <input type="email" id="id_email_organizacao" name="email_organizacao" required>
+                {{ form.email_organizacao.errors }}
+                
+                
+            </div>
+            <div class="center-button">
+                <button type="submit">Salvar</button>
+            </div>
         </form>
     </div>
 
