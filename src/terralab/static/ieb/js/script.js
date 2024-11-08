@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    
+                    // Ordenar os dados por nome
+                    data.sort((a, b) => a.nome.localeCompare(b.nome));
                     var select = document.getElementById('id_componente');
                     select.innerHTML = '<option value="">Selecione um componente</option>';
                     data.forEach(item => {
@@ -61,7 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(equipes_url)
                 .then(response => response.json())
                 .then(data => {
-                    
+                    // Ordenar os dados por nome
+                    data.sort((a, b) => a.nome.localeCompare(b.nome));
                     var select = document.getElementById('id_equipe_projeto');
                     select.innerHTML = '<option value="">Selecione uma equipe</option>';
                     data.forEach(item => {
@@ -78,7 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(equipes_adicionais_url)
                 .then(response => response.json())
                 .then(data => {
-                    
+                    // Ordenar os dados por nome
+                    data.sort((a, b) => a.nome.localeCompare(b.nome));
                     var checkboxGroup = document.getElementById('id_equipe_adicional');
                     
                     if (checkboxGroup) {
@@ -102,7 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    
+                    // Ordenar os dados por nome
+                    data.sort((a, b) => a.nome.localeCompare(b.nome));
                     var select = document.getElementById('id_atividade');
                     select.innerHTML = '<option value="">Selecione uma atividade</option>';
                     data.forEach(item => {
