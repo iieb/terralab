@@ -62,8 +62,8 @@
             {% endif %}
         </div>
 
-         <!-- Lightbox para visualização ampliada -->
-         <div id="lightbox" class="lightbox">
+        <!-- Lightbox para visualização ampliada -->
+        <div id="lightbox" class="lightbox">
             <span class="close" id="close-lightbox">&times;</span>
             <img id="lightbox-img" src="" alt="Visualização Ampliada">
         </div>
@@ -91,8 +91,77 @@
             <p>Foco do Treinamento: {{ treinados.get_foco_treinamento_display }}</p>
         {% endif %}
 
-        <!-- Outros indicadores, como capacitados, produtos, contratos, etc. -->
-        
+        {% if capacitados %}
+            <h3>Capacitados</h3>
+            <p>Total de Organizações: {{ capacitados.total_organizacoes }}</p>
+            <p>Foco da Capacitação: {{ capacitados.get_foco_capacitacao_display }}</p>
+            <ul>
+                {% for organizacao in capacitados.organizacoes.all %}
+                    <li>{{ organizacao.nome }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if area_restrito %}
+            <h3>Área Restrita</h3>
+            <p>TI: {{ area_restrito.ti.nome }}</p>
+            <p>Área em hectares: {{ area_restrito.area_em_ha }}</p>
+        {% endif %}
+
+        {% if area_direto %}
+            <h3>Área Direto</h3>
+            <p>Total de TIs: {{ area_direto.total_tis }}</p>
+            <p>Total de Área (ha): {{ area_direto.total_area }}</p>
+        {% endif %}
+
+        {% if area_geral %}
+            <h3>Área Geral</h3>
+            <p>Total de TIs: {{ area_geral.total_tis }}</p>
+            <p>Total de Área (ha): {{ area_geral.total_area }}</p>
+        {% endif %}
+
+        {% if produtos %}
+            <h3>Produtos</h3>
+            <ul>
+                {% for produto in produtos.produtos.all %}
+                    <li>{{ produto.nome }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if contratos %}
+            <h3>Contratos</h3>
+            <ul>
+                {% for contrato in contratos.contratos.all %}
+                    <li>{{ contrato.nome }} - {{ contrato.get_estado_display }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if leis %}
+            <h3>Leis</h3>
+            <ul>
+                {% for lei in leis.leis.all %}
+                    <li>{{ lei.nome }} - {{ lei.tipo }} - {{ lei.situacao }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if aplicacao %}
+            <h3>Aplicação</h3>
+            <p>Total de Pessoas: {{ aplicacao.total_pessoas }}</p>
+            <p>Homens: {{ aplicacao.homens }}</p>
+            <p>Mulheres: {{ aplicacao.mulheres }}</p>
+            <p>Jovens: {{ aplicacao.jovens }}</p>
+        {% endif %}
+
+        {% if mobilizados %}
+            <h3>Mobilizados</h3>
+            <p>Valor Mobilizado: {{ mobilizados.valor_mobilizado }}</p>
+            <p>Tipo de Apoio: {{ mobilizados.tipo_apoio }}</p>
+            <p>Fonte de Apoio: {{ mobilizados.fonte_apoio }}</p>
+        {% endif %}
+
         <div class="navigation-buttons">
             <a href="{% url 'atividade_registro_anterior' atividade_registro.id %}" class="btn btn-primary">Anterior</a>
             <a href="{% url 'atividade_registro_proximo' atividade_registro.id %}" class="btn btn-secondary">Próximo</a>
