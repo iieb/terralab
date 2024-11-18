@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Atividade - PDF</title>
+    <style>
+        /* Estilo inline para garantir que seja aplicado no PDF */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        .field-value {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .indicator-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes da Atividade</h1>
+
+        <label>Projeto:</label>
+        <div class="field-value">{{ atividade_registro.projeto.nome }}</div>
+
+        <label>Componente:</label>
+        <div class="field-value">{{ atividade_registro.componente.nome }}</div>
+
+        <label>Atividade:</label>
+        <div class="field-value">{{ atividade_registro.atividade.nome }}</div>
+
+        <label>Equipe Responsável:</label>
+        <div class="field-value">{{ atividade_registro.equipe_projeto.equipe.nome }}</div>
+
+        <label>Data Início:</label>
+        <div class="field-value">{{ atividade_registro.data_inicio }}</div>
+
+        <label>Data Final:</label>
+        <div class="field-value">{{ atividade_registro.data_final }}</div>
+
+        <label>Descrição:</label>
+        <div class="field-value">{{ atividade_registro.descricao }}</div>
+
+        <label>Local:</label>
+        <div class="field-value">{{ atividade_registro.local }}</div>
+
+        <label>Comentários:</label>
+        <div class="field-value">{{ atividade_registro.comentarios }}</div>
+
+        <label>Desafios:</label>
+        <div class="field-value">{{ atividade_registro.desafios }}</div>
+
+        <label>Propostas:</label>
+        <div class="field-value">{{ atividade_registro.propostas }}</div>
+
+        <label>Sucesso:</label>
+        <div class="field-value">{{ atividade_registro.sucesso }}</div>
+
+        <label>Melhores Práticas:</label>
+        <div class="field-value">{{ atividade_registro.melhores_praticas }}</div>
+
+        <h2>Indicadores Registrados</h2>
+
+        {% if atividade_registro.parcerias %}
+            <div class="indicator-section">
+                <h3>Parcerias</h3>
+                <ul>
+                    {% for parceria in atividade_registro.parcerias.all %}
+                        <li>{{ parceria.nome }} - {{ parceria.tipo }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Repetir o mesmo estilo de layout para as outras seções de indicadores -->
+    </div>
+</body>
+</html>

@@ -10,6 +10,14 @@ from django.views.decorators.csrf import csrf_exempt
 import unicodedata
 import re
 from decimal import Decimal, InvalidOperation
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from django.core.mail import EmailMessage
+from django.core.mail.backends.smtp import EmailBackend
+import os
+from io import BytesIO
 
 def normalize_string(s):
     # Remover acentos e caracteres especiais
@@ -264,7 +272,13 @@ def atividade_registro_view(request):
                         )
 
 
-            
+            atividade_registro = form.save()
+
+            # Capturar o e-mail da organização inserido pelo usuário
+            email_organizacao = form.cleaned_data.get('email_organizacao')
+
+            # Enviar e-mail de notificação
+            enviar_email_notificacao(atividade_registro, email_organizacao)
 
             messages.success(request, 'Registro de atividade salvo com sucesso!')
             return redirect('atividade_registro_detalhe', pk=atividade_registro.pk)
@@ -686,3 +700,78 @@ def atividade_registro_proximo(request, pk):
     else:
         # Se não houver próximo registro, redirecionar para o atual ou para uma página específica
         return redirect('atividade_registro_detalhe', pk=current_record.id)
+    
+
+def gerar_pdf(template_src, context_dict):
+    # Adiciona 'request': None ao contexto para que os blocos {% if request %} não sejam renderizados
+    context_dict.update({'request': None})
+
+    template_str = render_to_string(template_src, context_dict)
+    result = BytesIO()
+
+    # Cria o PDF a partir do HTML renderizado
+    pdf = pisa.CreatePDF(BytesIO(template_str.encode("utf-8")), dest=result)
+
+    # Verifica se o PDF foi criado com sucesso
+    if not pdf.err:
+        return result.getvalue()  # Retorna o conteúdo do PDF
+    return None
+
+def enviar_email_notificacao(atividade_registro, email_organizacao):
+    # Geração do PDF usando o novo template
+    pdf_context = {
+        'atividade_registro': atividade_registro,
+        # Inclua outras variáveis relevantes, como indicadores, se necessário
+    }
+    pdf_content = gerar_pdf('atividade_registro_pdf.html', pdf_context)
+
+    if pdf_content is None:
+        print("Erro ao gerar o PDF do relatório.")
+        return
+
+    # Configurar o backend SMTP explicitamente
+    backend = EmailBackend(
+        host=settings.EMAIL_HOST,
+        port=settings.EMAIL_PORT,
+        username=settings.EMAIL_HOST_USER,
+        password=settings.EMAIL_HOST_PASSWORD,
+        use_tls=settings.EMAIL_USE_TLS,
+        fail_silently=False,
+    )
+
+    # Construir a mensagem de e-mail
+    subject = 'Novo Registro de Atividade'
+    message = f"""
+    Um novo registro de atividade foi feito:
+
+    Projeto: {atividade_registro.projeto}
+    Atividade: {atividade_registro.atividade}
+    Data de Início: {atividade_registro.data_inicio}
+    Data Final: {atividade_registro.data_final}
+    Descrição: {atividade_registro.descricao}
+    Local: {atividade_registro.local}
+
+    Em anexo está o relatório detalhado em PDF.
+
+    Por favor, veja os detalhes no sistema.
+    """
+
+    # Definir destinatários
+    recipient_list = ['monitoramento@iieb.org.br']
+    if email_organizacao:
+        recipient_list.append(email_organizacao)
+
+    # Criar o email
+    email = EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=recipient_list,
+        connection=backend
+    )
+
+    # Anexar o PDF ao e-mail
+    email.attach('relatorio_atividade.pdf', pdf_content, 'application/pdf')
+
+    # Enviar o e-mail
+    email.send()
