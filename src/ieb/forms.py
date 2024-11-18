@@ -8,13 +8,21 @@ class AtividadeRegistroForm(forms.ModelForm):
         required=False
     )
 
+    # Adicionando o campo de e-mail da organização
+    email_organizacao = forms.EmailField(
+        label='E-mail da Organização',
+        required=True,
+        widget=forms.EmailInput(attrs={'placeholder': 'Digite o e-mail da organização'})
+    )
+
     class Meta:
         model = AtividadeRegistro
         fields = [
             'projeto', 'componente', 'atividade', 'equipe_projeto',
             'data_inicio', 'data_final', 'desafios', 'propostas',
             'sucesso', 'melhores_praticas', 'fotos', 'equipe_adicional',
-            'descricao', 'local', 'comentarios', 'lista_presenca'
+            'descricao', 'local', 'comentarios', 'lista_presenca',
+            'email_organizacao'
         ]
         widgets = {
             'data_inicio': forms.DateInput(attrs={'type': 'date'}),

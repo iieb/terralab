@@ -218,7 +218,8 @@ class AtividadeRegistro(models.Model):
     local = models.CharField(max_length=255)
     comentarios = models.TextField(blank=True)
     lista_presenca = models.ImageField(upload_to='listas_presenca/', blank=True)  # Novo campo para lista de presença
-
+    email_organizacao = models.EmailField(max_length=255, blank=True, null=True)
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
