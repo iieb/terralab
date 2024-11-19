@@ -85,18 +85,117 @@
 
         <h2>Indicadores Registrados</h2>
 
-        {% if atividade_registro.parcerias %}
+        {% if parcerias %}
             <div class="indicator-section">
                 <h3>Parcerias</h3>
                 <ul>
-                    {% for parceria in atividade_registro.parcerias.all %}
+                    {% for parceria in parcerias %}
                         <li>{{ parceria.nome }} - {{ parceria.tipo }}</li>
                     {% endfor %}
                 </ul>
             </div>
         {% endif %}
 
-        <!-- Repetir o mesmo estilo de layout para as outras seções de indicadores -->
+        {% if treinados %}
+            <div class="indicator-section">
+                <h3>Pessoas Treinadas</h3>
+                <p>Total: {{ treinados.total_pessoas }}</p>
+                <p>Homens: {{ treinados.homens }}</p>
+                <p>Mulheres: {{ treinados.mulheres }}</p>
+                <p>Jovens: {{ treinados.jovens }}</p>
+                <p>Foco do Treinamento: {{ treinados.get_foco_treinamento_display }}</p>
+            </div>
+        {% endif %}
+
+
+        {% if capacitados %}
+            <div class="indicator-section">
+                <h3>Capacitados</h3>
+                <p>Total de Organizações: {{ capacitados.total_organizacoes }}</p>
+                <p>Foco da Capacitação: {{ capacitados.get_foco_capacitacao_display }}</p>
+                <ul>
+                    {% for organizacao in capacitados.organizacoes.all %}
+                        <li>{{ organizacao.nome }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if area_restrito %}
+            <div class="indicator-section">
+                <h3>Área Restrita</h3>
+                <p>TI: {{ area_restrito.ti.nome }}</p>
+                <p>Área em hectares: {{ area_restrito.area_em_ha }}</p>
+            </div>
+        {% endif %}
+
+        {% if area_direto %}
+            <div class="indicator-section">
+                <h3>Área Direto</h3>
+                <p>Total de TIs: {{ area_direto.total_tis }}</p>
+                <p>Total de Área (ha): {{ area_direto.total_area }}</p>
+            </div>
+        {% endif %}
+
+        {% if area_geral %}
+            <div class="indicator-section">
+                <h3>Área Geral</h3>
+                <p>Total de TIs: {{ area_geral.total_tis }}</p>
+                <p>Total de Área (ha): {{ area_geral.total_area }}</p>
+            </div>
+        {% endif %}
+
+        {% if produtos %}
+            <div class="indicator-section">
+                <h3>Produtos</h3>
+                <ul>
+                    {% for produto in produtos.produtos.all %}
+                        <li>{{ produto.nome }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if contratos %}
+            <div class="indicator-section">
+                <h3>Contratos</h3>
+                <ul>
+                    {% for contrato in contratos.contratos.all %}
+                        <li>{{ contrato.nome }} - {{ contrato.get_estado_display }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if leis %}
+            <div class="indicator-section">
+                <h3>Leis</h3>
+                <ul>
+                    {% for lei in leis.leis.all %}
+                        <li>{{ lei.nome }} - {{ lei.tipo }} - {{ lei.situacao }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if aplicacao %}
+            <div class="indicator-section">
+                <h3>Aplicação</h3>
+                <p>Total de Pessoas: {{ aplicacao.total_pessoas }}</p>
+                <p>Homens: {{ aplicacao.homens }}</p>
+                <p>Mulheres: {{ aplicacao.mulheres }}</p>
+                <p>Jovens: {{ aplicacao.jovens }}</p>
+            </div>
+        {% endif %}
+
+        {% if mobilizados %}
+            <div class="indicator-section">
+                <h3>Mobilizados</h3>
+                <p>Valor Mobilizado: {{ mobilizados.valor_mobilizado }}</p>
+                <p>Tipo de Apoio: {{ mobilizados.tipo_apoio }}</p>
+                <p>Fonte de Apoio: {{ mobilizados.fonte_apoio }}</p>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

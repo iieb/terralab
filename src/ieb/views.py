@@ -278,7 +278,7 @@ def atividade_registro_view(request):
             email_organizacao = form.cleaned_data.get('email_organizacao')
 
             # Enviar e-mail de notificação
-            enviar_email_notificacao(atividade_registro, email_organizacao)
+            enviar_email_notificacao(atividade_registro.id, email_organizacao)
 
             messages.success(request, 'Registro de atividade salvo com sucesso!')
             return redirect('atividade_registro_detalhe', pk=atividade_registro.pk)
@@ -717,12 +717,39 @@ def gerar_pdf(template_src, context_dict):
         return result.getvalue()  # Retorna o conteúdo do PDF
     return None
 
-def enviar_email_notificacao(atividade_registro, email_organizacao):
-    # Geração do PDF usando o novo template
+def enviar_email_notificacao(atividade_registro_id, email_organizacao):
+    # Buscar o registro de atividade novamente com as relações pré-carregadas
+    atividade_registro = AtividadeRegistro.objects.get(id=atividade_registro_id)
+
+    # Obter os indicadores associados manualmente
+    parcerias = Parcerias.objects.filter(atividade_registro=atividade_registro)
+    treinados = Treinados.objects.filter(atividade_registro=atividade_registro).first()
+    capacitados = Capacitados.objects.filter(atividade_registro=atividade_registro).first()
+    area_restrito = AreaRestrito.objects.filter(atividade_registro=atividade_registro).first()
+    area_direto = AreaDireto.objects.filter(atividade_registro=atividade_registro).first()
+    area_geral = AreaGeral.objects.filter(atividade_registro=atividade_registro).first()
+    produtos = Produtos.objects.filter(atividade_registro=atividade_registro).first()
+    contratos = Contratos.objects.filter(atividade_registro=atividade_registro).first()
+    leis = Leis.objects.filter(atividade_registro=atividade_registro).first()
+    aplicacao = Aplicacao.objects.filter(atividade_registro=atividade_registro).first()
+    mobilizados = Mobilizados.objects.filter(atividade_registro=atividade_registro).first()
+
+    # Criar o contexto do PDF
     pdf_context = {
         'atividade_registro': atividade_registro,
-        # Inclua outras variáveis relevantes, como indicadores, se necessário
+        'parcerias': parcerias,
+        'treinados': treinados,
+        'capacitados': capacitados,
+        'area_restrito': area_restrito,
+        'area_direto': area_direto,
+        'area_geral': area_geral,
+        'produtos': produtos,
+        'contratos': contratos,
+        'leis': leis,
+        'aplicacao': aplicacao,
+        'mobilizados': mobilizados,
     }
+
     pdf_content = gerar_pdf('atividade_registro_pdf.html', pdf_context)
 
     if pdf_content is None:
@@ -775,3 +802,6 @@ def enviar_email_notificacao(atividade_registro, email_organizacao):
 
     # Enviar o e-mail
     email.send()
+
+
+
