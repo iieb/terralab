@@ -229,6 +229,10 @@ class AtividadeRegistro(models.Model):
 
             # Abrindo a imagem usando Pillow
             with Image.open(img_path) as img:
+                # Se a imagem estiver em RGBA, converta para RGB
+                if img.mode == 'RGBA':
+                    img = img.convert('RGB')
+
                 # Definindo o tamanho máximo da miniatura
                 img.thumbnail((300, 300))  # Redimensiona mantendo a proporção
 
@@ -239,7 +243,7 @@ class AtividadeRegistro(models.Model):
                     os.makedirs(thumbnail_dir)
 
                 thumbnail_path = os.path.join(thumbnail_dir, os.path.basename(img_path))
-                
+
                 # Salvando a miniatura no caminho definido
                 img.save(thumbnail_path, format='JPEG', quality=85)
 
@@ -247,6 +251,7 @@ class AtividadeRegistro(models.Model):
                 self.fotos_thumbnail.name = os.path.join('fotos/thumbnails/', os.path.basename(img_path))
 
         super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.data_inicio} - {self.projeto.nome}/COMP-{self.componente.codigo}/ATIV-{self.atividade.codigo} - {self.atividade.nome}"
